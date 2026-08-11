@@ -1,0 +1,3516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tektit AI Readiness Check</title>
+  
+  <meta name="description" content="Find out how AI-ready your organisation actually is: 12 dimensions across leadership, people, technology and rules. Your report by email, plus the three areas to fix first.">
+  <meta property="og:title" content="Tektit AI Readiness Check">
+  <meta property="og:description" content="How AI-ready is your organisation, really? 12 dimensions, honest answer, in under ten minutes.">
+  <meta property="og:type" content="website">
+  
+  <link rel="icon" type="image/png" href="favicon.png">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Gothic+A1:wght@400;600;800;900&display=swap" rel="stylesheet">
+  
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+  
+  <style>
+    /* ── Reset & Core Base Variables ── */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    
+    :root {
+      --tk-dark: #051F2E;         /* Deep Space Midnight */
+      --tk-indigo: #3D4585;       /* Muted Brand Indigo */
+      --tk-blue-bright: #4E58A8;  /* Vivid Blue Accent */
+      --tk-teal: #52A5B0;         /* Ocean Teal */
+      --tk-mint: #52F2B0;         /* Bright Active Mint */
+      --tk-light: #EFF2F8;        /* Canvas Gray Background */
+      --tk-border: #e2e8f0;
+      --tk-text-main: #051F2E;
+      --tk-text-muted: #3D4585;
+      --transition-fast: 0.2s ease;
+    }
+
+    html, body {
+      overflow-x: clip;
+    }
+
+    body {
+      font-family: 'Gothic A1', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--tk-light);
+      color: var(--tk-text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── Accessibility Utility ── */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ── Header Navbar ── */
+    .top-bar {
+      background: var(--tk-dark);
+      color: #fff;
+      padding: 14px 24px;
+      padding-left: max(24px, env(safe-area-inset-left));
+      padding-right: max(24px, env(safe-area-inset-right));
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      box-shadow: 0 2px 12px rgba(5, 31, 46, 0.15);
+    }
+    
+    .top-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .top-bar-left img {
+      height: 45px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    } 
+    
+    .top-bar h1 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .top-bar-right {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .header-status-text {
+      font-size: 0.8rem;
+      color: rgba(255, 255, 255, 0.7);
+      font-weight: 600;
+    }
+    
+    .progress-pill {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-size: 0.8rem;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+    
+    .lang-switch {
+      display: flex;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .lang-switch button {
+      background: transparent;
+      border: none;
+      color: rgba(255, 255, 255, 0.65);
+      font-family: inherit;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      padding: 5px 11px;
+      cursor: pointer;
+    }
+    .lang-switch button[aria-pressed="true"] {
+      background: rgba(255, 255, 255, 0.18);
+      color: #fff;
+    }
+
+    .progress-pill span {
+      font-weight: 900;
+      color: var(--tk-mint);
+    }
+
+    .header-progress-track {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .header-progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, var(--tk-teal), var(--tk-mint));
+      transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── Main Layout Canvas ── */
+    .page {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 40px 20px 64px;
+    }
+    
+    .intro {
+      background: transparent;
+      padding: 0 0 24px 0;
+      margin-bottom: 32px;
+    }
+    
+    .intro p {
+      margin-bottom: 18px;
+      font-size: 1rem;
+      color: #2d3748;
+      max-width: 840px;
+      text-align: left;
+    }
+    
+    .intro h2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--tk-dark);
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+
+    .usage-accordion {
+      background: #fafbfc;
+      border: 1px solid var(--tk-border);
+      border-radius: 4px;
+      margin-top: 24px;
+      padding: 14px 16px;
+      max-width: 840px;
+      transition: background var(--transition-fast);
+    }
+    .usage-accordion[open] {
+      background: #fff;
+      box-shadow: 0 2px 6px rgba(5, 31, 46, 0.02);
+    }
+    .usage-accordion summary {
+      cursor: pointer;
+      color: var(--tk-dark);
+      font-size: 0.95rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      outline: none;
+    }
+    .accordion-content {
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-top: 1px solid var(--tk-light);
+      padding-top: 14px;
+    }
+    .accordion-item {
+      font-size: 0.875rem;
+      line-height: 1.45;
+      color: #4a5568;
+    }
+
+    .archetype-selector-card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 28px;
+      margin-bottom: 36px;
+      border: 1px solid var(--tk-border);
+      box-shadow: 0 4px 14px rgba(77, 93, 171, 0.04);
+    }
+    .archetype-selector-card h3 {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--tk-dark);
+      margin-bottom: 8px;
+    }
+    .archetype-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    
+    @media (min-width: 850px) {
+      .archetype-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    .arch-btn {
+      padding: 16px;
+      border-radius: 4px;
+      border: 1.5px solid var(--tk-border);
+      background: #fafbfc;
+      color: var(--tk-text-main);
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-align: left;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      flex-direction: column;
+    }
+    .arch-btn:hover {
+      border-color: var(--tk-teal);
+      background: #f0f9fa;
+    }
+    .arch-btn.active {
+      border-color: var(--tk-blue-bright);
+      background: var(--tk-light);
+      color: var(--tk-dark);
+      box-shadow: inset 0 0 0 1px var(--tk-blue-bright);
+    }
+
+    /* ── Wizard progress stepper ──
+       Deliberately NOT styled like the archetype chips above: no filled boxes,
+       no card. It reads as structure (a progress rail), not as a control you
+       are expected to pick from. State is carried by the dot and a check mark,
+       not by colour alone. */
+    .wizard-nav {
+      margin-bottom: 30px;
+    }
+    .wizard-nav-caption {
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--tk-text-muted);
+      margin-bottom: 14px;
+    }
+    .wizard-steps {
+      display: flex;
+      list-style: none;
+    }
+    .wiz-step {
+      flex: 1;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      text-align: center;
+      background: none;
+      padding: 0;
+    }
+    /* connecting rail between the dots */
+    .wiz-step:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      top: 13px;
+      left: calc(50% + 17px);
+      right: calc(-50% + 17px);
+      height: 2px;
+      background: var(--tk-border);
+    }
+    .wiz-step.completed::after { background: var(--tk-teal); }
+    .wiz-dot {
+      position: relative;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid #cbd5e0;
+      background: #fff;
+      color: #718096;
+      font-size: 0.78rem;
+      font-weight: 800;
+      z-index: 1;
+      transition: background var(--transition-fast), border-color var(--transition-fast);
+    }
+    .wiz-label {
+      font-size: 0.68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #718096;
+      line-height: 1.35;
+      max-width: 13ch;
+    }
+    .wiz-step:hover .wiz-label { text-decoration: underline; }
+    .wiz-step:hover .wiz-dot { border-color: var(--tk-teal); }
+    /* answered: check mark replaces the number */
+    .wiz-step.completed .wiz-dot {
+      background: var(--tk-teal);
+      border-color: var(--tk-teal);
+      color: transparent;
+    }
+    .wiz-step.completed .wiz-dot::after {
+      content: "\2713";
+      position: absolute;
+      color: #fff;
+      font-size: 0.9rem;
+      line-height: 1;
+    }
+    .wiz-step.completed .wiz-label { color: var(--tk-dark); }
+    /* current step */
+    .wiz-step.active .wiz-dot {
+      background: var(--tk-blue-bright);
+      border-color: var(--tk-blue-bright);
+      color: #fff;
+    }
+    .wiz-step.active .wiz-label { color: var(--tk-dark); }
+
+    .step-pane {
+      display: none;
+      opacity: 0;
+      transform: translateY(8px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+    .step-pane.active {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .pane-title {
+      font-size: 1.3rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--tk-dark);
+      border-bottom: 2px solid var(--tk-blue-bright);
+      padding-bottom: 8px;
+    }
+
+    .dim-card {
+      background: #fff;
+      border-radius: 8px;
+      border: 1px solid var(--tk-border);
+    }
+    
+    .dim-head {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--tk-light);
+    }
+    
+    .dim-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;              /* let the name wrap instead of squeezing the badge */
+    }
+    
+    .dim-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--tk-light);
+    }
+    
+    .dim-name {
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-size: 0.95rem;
+      color: var(--tk-dark);
+    }
+    
+    .dim-badge {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 100px;
+      background: var(--tk-light);
+      color: #4a5568;
+      flex-shrink: 0;            /* "0 / 5" must never wrap */
+      white-space: nowrap;
+    }
+    .dim-badge.active {
+      background: #f0f9fa;
+      color: var(--tk-teal);
+      border: 1px solid var(--tk-teal);
+    }
+    .dim-badge.completed {
+      background: #e6fffa;
+      color: #0d9488;
+      border: 1px solid #0d9488;
+    }
+    
+    .elements {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding: 16px 20px;
+    }
+
+    /* ── Scale rows ──
+       One statement plus a four-step scale. Single column by design: a shorter
+       statement is not worth the reading errors a two-column grid produces. */
+    .el-row {
+      padding: 12px 14px;
+      border-radius: 6px;
+      border: 1.5px solid var(--tk-border);
+      background: #fafbfc;
+      transition: border-color var(--transition-fast), background var(--transition-fast);
+    }
+    .el-row.is-answered {
+      border-color: var(--tk-teal);
+      background: #f0fdf4;
+    }
+    .el-row.is-na {
+      border-color: #cbd5e0;
+      background: #f7fafc;
+    }
+
+    .el-text {
+      font-size: 0.9rem;
+      color: #2d3748;
+      line-height: 1.5;
+      margin-bottom: 10px;
+    }
+
+    .el-scale {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr)) auto;
+      gap: 6px;
+      align-items: stretch;
+    }
+
+    .sc-btn {
+      font-family: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 2px;
+      min-height: 46px;
+      padding: 6px 4px;
+      border-radius: 5px;
+      border: 1.5px solid #d9e0ea;
+      background: #fff;
+      color: var(--tk-text-muted);
+      cursor: pointer;
+      text-align: center;
+      transition: border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+    }
+    .sc-btn:hover { border-color: var(--tk-teal); background: #f0f9fa; }
+    .sc-btn:focus-visible { outline: 2px solid var(--tk-blue-bright); outline-offset: 2px; }
+
+    .sc-num {
+      font-size: 0.95rem;
+      font-weight: 800;
+      line-height: 1;
+    }
+    .sc-cap {
+      font-size: 0.6rem;
+      font-weight: 600;
+      line-height: 1.15;
+      letter-spacing: 0.01em;
+      text-transform: uppercase;
+      opacity: 0.75;
+    }
+
+    .sc-btn.active {
+      background: var(--tk-teal);
+      border-color: var(--tk-teal);
+      color: #fff;
+    }
+    .sc-btn.active .sc-cap { opacity: 0.95; }
+
+    /* "Cannot assess" is deliberately visually separate from the scale: it is
+       not a fifth, worse level. It sits outside the scale and reads as grey. */
+    .sc-na {
+      min-width: 58px;
+      border-style: dashed;
+      color: #8a94a6;
+    }
+    .sc-na:hover { border-color: #8a94a6; background: #f1f3f7; }
+    .sc-na.active {
+      background: #5b6577;
+      border-color: #5b6577;
+      border-style: solid;
+      color: #fff;
+    }
+
+    @media (max-width: 560px) {
+      .el-scale { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+      .sc-na { grid-column: 1 / -1; min-height: 38px; flex-direction: row; gap: 8px; }
+    }
+
+    .scale-legend {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 18px;
+      font-size: 0.76rem;
+      color: var(--tk-text-muted);
+      background: #fff;
+      border: 1px solid var(--tk-border);
+      border-radius: 6px;
+      padding: 12px 16px;
+      margin-bottom: 18px;
+    }
+    .scale-legend b { color: var(--tk-dark); font-weight: 800; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .sc-btn, .el-row, .header-progress-fill, .step-pane { transition: none !important; }
+    }
+
+    /* ── Tooltips ── */
+    .tt-wrap {
+      position: relative;
+      display: inline-block;
+      margin-left: 4px;
+      color: var(--tk-blue-bright);
+      cursor: help;
+    }
+    .tt-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: var(--tk-light);
+      font-size: 0.65rem;
+      font-weight: bold;
+    }
+    .tt-text {
+      visibility: hidden;
+      width: min(240px, calc(100vw - 24px));
+      background-color: var(--tk-dark);
+      color: #fff;
+      text-align: center;
+      border-radius: 4px;
+      padding: 8px 12px;
+      position: absolute;
+      z-index: 100; 
+      bottom: 140%;
+      left: 50%;
+      transform: translateX(-50%); 
+      opacity: 0;
+      transition: opacity 0.2s;
+      font-size: 0.75rem;
+      pointer-events: none; 
+    }
+    .tt-text::after {
+      content: "";
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      border-width: 5px;
+      border-style: solid;
+      border-color: var(--tk-dark) transparent transparent transparent;
+    }
+    .tt-wrap:hover .tt-text,
+    .tt-wrap:focus .tt-text,
+    .tt-wrap:focus-within .tt-text {
+      visibility: visible;
+      opacity: 1;
+    }
+    .tt-wrap:focus-visible {
+      outline: 2px solid var(--tk-teal);
+      outline-offset: 2px;
+      border-radius: 50%;
+    }
+
+
+    /* ── Controls Core Buttons ── */
+    .btn-group {
+      margin-top: 28px; 
+      display: flex; 
+      gap: 12px; 
+      align-items: center; 
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border-radius: 4px;
+      cursor: pointer;
+      border: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary { background: var(--tk-dark); color: #fff; }
+    .btn-primary:hover { background: var(--tk-teal); }
+    .btn-ghost { background: transparent; color: #4a5568; border: 1.5px solid #cbd5e0; }
+    .btn-ghost:hover { background: var(--tk-light); }
+
+    #resetBtn {
+      margin-left: auto; 
+    }
+
+    /* ── Lead Gate Form Block ── */
+    .lead-gate {
+      background: #fff;
+      border-radius: 8px;
+      padding: 36px;
+      margin: 24px 0;
+      text-align: center;
+      border: 2px solid var(--tk-teal);
+      box-shadow: 0 10px 25px rgba(5, 31, 46, 0.05);
+    }
+    .lead-gate h2 {
+      color: var(--tk-dark);
+      margin-bottom: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .lead-gate p {
+      font-size: 0.95rem;
+      color: #4a5568;
+      max-width: 640px;
+      margin: 0 auto 20px;
+    }
+    .lead-logo {
+      height: 55px;
+      width: auto;
+      margin: 0 auto 12px;
+      display: block;
+    }
+    .lead-form {
+      max-width: 400px;
+      margin: 20px auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .lead-form input {
+      padding: 12px;
+      border-radius: 4px;
+      border: 1px solid #cbd5e0;
+      font-size: 1rem;
+      width: 100%;
+      outline: none;
+    }
+    /* Grid keeps the box optically centred on the first line and gives the
+       wrapped text one clean left edge, whatever the line height. */
+    .diag-line {
+      font-size: 0.9rem;
+      line-height: 1.55;
+      color: var(--tk-dark);
+      background: #f4f7fb;
+      border-left: 3px solid var(--tk-teal);
+      padding: 10px 14px;
+      margin-bottom: 8px;
+      border-radius: 0 4px 4px 0;
+    }
+    .diag-line.diag-na {
+      border-left-color: #5b6577;
+      background: #f3f4f7;
+      color: #3d4457;
+    }
+
+    .lead-form select {
+      width: 100%;
+      padding: 13px 15px;
+      border-radius: 5px;
+      border: 1.5px solid var(--tk-border);
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--tk-text-main);
+      background: #fff;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%233D4585' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      padding-right: 38px;
+    }
+    .lead-form select:focus {
+      outline: none;
+      border-color: var(--tk-teal);
+    }
+
+    .lead-consent {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 10px;
+      text-align: left;
+      font-size: 0.8rem;
+      color: #4a5568;
+      line-height: 1.5;
+      cursor: pointer;
+      margin-top: 4px;
+    }
+    .lead-consent input {
+      width: 16px;
+      height: 16px;
+      margin: calc((1.5em - 16px) / 2) 0 0 0;
+      accent-color: var(--tk-teal);
+      cursor: pointer;
+    }
+    .lead-consent a {
+      color: var(--tk-blue-bright);
+      text-decoration: underline;
+    }
+
+    /* ── Faded Locked Preview System ── */
+    .locked-preview {
+      filter: blur(6px);
+      opacity: 0.25;
+      pointer-events: none;
+      user-select: none;
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    /* ── PREMIUM RESULTS CONTAINER RE-ENGINEERING ── */
+    .results-section {
+      display: none;
+      margin-top: 40px;
+      scroll-margin-top: 96px;
+    }
+    @media (max-width: 720px) {
+      .results-section { scroll-margin-top: 124px; }
+    }
+    
+    .res-hero {
+      background: var(--tk-dark) !important;
+      padding: 44px;
+      color: #ffffff !important;
+      display: flex;
+      align-items: center;
+      gap: 36px;
+      margin-bottom: 32px;
+      border-bottom: 4px solid var(--tk-teal);
+    }
+    .res-hero h2 {
+      font-weight: 900 !important;
+      font-size: 1.8rem !important;
+      color: #ffffff !important;
+      letter-spacing: 0.04em;
+      line-height: 1.2;
+      text-transform: uppercase !important;
+    }
+    .res-hero p {
+      font-size: 1rem !important;
+      color: var(--tk-light) !important;
+      max-width: 600px;
+      margin-top: 8px;
+    }
+    .res-logo {
+      height: 55px;
+      width: auto;
+      margin-left: auto;
+      opacity: 0.95;
+    }
+    .score-ring {
+      position: relative;
+      width: 150px;
+      height: 150px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .score-ring svg {
+      position: absolute;
+      inset: 0;
+      width: 150px;
+      height: 150px;
+      transform: rotate(-90deg);
+    }
+    .score-ring .ring-track {
+      fill: none;
+      stroke: rgba(255,255,255,0.14);
+      stroke-width: 7;
+    }
+    .score-ring .ring-fill {
+      fill: none;
+      stroke: url(#ringGradient);
+      stroke-width: 7;
+      stroke-linecap: round;
+      transition: stroke-dashoffset 1s cubic-bezier(0.4,0,0.2,1);
+    }
+    .score-ring .score-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 96px;
+    }
+    .score-num {
+      font-weight: 900 !important;
+      font-size: 2.8rem !important;
+      color: #ffffff !important;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: -0.02em;
+    }
+    .score-sub {
+      font-size: 0.72rem !important;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--tk-mint) !important;
+      margin-top: 5px;
+      font-weight: 800;
+    }
+    
+    .report-paper {
+      background: #ffffff !important;
+      padding: 48px;
+      border: 1px solid var(--tk-border) ;
+      box-shadow: 0 4px 12px rgba(5, 31, 46, 0.02);
+    }
+    .report-header-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--tk-dark);
+      padding-bottom: 20px;
+      margin-bottom: 40px;
+    }
+    .brand-title {
+      font-weight: 800;
+      font-size: 1.6rem;
+      color: var(--tk-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .report-subtitle {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--tk-indigo);
+      font-weight: 700;
+    }
+
+    .res-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      margin-bottom: 40px;
+    }
+    .res-card {
+      background: #ffffff !important;
+      padding: 20px 0 0;         /* flush with the rule above it */
+      border: none !important;
+      border-top: 2px solid var(--tk-dark) !important;
+    }
+    .rc-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+    .rc-name {
+      font-weight: 800 !important;
+      font-size: 0.9rem !important;
+      color: var(--tk-dark) !important;
+    }
+    .rc-badge {
+      font-weight: 900 !important;
+      font-size: 1.1rem !important;
+      color: var(--tk-blue-bright) !important;
+    }
+    .rc-bar-wrap {
+      height: 4px !important;
+      background: #edf2f7 !important;
+      margin: 12px 0 8px !important;
+    }
+    .rc-bar {
+      height: 4px !important;
+      background: var(--tk-dark) !important;
+    }
+    .rc-detail {
+      font-size: 0.8rem !important;
+      color: #718096 !important;
+    }
+
+    .section-card {
+      background: #ffffff;
+      padding: 36px 0;
+      border-top: 1px solid var(--tk-border);
+      margin-top: 24px;
+    }
+    .section-card h3 {
+      font-weight: 800 !important;
+      font-size: 1.3rem;
+      line-height: 1.35;
+      color: var(--tk-dark);
+      padding-bottom: 16px;
+      margin-bottom: 24px;
+      border-bottom: 1px solid var(--tk-dark);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .focus-desc {
+      font-size: 1rem !important;
+      color: var(--tk-dark) !important;
+      margin-bottom: 32px !important;
+      line-height: 1.6;
+    }
+    /* Inline emphasis: body typeface at a heavier weight keeps the brand colour
+       legible at text size, where a high-contrast display serif loses its hairlines. */
+    .tektit-keyword-accent {
+      font-weight: 800;
+      color: var(--tk-blue-bright);
+      text-transform: none !important;
+    }
+
+    .prio-row {
+      background: var(--tk-light) !important;
+      padding: 20px 22px !important;
+      margin-bottom: 18px !important;
+      display: block;
+      border-left: 4px solid var(--tk-teal) !important;
+    }
+    /* Rank as a small kicker above the title, so the heading starts flush
+       with the hint text and the next-steps box below it. */
+    .prio-rank {
+      display: block;
+      background: none !important;
+      color: var(--tk-teal) !important;
+      font-size: 0.68rem !important;
+      font-weight: 800 !important;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      line-height: 1.2;
+      margin-bottom: 6px;
+    }
+    .prio-content {
+      flex-grow: 1;
+    }
+    .prio-name {
+      font-weight: 800 !important;
+      font-size: 1.1rem !important;
+      margin-bottom: 10px !important;
+      color: var(--tk-dark) !important;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .diagnostic-text {
+      font-size: 0.95rem !important;
+      color: var(--tk-dark) !important;
+      margin-bottom: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── Headshot Frame ── */
+    .advisor-profile {
+      display: flex;
+      gap: 24px;
+      align-items: center;
+      margin-top: 36px;
+      padding-top: 28px;
+      border-top: 1px dashed #cbd5e0;
+    }
+    .avatar-frame {
+      position: relative;
+      width: 90px;
+      height: 90px;
+      flex-shrink: 0;
+    }
+    .avatar-frame img {
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--tk-dark);
+      display: block;
+    }
+    .avatar-fallback {
+      display: none;
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      background: var(--tk-dark);
+      color: #ffffff;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 1.4rem;
+      border: 2px solid var(--tk-dark);
+    }
+
+    .minto-booking-card {
+      margin-top: 40px !important;
+      padding: 44px !important;
+      background: #ffffff !important;
+      border: 1px solid #cbd5e0 !important;
+      border-top: 4px solid var(--tk-dark) !important;
+      text-align: left !important;
+    }
+    .minto-booking-card h2 {
+      font-weight: 900 !important;
+      font-size: 1.6rem !important;
+      color: var(--tk-dark) !important;
+      margin-bottom: 14px !important;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .minto-booking-card p {
+      font-size: 1rem !important;
+      color: var(--tk-dark) !important;
+      line-height: 1.6 !important;
+      margin-bottom: 32px !important;
+    }
+    .minto-booking-btn {
+      display: inline-block;
+      background: var(--tk-dark) !important;
+      color: #ffffff !important;
+      text-decoration: none !important;
+      padding: 16px 32px !important;
+      font-weight: 700 !important;
+      font-size: 0.9rem !important;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: background 0.2s ease !important;
+      border-radius: 4px !important;
+    }
+    .minto-booking-btn:hover {
+      background: var(--tk-teal) !important;
+    }
+
+    .pdf-footer-block {
+      margin-top: 48px;
+      padding-top: 24px;
+      border-top: 1px solid #cbd5e0;
+      font-size: 0.85rem;
+      color: #718096;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .elements { grid-template-columns: 1fr; }
+      .res-hero { flex-direction: column; text-align: center; padding: 24px; }
+      .res-logo { margin: 0 auto; }
+      .wiz-label { display: none; }
+      .wizard-steps { padding-bottom: 2px; }
+      #resetBtn { margin-left: 0; width: 100%; }
+    }
+    @media (max-width: 720px) {
+      .top-bar {
+        flex-wrap: wrap; row-gap: 8px; padding: 12px 16px;
+        padding-left: max(16px, env(safe-area-inset-left));
+        padding-right: max(16px, env(safe-area-inset-right));
+      }
+      .top-bar-left { gap: 10px; min-width: 0; }
+      .top-bar-left img { height: 34px; }
+      .top-bar h1 { font-size: 0.95rem; letter-spacing: 0.03em; }
+      .top-bar-right { gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+      .header-status-text { display: none; }
+      .progress-pill { padding: 5px 11px; font-size: 0.72rem; }
+    }
+    @media (max-width: 380px) {
+      .top-bar h1 { display: none; }
+    }
+
+    /* ── Early link capture ── */
+    .early-link {
+      background: #fff;
+      border: 1px solid var(--tk-border);
+      border-left: 3px solid var(--tk-teal);
+      border-radius: 4px;
+      padding: 18px 20px;
+      margin-top: 24px;
+      max-width: 840px;
+    }
+    .early-link-text { font-size: 0.9rem; color: #2d3748; margin-bottom: 12px; }
+    .early-link-form { display: flex; gap: 10px; flex-wrap: wrap; }
+    .early-link-form input {
+      flex: 1 1 240px;
+      min-width: 0;
+      padding: 11px 12px;
+      border: 1px solid #cbd5e0;
+      border-radius: 4px;
+      font-size: 0.95rem;
+      outline: none;
+    }
+    .early-link-form input:focus { border-color: var(--tk-teal); box-shadow: 0 0 0 2px rgba(82,165,176,0.18); }
+    .early-consent {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 10px;
+      font-size: 0.8rem; color: #4a5568; line-height: 1.5;
+      margin-top: 12px; cursor: pointer;
+    }
+    .early-consent input {
+      width: 16px; height: 16px;
+      margin: calc((1.5em - 16px) / 2) 0 0 0;
+      accent-color: var(--tk-teal); cursor: pointer;
+    }
+    .early-consent a { color: var(--tk-blue-bright); text-decoration: underline; }
+    .early-msg { font-size: 0.82rem; margin-top: 10px; font-weight: 600; }
+    .early-msg.err { color: #c53030; }
+    .early-msg.ok { color: #0d9488; }
+
+    /* ── Scope dialog ── */
+    .modal-backdrop {
+      position: fixed; inset: 0; z-index: 200;
+      background: rgba(5, 31, 46, 0.62);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .modal-box {
+      background: #fff;
+      border-radius: 8px;
+      border-top: 4px solid var(--tk-teal);
+      padding: 30px;
+      max-width: 520px;
+      width: 100%;
+      max-height: 88vh;
+      overflow-y: auto;
+      box-shadow: 0 18px 50px rgba(5, 31, 46, 0.3);
+    }
+    .modal-box h3 {
+      font-size: 1.15rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.05em;
+      color: var(--tk-dark); margin-bottom: 12px;
+    }
+    .modal-box > p { font-size: 0.92rem; color: #4a5568; line-height: 1.5; }
+    .scope-list {
+      list-style: none;
+      margin: 14px 0 4px;
+      padding: 12px 14px;
+      background: var(--tk-light);
+      border-radius: 4px;
+      font-size: 0.85rem;
+      color: var(--tk-dark);
+      max-height: 190px;
+      overflow-y: auto;
+    }
+    .scope-list li { padding: 3px 0; font-weight: 600; }
+    .modal-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 20px; }
+    .modal-actions .btn { width: 100%; justify-content: center; text-align: center; }
+    .modal-back {
+      display: block; margin: 14px auto 0;
+      background: none; border: none; cursor: pointer;
+      font-size: 0.82rem; color: var(--tk-blue-bright); font-weight: 700;
+    }
+    .modal-hint {
+      font-size: 0.75rem; color: #718096; line-height: 1.45;
+      margin-top: 12px; text-align: center; font-style: italic;
+    }
+
+    /* ── Assessment basis / radar note / skipped cards ── */
+    .assessment-basis {
+      font-size: 0.82rem; color: #718096; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+    .radar-note {
+      font-size: 0.75rem; color: #718096; font-style: italic;
+      text-align: center; margin-top: 10px; line-height: 1.45;
+    }
+    .res-card-skipped { opacity: 0.55; }
+
+    /* ── Report confirmation + send status ── */
+    .report-confirm {
+      margin-top: 20px;
+      padding: 16px 20px;
+      background: #e6fffa;
+      border-left: 4px solid #0d9488;
+      font-size: 0.92rem;
+      color: #05403a;
+      line-height: 1.5;
+    }
+    .send-status {
+      margin-top: 14px;
+      padding: 16px 20px;
+      background: #fffaf0;
+      border-left: 4px solid #dd6b20;
+      font-size: 0.9rem;
+      color: #7b341e;
+      line-height: 1.5;
+    }
+    .send-status button {
+      margin-top: 10px;
+      padding: 9px 16px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      background: var(--tk-dark);
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    /* Sticky results conversion bar */
+    #stickyActionBar {
+      position: fixed;
+      left: 0; right: 0; bottom: 0;
+      z-index: 90;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      padding: 10px 16px;
+      background: rgba(5, 31, 46, 0.97);
+      box-shadow: 0 -4px 20px rgba(5, 31, 46, 0.28);
+      transform: translateY(130%);
+      transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    #stickyActionBar.visible { transform: translateY(0); }
+    #stickyActionBar .btn { margin: 0; }
+    /* text-overflow never applied here: .btn is a flex container, so the old
+       max-width simply cut the label off. A short dedicated label instead. */
+    #stickyBookBtn {
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    @media (max-width: 600px) {
+      #stickyActionBar { padding: 8px 10px; gap: 8px; }
+      #stickyActionBar .btn { flex: 1; font-size: 0.85rem; padding: 12px 8px; }
+      #stickyBookBtn { white-space: normal; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      #stickyActionBar { transition: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top-bar">
+    <div class="top-bar-left">
+      <img src="TEKTIT_Cons-Logo_color-white.png" alt="Tektit Consulting Logo">
+      <h1 data-i18n="headTitle">Tektit Maturity Check</h1>
+    </div>
+    <div class="top-bar-right">
+      <div class="header-status-text" id="progText"></div>
+      <div class="progress-pill" id="liveScorePill" style="display:none;"><span data-i18n="liveScoreLabel">Live score:</span> <span id="liveScoreVal">0.0</span></div>
+      <div class="progress-pill"><span data-i18n="selectedLabel">Selected:</span> <span id="headerCount">0</span></div>
+      <div class="lang-switch" id="langSwitch" role="group">
+        <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        <button type="button" data-lang="de" aria-pressed="false">DE</button>
+      </div>
+    </div>
+    <div class="header-progress-track">
+      <div class="header-progress-fill" id="progFill"></div>
+    </div>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <h2 data-i18n="introH2">Most companies don't know how AI-ready they actually are.</h2>
+      <p data-i18n="introP1"></p>
+      <p data-i18n="introP2"></p>
+      <p data-i18n="introP3"></p>
+      <p data-i18n="introP4"></p>
+      
+      <section class="early-link" id="earlyLink">
+        <div class="early-link-text">
+<span data-i18n="earlyText"></span>
+        </div>
+        <div class="early-link-form" id="earlyLinkForm">
+          <label for="earlyEmail" class="sr-only">Your email address</label>
+          <input type="email" id="earlyEmail" placeholder="" data-i18n-ph="earlyPlaceholder" autocomplete="email" inputmode="email">
+          <button type="button" class="btn btn-primary" id="earlyLinkBtn" data-i18n="earlyBtn">Send me the link</button>
+        </div>
+        <label class="early-consent" for="earlyConsent" id="earlyConsentRow">
+          <input type="checkbox" id="earlyConsent">
+          <span data-i18n="earlyConsent"></span>
+        </label>
+        <div class="early-msg" id="earlyMsg" role="status" aria-live="polite"></div>
+      </section>
+
+      <details class="usage-accordion">
+        <summary data-i18n="accSummary">How to use this tool</summary>
+        <div class="accordion-content">
+          <div class="accordion-item" data-i18n="acc1"></div>
+          <div class="accordion-item" data-i18n="acc2"></div>
+          <div class="accordion-item" data-i18n="acc3"></div>
+          <div class="accordion-item" data-i18n="acc4"></div>
+          <div class="accordion-item" data-i18n="acc5"></div>
+        </div>
+      </details>
+    </section>
+
+    <section class="archetype-selector-card" id="archetypeSelector">
+      <h3 data-i18n="archH3">Select your organization's primary business profile:</h3>
+      <p style="font-size: 0.85rem; color: var(--tk-text-muted); margin-bottom: 4px;" data-i18n="archP"></p>
+      <div class="archetype-grid">
+        <button type="button" class="arch-btn active" data-arch="digital" data-i18n="archDigital"></button>
+        <button type="button" class="arch-btn" data-arch="services" data-i18n="archServices"></button>
+        <button type="button" class="arch-btn" data-arch="mittelstand" data-i18n="archMittelstand"></button>
+        <button type="button" class="arch-btn" data-arch="logistics" data-i18n="archLogistics"></button>
+      </div>
+    </section>
+    
+    <nav class="wizard-nav" aria-label="Assessment progress">
+      <div class="wizard-nav-caption" data-i18n="wizCaption"></div>
+      <ol class="wizard-steps" id="wizardStepsNav">
+        <li class="wiz-step" data-step-idx="0"><span class="wiz-dot">1</span><span class="wiz-label" data-wiz-label="0"></span></li>
+        <li class="wiz-step" data-step-idx="1"><span class="wiz-dot">2</span><span class="wiz-label" data-wiz-label="1"></span></li>
+        <li class="wiz-step" data-step-idx="2"><span class="wiz-dot">3</span><span class="wiz-label" data-wiz-label="2"></span></li>
+        <li class="wiz-step" data-step-idx="3"><span class="wiz-dot">4</span><span class="wiz-label" data-wiz-label="3"></span></li>
+      </ol>
+    </nav>
+
+    <section id="dimsContainer" aria-label="Maturity Dimensions Wizard Checklist"></section>
+
+    <div class="btn-group">
+      <button type="button" class="btn btn-ghost" id="prevStepBtn" style="display: none;" data-i18n="prevBtn"></button>
+      <button type="button" class="btn btn-primary" id="nextStepBtn" data-i18n="nextBtn"></button>
+      <button type="button" class="btn btn-primary" id="showLeadBtn" style="display: none;" data-i18n="genBtn"></button>
+      <button type="button" class="btn btn-ghost" id="resetBtn" data-i18n="resetBtn"></button>
+    </div>
+
+    <section id="results" class="results-section">
+      <div class="res-hero">
+        <div class="score-ring">
+          <svg viewBox="0 0 130 130" aria-hidden="true">
+            <defs>
+              <linearGradient id="ringGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#52A5B0"></stop>
+                <stop offset="100%" stop-color="#52F2B0"></stop>
+              </linearGradient>
+            </defs>
+            <circle class="ring-track" cx="65" cy="65" r="58"></circle>
+            <circle class="ring-fill" id="scoreRingFill" cx="65" cy="65" r="58"
+                    stroke-dasharray="364.4" stroke-dashoffset="364.4"></circle>
+          </svg>
+          <div class="score-inner">
+            <span class="score-num" id="totalScoreEl">0.0</span>
+            <span class="score-sub">/ 5.0</span>
+          </div>
+        </div>
+        <div>
+          <h2 id="userGreeting" data-i18n="resultsTitle"></h2>
+          <p id="scoreSubtitle" aria-live="polite"></p>
+        </div>
+        <img src="TEKTIT_Cons-Logo_color-white.png" alt="Tektit Logo Accent" class="res-logo" loading="lazy">
+      </div>
+
+      <section id="leadGate" class="lead-gate">
+        <img src="Tektit Consulting Bildmarke square.png" alt="Tektit Consulting" class="lead-logo" loading="lazy">
+        <h2 data-i18n="gateH2"></h2>
+        <p data-i18n="gateP"></p>
+        
+        <div class="lead-form">
+          <div>
+            <label for="leadName" class="sr-only" data-i18n="srName"></label>
+            <input type="text" id="leadName" placeholder="" data-i18n-ph="phName" autocomplete="name" required>
+          </div>
+          <div>
+            <label for="leadCompany" class="sr-only" data-i18n="srCompany"></label>
+            <input type="text" id="leadCompany" placeholder="" data-i18n-ph="phCompany" autocomplete="organization" required>
+          </div>
+          <div>
+            <label for="leadEmail" class="sr-only" data-i18n="srEmail"></label>
+            <input type="email" id="leadEmail" placeholder="" data-i18n-ph="phEmail" autocomplete="email" inputmode="email" required>
+          </div>
+          <div>
+            <label for="leadRole" class="sr-only" data-i18n="srRole"></label>
+            <select id="leadRole" required>
+              <option value="" data-i18n="roleNone"></option>
+              <option value="board" data-i18n="roleBoard"></option>
+              <option value="unit_lead" data-i18n="roleUnitLead"></option>
+              <option value="functional" data-i18n="roleFunctional"></option>
+              <option value="staff" data-i18n="roleStaff"></option>
+            </select>
+          </div>
+          <input type="text" id="tk_hp_field" name="tk_hp_field" tabindex="-1" autocomplete="off" aria-hidden="true" readonly onfocus="this.removeAttribute('readonly');" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">
+          <label class="lead-consent" for="leadConsent">
+            <input type="checkbox" id="leadConsent" required>
+            <span data-i18n="gateConsent"></span>
+          </label>
+          <button type="button" class="btn btn-primary" id="unlockResultsBtn" data-i18n="unlockBtn"></button>
+        </div>
+      </section>
+
+      <div id="lockedPreviewWrapper">
+        <div id="pdfContent" class="report-paper">
+          
+          <div class="report-header-line">
+            <div class="brand-title">TEKTIT</div>
+            <div class="report-subtitle" data-i18n="reportSubtitle"></div>
+          </div>
+
+          <p class="assessment-basis" id="assessmentBasis"></p>
+          <div id="diagLines"></div>
+
+          <div class="res-cards" id="resCards"></div>
+          
+          <div class="section-card" id="radarCard">
+            <h3 data-i18n="radarH3"></h3>
+            <div style="max-width:660px; margin:0 auto; padding: 10px;">
+              <svg id="radarSvg" viewBox="0 0 600 520" style="width:100%; height:auto; overflow: visible;"></svg>
+            </div>
+            <p class="radar-note" id="radarNote"></p>
+          </div>
+          
+          <div class="section-card" id="focusCard">
+            <h3 id="focusHeading" data-i18n="focusH3"></h3>
+            <p class="focus-desc" data-i18n="focusDesc"></p>
+            <div id="prioList"></div>
+            <p style="font-size: 0.75rem; color: #718096; margin-top: 14px; font-style: italic; line-height: 1.4;" data-i18n="focusNote"></p>
+          </div>
+
+          <div class="section-card" id="sparringCard">
+            <h3 data-i18n="sparringH3"></h3>
+            <p class="diagnostic-text" data-i18n="diag1"></p>
+            <p class="diagnostic-text" data-i18n="diag2"></p>
+            
+            <div class="advisor-profile">
+              <div class="avatar-frame">
+                <img src="cutout 800.jpeg" alt="Matthias Paratsch" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                <div class="avatar-fallback">MP</div>
+              </div>
+              <div style="text-align: left;">
+                <h4 style="margin: 0; font-size: 1.1rem; color: #051F2E; font-weight: 800; text-transform: uppercase;">Matthias Paratsch</h4>
+                <p style="margin: 2px 0 0; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: #52A5B0; font-weight: 700;" data-i18n="advisorRole"></p>
+                <p style="margin: 6px 0 0; font-size: 0.85rem; color: #718096; line-height: 1.55;" data-i18n="advisorBio"></p>
+              </div>
+            </div>
+            
+            <div class="pdf-footer-block">
+              <strong>Tektit Consulting GmbH</strong><br>
+              Matthias Paratsch | Associate Partner<br>
+              Schönhauser Allee 45, 10435 Berlin<br>
+              Email: matthias.paratsch@tektitconsulting.com | Tel: +49 171 5296 756<br>
+              <span style="font-size: 0.75rem; color: #a0aec0; margin-top: 6px; display: block; text-transform: uppercase; letter-spacing: 0.02em;" data-i18n="footerCopy"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="report-confirm" id="reportConfirm" style="display:none;"></div>
+      <div class="send-status" id="sendStatus" style="display:none;"></div>
+
+      <div class="btn-group" id="resultsActionButtonGroup" style="margin-top:24px;">
+        <button type="button" class="btn btn-ghost" id="backBtn" data-i18n="backBtn"></button>
+        <button type="button" class="btn btn-primary" id="kioskResetBtn" style="display:none;" data-i18n="kioskReset"></button>
+      </div>
+
+      <div id="bookingSection"></div>
+    </section>
+  </main>
+
+  <div class="modal-backdrop" id="scopeModal" role="dialog" aria-modal="true" aria-labelledby="scopeTitle" style="display:none;">
+    <div class="modal-box">
+      <h3 id="scopeTitle" data-i18n="scopeTitle"></h3>
+      <p data-i18n="scopeIntro"></p>
+      <ul class="scope-list" id="scopeList"></ul>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-primary" id="scopeApplies" data-i18n="scopeApplies"></button>
+        <button type="button" class="btn btn-ghost" id="scopeSkipped" data-i18n="scopeSkipped"></button>
+      </div>
+      <button type="button" class="modal-back" id="scopeBack" data-i18n="scopeBack"></button>
+      <p class="modal-hint" data-i18n="scopeHint"></p>
+    </div>
+  </div>
+
+  <script>
+    const DIMS_TEMPLATE = [
+      /* Pillar 1: AI Leadership & Value */
+      {id:"mandate", name:{
+        en:"Ownership & Mandate",
+        de:"Mandat & Verantwortung"
+       }, icon:"🧭", cluster:"AI Leadership & Value", strategicWeight: 1.5, elements:[
+        {t:{
+          en:"There is a named person responsible for AI in our company, with the authority to decide, not just an interest in the topic.",
+          de:"Bei uns ist namentlich klar, wer für KI verantwortlich ist, mit Entscheidungsbefugnis und nicht nur mit Interesse am Thema."
+         }, w: 2, desc:{
+          en:"Without one person holding the mandate, AI splinters into parallel initiatives that nobody brings back together.",
+          de:"Ohne eine Person mit Mandat zerfällt das Thema in parallele Initiativen, die niemand zusammenführt."
+         }},
+        {t:{
+          en:"AI has its own budget, and we know what our usage costs us per month.",
+          de:"Für KI ist ein eigenes Budget hinterlegt, und wir wissen, was die Nutzung uns pro Monat kostet."
+         }, w: 1.5, desc:{
+          en:"Usage-based pricing can escalate quietly during the learning phase. Knowing the monthly number is what keeps the topic fundable.",
+          de:"Verbrauchsabhängige Preise können in der Lernphase unbemerkt eskalieren. Die monatliche Zahl zu kennen, hält das Thema finanzierbar."
+         }},
+        {t:{
+          en:"Leadership works on AI in a fixed rhythm, not only when something comes up.",
+          de:"Die Geschäftsführung befasst sich in einem festen Rhythmus mit KI, nicht nur anlassbezogen."
+         }, w: 1, desc:{
+          en:"A standing slot in the leadership agenda is what separates a real transformation from a side project.",
+          de:"Ein fester Platz in der Führungsagenda unterscheidet eine echte Transformation von einem Nebenprojekt."
+         }}
+      ]},
+      {id:"focus", name:{
+        en:"Focus & Prioritization",
+        de:"Priorisierung & Fokus"
+       }, icon:"🎯", cluster:"AI Leadership & Value", strategicWeight: 1.3, elements:[
+        {t:{
+          en:{
+            digital:"We can name the points in our value chain where AI has the greatest leverage, and explain why it is those and not others.",
+            services:"We can name where AI has the greatest leverage in our delivery and client work, and explain why it is those steps and not others.",
+            mittelstand:"We can name where AI has the greatest leverage along our value chain, from order intake to production to service, and explain why it is those steps.",
+            logistics:"We can name where AI has the greatest leverage across our operations, from planning to fulfilment to customer service, and explain why it is those steps."
+           },
+          de:{
+            digital:"Wir können die Stellen in unserer Wertschöpfung benennen, an denen KI den größten Hebel hat, und begründen, warum es diese sind und nicht andere.",
+            services:"Wir können benennen, wo KI in unserer Leistungserbringung und Kundenarbeit den größten Hebel hat, und begründen, warum es diese Schritte sind.",
+            mittelstand:"Wir können benennen, wo KI entlang unserer Wertschöpfung den größten Hebel hat, von der Auftragsannahme über die Produktion bis zum Service, und begründen, warum es diese Schritte sind.",
+            logistics:"Wir können benennen, wo KI in unseren Abläufen den größten Hebel hat, von der Planung über die Abwicklung bis zum Kundenservice, und begründen, warum es diese Schritte sind."
+           }
+         }, w: 2, desc:{
+          en:"A list of possible use cases is not a priority. A priority comes with a reason why this one and not the other twelve.",
+          de:"Eine Liste möglicher Anwendungsfälle ist keine Priorität. Eine Priorität hat eine Begründung, warum dieser Fall und nicht die anderen zwölf."
+         }},
+        {t:{
+          en:"We have been just as explicit about where we deliberately do not use AI.",
+          de:"Wir haben genauso klar benannt, wo wir KI bewusst nicht einsetzen."
+         }, w: 1.5, desc:{
+          en:"Deciding against AI in specific places is a sign of maturity, not of hesitation. It protects budget and credibility.",
+          de:"Sich an bestimmten Stellen gegen KI zu entscheiden, ist ein Zeichen von Reife, nicht von Zögern. Es schützt Budget und Glaubwürdigkeit."
+         }},
+        {t:{
+          en:"New AI ideas are assessed for value and feasibility before effort goes into them.",
+          de:"Neue KI-Ideen werden auf Nutzen und Umsetzbarkeit geprüft, bevor Aufwand hineinfließt."
+         }, w: 1, desc:{
+          en:"Two questions are enough: how much does this save or earn, and how hard is it to build. Asked in that order.",
+          de:"Zwei Fragen reichen: Was bringt es an Zeit oder Geld, und wie schwer ist es zu bauen. In dieser Reihenfolge gestellt."
+         }}
+      ]},
+      {id:"impact", name:{
+        en:"Impact & Portfolio",
+        de:"Wirkung & Portfolio"
+       }, icon:"📈", cluster:"AI Leadership & Value", strategicWeight: 1.2, elements:[
+        {t:{
+          en:"For at least one AI use case we can evidence the benefit in hours or euros.",
+          de:"Für mindestens einen KI-Einsatz können wir den Nutzen in Stunden oder Euro belegen."
+         }, w: 2, desc:{
+          en:"Not an estimate and not a feeling. A number somebody would defend in a management meeting.",
+          de:"Keine Schätzung und kein Gefühl. Eine Zahl, die jemand in einer Führungsrunde verteidigen würde."
+         }},
+        {t:{
+          en:{
+            digital:"AI is noticeably part of at least one product or feature we sell to customers.",
+            services:"AI is noticeably part of at least one service we sell to clients.",
+            mittelstand:"AI is noticeably part of at least one product or service our customers pay for.",
+            logistics:"AI is noticeably part of at least one service our customers experience, for example in availability, delivery reliability or support."
+           },
+          de:{
+            digital:"KI steckt spürbar in mindestens einem Produkt oder Feature, das wir unseren Kunden verkaufen.",
+            services:"KI steckt spürbar in mindestens einer Leistung, die wir unseren Kunden verkaufen.",
+            mittelstand:"KI steckt spürbar in mindestens einem Produkt oder Service, für den unsere Kunden zahlen.",
+            logistics:"KI steckt spürbar in mindestens einer Leistung, die unsere Kunden merken, etwa bei Verfügbarkeit, Liefertreue oder Support."
+           }
+         }, w: 1.5, desc:{
+          en:"Internal efficiency lowers your cost. Only what reaches the customer changes your market position.",
+          de:"Interne Effizienz senkt Deine Kosten. Erst was beim Kunden ankommt, verändert Deine Marktposition."
+         }},
+        {t:{
+          en:"We keep measuring the benefit after rollout, not just during the pilot.",
+          de:"Wir messen den Nutzen auch nach dem Rollout weiter, nicht nur im Pilotprojekt."
+         }, w: 1, desc:{
+          en:"Pilots are measured because they need to prove something. Live systems stop being measured, and that is where the value quietly disappears.",
+          de:"Pilotprojekte werden gemessen, weil sie sich beweisen müssen. Im Betrieb hört das Messen auf, und genau dort verschwindet der Nutzen unbemerkt."
+         }}
+      ]},
+
+      /* Pillar 2: People & Culture */
+      {id:"enablement", name:{
+        en:"Enablement",
+        de:"Befähigung"
+       }, icon:"🎓", cluster:"People & Culture", strategicWeight: 1.3, elements:[
+        {t:{
+          en:{
+            digital:"Our people have been trained to use AI in their own work, not just informed that it exists.",
+            services:"Our consultants and delivery teams have been trained to use AI in their own client work, not just informed that it exists.",
+            mittelstand:"Our people have been trained to use AI in their own work, in administration as well as in production and service.",
+            logistics:"Our people have been trained to use AI in their own work, in the office as well as in operations."
+           },
+          de:{
+            digital:"Unsere Leute sind darin geschult, KI in ihrer eigenen Arbeit einzusetzen, nicht nur darüber informiert, dass es sie gibt.",
+            services:"Unsere Beraterinnen und Projektteams sind darin geschult, KI in ihrer eigenen Kundenarbeit einzusetzen, nicht nur darüber informiert.",
+            mittelstand:"Unsere Leute sind darin geschult, KI in ihrer eigenen Arbeit einzusetzen, in der Verwaltung wie in Produktion und Service.",
+            logistics:"Unsere Leute sind darin geschult, KI in ihrer eigenen Arbeit einzusetzen, im Büro wie im operativen Betrieb."
+           }
+         }, w: 2, desc:{
+          en:"An information event creates awareness. Only practice on your own tasks creates capability.",
+          de:"Eine Infoveranstaltung schafft Aufmerksamkeit. Erst Übung an den eigenen Aufgaben schafft Können."
+         }},
+        {t:{
+          en:"In the business units there are people others can turn to with a practical AI question.",
+          de:"In den Fachbereichen gibt es Personen, an die sich andere mit einer praktischen KI-Frage wenden können."
+         }, w: 1.5, desc:{
+          en:"Capability spreads through colleagues, not through documents. Two or three visible people per unit are enough.",
+          de:"Können verbreitet sich über Kolleginnen und Kollegen, nicht über Dokumente. Zwei oder drei sichtbare Personen pro Bereich reichen."
+         }},
+        {t:{
+          en:"Our managers can judge what AI can do in their area and where its limits are.",
+          de:"Unsere Führungskräfte können beurteilen, was KI in ihrem Bereich leisten kann und wo ihre Grenzen liegen."
+         }, w: 1, desc:{
+          en:"Most stalled AI projects sit in the gap between people who understand the technology and people who understand the process.",
+          de:"Die meisten steckengebliebenen KI-Vorhaben sitzen in der Lücke zwischen denen, die die Technik verstehen, und denen, die den Prozess verstehen."
+         }}
+      ]},
+      {id:"adoption", name:{
+        en:"Adoption & Communication",
+        de:"Akzeptanz & Kommunikation"
+       }, icon:"💬", cluster:"People & Culture", strategicWeight: 1.2, elements:[
+        {t:{
+          en:"We have openly communicated what AI means for roles and tasks here, including the uncomfortable parts.",
+          de:"Wir haben offen kommuniziert, was KI für Rollen und Aufgaben bei uns bedeutet, auch das Unbequeme."
+         }, w: 2, desc:{
+          en:"What is not said openly gets filled in with the worst assumption. Silence is the most expensive communication choice.",
+          de:"Was nicht offen gesagt wird, füllen die Leute mit der schlechtesten Annahme. Schweigen ist die teuerste Variante von Kommunikation."
+         }},
+        {t:{
+          en:"People can raise concerns about AI without being seen as blockers.",
+          de:"Bei uns kann man Bedenken zu KI äußern, ohne als Bremser zu gelten."
+         }, w: 1.5, desc:{
+          en:"Concerns that cannot be voiced do not disappear. They turn into quiet non-use, which is much harder to fix.",
+          de:"Bedenken, die nicht geäußert werden dürfen, verschwinden nicht. Sie werden zu stiller Nichtnutzung, und die ist deutlich schwerer zu beheben."
+         }},
+        {t:{
+          en:"We know how many of our people actually use the AI tools we provide.",
+          de:"Wir wissen, wie viele unserer Leute die bereitgestellten KI-Werkzeuge tatsächlich nutzen."
+         }, w: 1, desc:{
+          en:"Licences bought is not usage. The gap between the two is the single most common reason AI shows no effect.",
+          de:"Gekaufte Lizenzen sind keine Nutzung. Die Lücke zwischen beidem ist der häufigste Grund, warum KI keine Wirkung zeigt."
+         }}
+      ]},
+      {id:"learning", name:{
+        en:"Institutional Learning",
+        de:"Wissenssicherung"
+       }, icon:"📚", cluster:"People & Culture", strategicWeight: 1.0, elements:[
+        {t:{
+          en:"Findings from AI experiments are recorded so that somebody else can build on them.",
+          de:"Erkenntnisse aus KI-Versuchen werden so festgehalten, dass jemand anders damit weiterarbeiten kann."
+         }, w: 2, desc:{
+          en:"Learning that lives only in the head of whoever ran the experiment leaves the company when they do.",
+          de:"Wissen, das nur im Kopf der Person steckt, die den Versuch gemacht hat, verlässt das Unternehmen mit ihr."
+         }},
+        {t:{
+          en:"What works in one area gets passed on to other areas systematically.",
+          de:"Was in einem Bereich funktioniert, wird systematisch an andere Bereiche weitergegeben."
+         }, w: 1.5, desc:{
+          en:"Without transfer, every department pays the same tuition fee for the same lesson.",
+          de:"Ohne Weitergabe zahlt jede Abteilung dasselbe Lehrgeld für dieselbe Lektion."
+         }},
+        {t:{
+          en:"There is one place where prompts, templates and experience come together.",
+          de:"Es gibt einen festen Ort, an dem Prompts, Vorlagen und Erfahrungen zusammenlaufen."
+         }, w: 1, desc:{
+          en:"A shared library is the cheapest productivity gain in this whole topic, and the one most often skipped.",
+          de:"Eine gemeinsame Sammlung ist der günstigste Produktivitätsgewinn im ganzen Thema und der, der am häufigsten übersprungen wird."
+         }}
+      ]},
+
+      /* Pillar 3: Technology & Data */
+      {id:"access", name:{
+        en:"Access & Workspace",
+        de:"Zugang & Arbeitsumgebung"
+       }, icon:"🔐", cluster:"Technology & Data", strategicWeight: 1.4, elements:[
+        {t:{
+          en:"There is an approved company AI environment in which internal information may be processed.",
+          de:"Es gibt eine freigegebene, unternehmenseigene KI-Umgebung, in der auch interne Informationen verarbeitet werden dürfen."
+         }, w: 2, desc:{
+          en:"Without a sanctioned place to work, people will find an unsanctioned one. This is the single highest-leverage item on this list.",
+          de:"Ohne einen erlaubten Ort zum Arbeiten finden die Leute einen unerlaubten. Das ist der wirksamste Punkt auf dieser Liste."
+         }},
+        {t:{
+          en:"We know which AI tools are actually in use across the company, private accounts included.",
+          de:"Wir wissen, welche KI-Werkzeuge im Unternehmen tatsächlich genutzt werden, private Accounts eingeschlossen."
+         }, w: 1.5, desc:{
+          en:"Most companies are already using AI heavily. They just cannot see it, which means they cannot govern it.",
+          de:"Die meisten Unternehmen nutzen KI längst intensiv. Sie sehen es nur nicht, und deshalb können sie es nicht steuern."
+         }},
+        {t:{
+          en:"The approved environment is good enough that nobody has a reason to fall back on private accounts.",
+          de:"Die freigegebene Umgebung ist so gut, dass niemand einen Grund hat, auf private Accounts auszuweichen."
+         }, w: 1, desc:{
+          en:"A compliant tool that is worse than the free alternative does not create compliance. It creates workarounds.",
+          de:"Ein regelkonformes Werkzeug, das schlechter ist als die kostenlose Alternative, schafft keine Regelkonformität. Es schafft Umwege."
+         }}
+      ]},
+      {id:"data", name:{
+        en:"Data Access & Quality",
+        de:"Datenzugang & Datenqualität"
+       }, icon:"📊", cluster:"Technology & Data", strategicWeight: 1.4, elements:[
+        {t:{
+          en:{
+            digital:"The data sources that matter for AI are identified and technically reachable.",
+            services:"The knowledge that matters for AI, project documents, offers, methods, is identified and technically reachable.",
+            mittelstand:"The data sources that matter for AI, from ERP to machine and quality data, are identified and technically reachable.",
+            logistics:"The data sources that matter for AI, from inventory to transport and order data, are identified and technically reachable."
+           },
+          de:{
+            digital:"Die für KI relevanten Datenquellen sind identifiziert und technisch erreichbar.",
+            services:"Das für KI relevante Wissen, also Projektunterlagen, Angebote und Methoden, ist identifiziert und technisch erreichbar.",
+            mittelstand:"Die für KI relevanten Datenquellen, von ERP bis zu Maschinen- und Qualitätsdaten, sind identifiziert und technisch erreichbar.",
+            logistics:"Die für KI relevanten Datenquellen, von Bestands- bis zu Transport- und Auftragsdaten, sind identifiziert und technisch erreichbar."
+           }
+         }, w: 2, desc:{
+          en:"Most AI projects do not fail on the model. They fail because the data cannot be reached without a manual workaround.",
+          de:"Die meisten KI-Vorhaben scheitern nicht am Modell. Sie scheitern daran, dass die Daten ohne manuellen Umweg nicht erreichbar sind."
+         }},
+        {t:{
+          en:"Our data is maintained and described well enough that a system can make sense of it.",
+          de:"Unsere Daten sind so gepflegt und beschrieben, dass ein System sie sinnvoll nutzen kann."
+         }, w: 1.5, desc:{
+          en:"Cryptic field names and half-filled records confuse a language model in exactly the way they confuse a new colleague.",
+          de:"Kryptische Feldnamen und halb gefüllte Datensätze verwirren ein Sprachmodell genauso wie eine neue Kollegin."
+         }},
+        {t:{
+          en:"For our key data it is clear who owns it and keeps it current.",
+          de:"Für unsere wichtigen Daten ist geklärt, wer sie verantwortet und aktuell hält."
+         }, w: 1, desc:{
+          en:"Data without an owner degrades. AI makes that degradation visible faster than any report ever did.",
+          de:"Daten ohne Verantwortliche verfallen. KI macht diesen Verfall schneller sichtbar als jeder Bericht."
+         }}
+      ]},
+      {id:"integration", name:{
+        en:"Process Integration",
+        de:"Integration in Prozesse"
+       }, icon:"🔗", cluster:"Technology & Data", strategicWeight: 1.1, elements:[
+        {t:{
+          en:{
+            digital:"AI sits inside the tools where the work already happens, not as a separate application next to them.",
+            services:"AI sits inside the tools where the work already happens, for example in our documents and project systems, not as a separate application next to them.",
+            mittelstand:"AI sits inside the systems where the work already happens, for example in ERP or the order process, not as a separate application next to them.",
+            logistics:"AI sits inside the systems where the work already happens, for example in planning or the order process, not as a separate application next to them."
+           },
+          de:{
+            digital:"KI sitzt in den Werkzeugen, in denen die Arbeit ohnehin passiert, und nicht als separate Anwendung daneben.",
+            services:"KI sitzt in den Werkzeugen, in denen die Arbeit ohnehin passiert, etwa in unseren Dokumenten und Projektsystemen, und nicht als separate Anwendung daneben.",
+            mittelstand:"KI sitzt in den Systemen, in denen die Arbeit ohnehin passiert, etwa im ERP oder im Auftragsprozess, und nicht als separate Anwendung daneben.",
+            logistics:"KI sitzt in den Systemen, in denen die Arbeit ohnehin passiert, etwa in der Planung oder im Auftragsprozess, und nicht als separate Anwendung daneben."
+           }
+         }, w: 2, desc:{
+          en:"Every switch between systems costs adoption. Tools that require a detour get used twice and then forgotten.",
+          de:"Jeder Wechsel zwischen Systemen kostet Akzeptanz. Werkzeuge, die einen Umweg verlangen, werden zweimal genutzt und dann vergessen."
+         }},
+        {t:{
+          en:"There is a defined path from experiment to production use, with IT and the business unit both involved.",
+          de:"Vom Versuch zum produktiven Einsatz gibt es bei uns einen geregelten Weg, an dem IT und Fachbereich beteiligt sind."
+         }, w: 1.5, desc:{
+          en:"If IT joins too late you get a blocked launch. If the business unit joins too late you get a tool nobody uses.",
+          de:"Kommt die IT zu spät dazu, wird der Start blockiert. Kommt der Fachbereich zu spät dazu, entsteht ein Werkzeug, das niemand nutzt."
+         }},
+        {t:{
+          en:{
+            digital:"Where AI output reaches customers or decisions, it is defined who reviews it first.",
+            services:"Where AI output goes into client deliverables, it is defined who reviews it first.",
+            mittelstand:"Where AI output affects customers, quality or production decisions, it is defined who reviews it first.",
+            logistics:"Where AI output affects customers or operational decisions, it is defined who reviews it first."
+           },
+          de:{
+            digital:"Wo KI-Ergebnisse zu Kunden oder in Entscheidungen gehen, ist geregelt, wer sie vorher prüft.",
+            services:"Wo KI-Ergebnisse in Kundenleistungen einfließen, ist geregelt, wer sie vorher prüft.",
+            mittelstand:"Wo KI-Ergebnisse Kunden, Qualität oder Produktionsentscheidungen betreffen, ist geregelt, wer sie vorher prüft.",
+            logistics:"Wo KI-Ergebnisse Kunden oder operative Entscheidungen betreffen, ist geregelt, wer sie vorher prüft."
+           }
+         }, w: 1, desc:{
+          en:"A named reviewer is what lets you use AI on things that matter. Without one you are limited to the harmless cases.",
+          de:"Eine benannte Prüfinstanz erlaubt Dir, KI dort einzusetzen, wo es zählt. Ohne sie bleibst Du auf die harmlosen Fälle beschränkt."
+         }}
+      ]},
+
+      /* Pillar 4: Rules & Risk */
+      {id:"rules", name:{
+        en:"Usage Rules",
+        de:"Nutzungsregeln"
+       }, icon:"📋", cluster:"Rules & Risk", strategicWeight: 1.3, elements:[
+        {t:{
+          en:"There are binding rules for using AI, and our people could state them in one sentence.",
+          de:"Es gibt verbindliche Regeln für den KI-Einsatz, und unsere Leute könnten sie in einem Satz wiedergeben."
+         }, w: 2, desc:{
+          en:"A policy nobody can paraphrase is not a policy. It is a document that protects nobody.",
+          de:"Eine Richtlinie, die niemand in eigenen Worten wiedergeben kann, ist keine Richtlinie. Sie ist ein Dokument, das niemanden schützt."
+         }},
+        {t:{
+          en:"The rules say concretely which data may go into which system, and which may not.",
+          de:"Die Regeln sagen konkret, welche Daten in welches System dürfen und welche nicht."
+         }, w: 1.5, desc:{
+          en:"General appeals to caution do not help anyone at the moment of pasting. Named data categories and named systems do.",
+          de:"Allgemeine Appelle zur Vorsicht helfen niemandem in dem Moment, in dem er etwas einfügt. Benannte Datenarten und benannte Systeme helfen."
+         }},
+        {t:{
+          en:"The rules are reviewed regularly, because both the technology and the legal position keep moving.",
+          de:"Die Regeln werden regelmäßig überprüft, weil sich Technik und Rechtslage laufend verändern."
+         }, w: 1, desc:{
+          en:"A policy written once ages faster in this field than in any other. Compliance here is a routine, not a project.",
+          de:"Eine einmal geschriebene Richtlinie veraltet hier schneller als in jedem anderen Feld. Compliance ist eine Routine, kein Projekt."
+         }}
+      ]},
+      {id:"security", name:{
+        en:"Permissions & Security",
+        de:"Berechtigungen & Informationssicherheit"
+       }, icon:"🔒", cluster:"Rules & Risk", strategicWeight: 1.4, elements:[
+        {t:{
+          en:{
+            digital:"If we connected an AI assistant to our systems tomorrow, we would know which documents it would surface.",
+            services:"If we connected an AI assistant to our drives tomorrow, we would know which client documents it would surface.",
+            mittelstand:"If we connected an AI assistant to our drives and systems tomorrow, we would know which documents it would surface.",
+            logistics:"If we connected an AI assistant to our systems tomorrow, we would know which documents and data it would surface."
+           },
+          de:{
+            digital:"Wenn wir morgen einen KI-Assistenten an unsere Systeme anschließen, wüssten wir, welche Dokumente er zeigen würde.",
+            services:"Wenn wir morgen einen KI-Assistenten an unsere Laufwerke anschließen, wüssten wir, welche Kundenunterlagen er zeigen würde.",
+            mittelstand:"Wenn wir morgen einen KI-Assistenten an unsere Laufwerke und Systeme anschließen, wüssten wir, welche Dokumente er zeigen würde.",
+            logistics:"Wenn wir morgen einen KI-Assistenten an unsere Systeme anschließen, wüssten wir, welche Dokumente und Daten er zeigen würde."
+           }
+         }, w: 2, desc:{
+          en:"AI does not create new access. It makes existing over-permissioning searchable, which is a different kind of problem.",
+          de:"KI schafft keine neuen Zugriffe. Sie macht vorhandene zu weite Berechtigungen durchsuchbar, und das ist ein anderes Problem."
+         }},
+        {t:{
+          en:"Access rights to documents and systems are current and reviewed regularly.",
+          de:"Zugriffsrechte auf Dokumente und Systeme sind aktuell und werden regelmäßig überprüft."
+         }, w: 1.5, desc:{
+          en:"Permissions accumulate over years of role changes. Almost nobody removes them, and AI reads all of them.",
+          de:"Berechtigungen sammeln sich über Jahre von Rollenwechseln an. Fast niemand nimmt sie zurück, und KI liest sie alle."
+         }},
+        {t:{
+          en:"With our AI providers it is settled where data is stored and that it is not used for training.",
+          de:"Bei unseren KI-Anbietern ist geklärt, wo Daten liegen und dass sie nicht zum Training verwendet werden."
+         }, w: 1, desc:{
+          en:"Free tiers rarely give that guarantee. This is usually a contract question, not a technical one.",
+          de:"Kostenlose Varianten geben diese Zusage selten. Das ist meist eine Vertragsfrage, keine technische."
+         }}
+      ]},
+      {id:"regulatory", name:{
+        en:"Regulatory Readiness",
+        de:"Regulatorik & Nachweisfähigkeit"
+       }, icon:"⚖️", cluster:"Rules & Risk", strategicWeight: 1.0, elements:[
+        {t:{
+          en:"We know which of our AI applications fall under which obligations of the EU AI Act.",
+          de:"Wir wissen, welche unserer KI-Anwendungen unter welche Pflichten des EU AI Act fallen."
+         }, w: 2, desc:{
+          en:"Obligations depend on the risk class of the specific application, not on the company. Most uses are low-risk, but you need to be able to say so.",
+          de:"Die Pflichten hängen an der Risikoklasse der einzelnen Anwendung, nicht am Unternehmen. Die meisten Einsätze sind unkritisch, aber man muss das sagen können."
+         }},
+        {t:{
+          en:"Our AI applications are documented: purpose, data sources, and who is responsible.",
+          de:"Unsere KI-Anwendungen sind dokumentiert: Zweck, Datenquellen und Verantwortliche."
+         }, w: 1.5, desc:{
+          en:"A simple register of what runs where covers most evidence obligations and takes an afternoon to start.",
+          de:"Eine einfache Übersicht, was wo läuft, deckt die meisten Nachweispflichten ab und ist an einem Nachmittag begonnen."
+         }},
+        {t:{
+          en:"Data protection and, where applicable, employee representation are involved early, not only at sign-off.",
+          de:"Datenschutz und, wo vorhanden, die Mitbestimmung sind früh eingebunden, nicht erst zur Freigabe."
+         }, w: 1, desc:{
+          en:"Late involvement turns a partner into a gatekeeper. The same people asked early usually clear the path.",
+          de:"Späte Einbindung macht aus einem Partner eine Hürde. Früh gefragt räumen dieselben Leute den Weg meist frei."
+         }}
+      ]}
+    ];
+
+    const ACTIONABLE_NEXT_STEPS = {
+      mandate: { en: "Name one person as responsible for AI, in writing, with a budget line and the authority to decide. Give the topic a fixed slot in the leadership meeting. Both steps take one decision, not a project.", de: "Benenne schriftlich eine Person als verantwortlich für KI, mit Budgetzeile und Entscheidungsbefugnis. Gib dem Thema einen festen Platz in der Führungsrunde. Beides ist eine Entscheidung, kein Projekt." },
+      focus: { en: "Take your three biggest cost or time drivers and ask for each one what AI would remove. Then write down two places where you will deliberately not use it. The second list is what makes the first credible.", de: "Nimm Deine drei größten Kosten- oder Zeittreiber und frag bei jedem, was KI davon abnehmen würde. Schreib danach zwei Stellen auf, an denen Du KI bewusst nicht einsetzt. Die zweite Liste macht die erste glaubwürdig." },
+      impact: { en: "Pick the AI use case that is already running and measure it properly once: hours before, hours after, over two weeks. One defensible number opens more doors internally than ten pilots.", de: "Nimm den KI-Einsatz, der schon läuft, und miss ihn einmal richtig: Stunden vorher, Stunden nachher, über zwei Wochen. Eine belastbare Zahl öffnet intern mehr Türen als zehn Pilotprojekte." },
+      enablement: { en: "Replace the next information session with a working session on real tasks people brought with them. Then ask each business unit to name two people others can turn to.", de: "Ersetz die nächste Infoveranstaltung durch eine Arbeitssitzung an echten Aufgaben, die die Leute selbst mitbringen. Lass danach jeden Fachbereich zwei Personen benennen, an die sich andere wenden können." },
+      adoption: { en: "Say out loud what AI means for roles here, including what you do not yet know. Then check actual usage of the tools you pay for. The gap between licences and use is usually the real finding.", de: "Sag offen, was KI für Rollen bei Euch bedeutet, auch das, was Du noch nicht weißt. Prüf danach die tatsächliche Nutzung der Werkzeuge, für die Du zahlst. Die Lücke zwischen Lizenz und Nutzung ist meist der eigentliche Befund." },
+      learning: { en: "Set up one shared place for prompts, templates and findings, and make it somebody's job to keep it tidy. A folder that is maintained beats a platform that is not.", de: "Richte einen gemeinsamen Ort für Prompts, Vorlagen und Erkenntnisse ein und mach das Pflegen zur Aufgabe einer Person. Ein gepflegter Ordner schlägt eine ungepflegte Plattform." },
+      access: { en: "Give people one approved AI environment that is genuinely good, and make it easier to reach than the free alternative. Nothing else in this list reduces shadow usage as fast.", de: "Gib den Leuten eine freigegebene KI-Umgebung, die wirklich gut ist, und mach sie leichter erreichbar als die kostenlose Alternative. Nichts anderes auf dieser Liste senkt die Schattennutzung so schnell." },
+      data: { en: "Pick the one use case you care about most and follow its data backwards: where does it sit, who owns it, can a system read it without a manual step. Fix that path before you buy anything.", de: "Nimm den Anwendungsfall, der Dir am wichtigsten ist, und verfolg seine Daten zurück: Wo liegen sie, wer verantwortet sie, kann ein System sie ohne manuellen Schritt lesen. Räum diesen Weg frei, bevor Du etwas kaufst." },
+      integration: { en: "Move AI into the tool where the work already happens, even if the first version is cruder than a standalone app. Then define the path from experiment to production with IT and the business unit in the same room.", de: "Hol KI in das Werkzeug, in dem die Arbeit ohnehin passiert, auch wenn die erste Version gröber ist als eine eigene Anwendung. Definiere danach den Weg vom Versuch zum Betrieb mit IT und Fachbereich im selben Raum." },
+      rules: { en: "Write rules short enough that people remember them: which data may go where, and who to ask when in doubt. One page beats twelve. Then put a review date on it.", de: "Schreib die Regeln so kurz, dass die Leute sie behalten: Welche Daten dürfen wohin, und wen frage ich im Zweifel. Eine Seite schlägt zwölf. Setz danach ein Datum für die Überprüfung darauf." },
+      security: { en: "Before you connect AI to anything, run a permissions check on your most sensitive folders. You will find access that should have been removed years ago. Fix that first; it is cheaper than any AI project.", de: "Bevor Du KI an irgendetwas anschließt, prüf die Berechtigungen auf Deinen sensibelsten Ablagen. Du wirst Zugriffe finden, die vor Jahren hätten entfernt werden müssen. Räum das zuerst auf, es ist günstiger als jedes KI-Projekt." },
+      regulatory: { en: "Start a simple register: what runs where, for what purpose, on which data, who is responsible. That single list answers most evidence questions and takes an afternoon to begin.", de: "Beginn eine einfache Übersicht: Was läuft wo, zu welchem Zweck, auf welchen Daten, wer ist verantwortlich. Diese eine Liste beantwortet die meisten Nachweisfragen und ist an einem Nachmittag begonnen." }
+    };
+
+    const CONTEXT_HINTS = {
+      mandate: { en: "A topic without an owner becomes everybody's hobby and nobody's result.", de: "Ein Thema ohne Verantwortliche wird das Hobby aller und das Ergebnis von niemandem." },
+      focus: { en: "Knowing where not to use AI is what makes the rest credible.", de: "Zu wissen, wo KI nicht hingehört, macht den Rest glaubwürdig." },
+      impact: { en: "Internal efficiency lowers cost. Only the customer side changes your position.", de: "Interne Effizienz senkt Kosten. Erst die Kundenseite verändert Deine Position." },
+      enablement: { en: "Awareness is not ability. Ability comes from practising on your own work.", de: "Informiert sein ist nicht können. Können kommt vom Üben an der eigenen Arbeit." },
+      adoption: { en: "What is not said openly gets filled in with the worst assumption.", de: "Was nicht offen gesagt wird, füllen die Leute mit der schlechtesten Annahme." },
+      learning: { en: "Learning that lives in one head leaves with that head.", de: "Wissen, das in einem Kopf lebt, geht mit diesem Kopf." },
+      access: { en: "Without a sanctioned place to work, people find an unsanctioned one.", de: "Ohne erlaubten Ort zum Arbeiten finden die Leute einen unerlaubten." },
+      data: { en: "Most AI projects fail on data access, not on the model.", de: "Die meisten KI-Vorhaben scheitern am Datenzugang, nicht am Modell." },
+      integration: { en: "Every switch between systems costs adoption.", de: "Jeder Wechsel zwischen Systemen kostet Akzeptanz." },
+      rules: { en: "A policy nobody can paraphrase protects nobody.", de: "Eine Richtlinie, die niemand wiedergeben kann, schützt niemanden." },
+      security: { en: "AI does not create new access. It makes old over-permissioning searchable.", de: "KI schafft keine neuen Zugriffe. Sie macht alte zu weite Rechte durchsuchbar." },
+      regulatory: { en: "You cannot demonstrate what you have never written down.", de: "Was nie aufgeschrieben wurde, kann man nicht nachweisen." }
+    };
+
+    /* ── UI strings. Product name and band names stay English in both languages. ── */
+    const UI = {
+      headTitle: { en: "Tektit AI Readiness Check", de: "Tektit AI Readiness Check" },
+      scale1: { en: "Not in place", de: "Nicht vorhanden" },
+      scale2: { en: "Started, in some areas", de: "Angefangen, in einzelnen Bereichen" },
+      scale3: { en: "Established, not consistently", de: "Etabliert, aber nicht durchgängig" },
+      scale4: { en: "Established and reviewed", de: "Durchgängig etabliert und überprüft" },
+      scaleNa: { en: "Cannot assess this", de: "Kann ich nicht beurteilen" },
+      scale1Short: { en: "not in place", de: "nicht" },
+      scale2Short: { en: "started", de: "angefangen" },
+      scale3Short: { en: "partly", de: "teilweise" },
+      scale4Short: { en: "consistent", de: "durchgängig" },
+      scaleNaShort: { en: "can't say", de: "unklar" },
+      progText: { en: "{n} of {t} dimensions reviewed", de: "{n} von {t} Dimensionen bearbeitet" },
+      liveScoreLabel: { en: "Live score:", de: "Live-Score:" },
+      selectedLabel: { en: "Selected:", de: "Ausgewählt:" },
+      langHint: { en: "Language", de: "Sprache" },
+      introH2: { en: "Most companies don't know how AI-ready they actually are.", de: "Die meisten Unternehmen wissen nicht, wie KI-ready sie wirklich sind." },
+      introP1: { en: "They have bought licences, run a training session, maybe written a policy. And still nobody in the building can answer the question of where the company actually stands. Meanwhile the tools get used anyway, on private accounts, with no rules and no record of what was learned.", de: "Sie haben Lizenzen gekauft, eine Schulung gemacht, vielleicht eine Richtlinie geschrieben. Und trotzdem kann niemand im Haus die Frage beantworten, wo das Unternehmen eigentlich steht. Genutzt wird KI ohnehin, über private Accounts, ohne Regeln und ohne dass jemand die Erkenntnisse festhält." },
+      introP2: { en: "Introducing AI is not an IT project. It is a company-wide change with a technical, a cultural, an organisational and a legal side, and it fails on whichever of the four gets ignored. This check looks at all four.", de: "Die Einführung von KI ist kein IT-Projekt. Sie ist eine unternehmensweite Veränderung mit einer technischen, einer kulturellen, einer organisatorischen und einer rechtlichen Seite, und sie scheitert an der Seite, die übersehen wird. Dieser Check betrachtet alle vier." },
+      introP3: { en: "In under ten minutes you will see which pillar is your constraint, what to fix first, and where AI is not worth it for you.", de: "In unter zehn Minuten siehst Du, welche Säule Dein Engpass ist, was Du zuerst angehen solltest und wo sich KI für Dich nicht lohnt." },
+      introP4: { en: "No fluff. No consultant-speak. Just clarity.", de: "Kein Blabla. Kein Beratersprech. Nur Klarheit." },
+      earlyText: { en: "<strong>Short on time?</strong> We'll email you the link; complete the check later, for example on your way home.", de: "<strong>Keine Zeit?</strong> Wir schicken Dir den Link; Du kannst den Check später machen, zum Beispiel auf der Rückfahrt." },
+      earlyPlaceholder: { en: "your.name@company.com", de: "dein.name@firma.de" },
+      earlyBtn: { en: "Send me the link", de: "Link schicken" },
+      earlyConsent: { en: "I agree to be contacted by Tektit Consulting GmbH and to receive the link and my report by email. See our <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Data Privacy</a> notice.", de: "Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und mir den Link sowie meinen Report per E-Mail schickt. Siehe unsere <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzhinweise</a>." },
+      earlyErrEmail: { en: "Please enter a valid email address.", de: "Bitte gib eine gültige E-Mail-Adresse ein." },
+      earlyErrConsent: { en: "Please tick the consent box so we may email you the link.", de: "Bitte setz das Häkchen, damit wir Dir den Link schicken dürfen." },
+      earlyOk: { en: "✅ Link sent to {email}; you can also just start below.", de: "✅ Link an {email} geschickt; Du kannst auch direkt unten anfangen." },
+      accSummary: { en: "How to use this tool", de: "So nutzt Du das Tool" },
+      acc1: { en: "<strong>1. What the tool assesses:</strong> Your organisation across 4 pillars and 12 dimensions: AI leadership and value, people and culture, technology and data, and rules and risk. It looks at your organisation, not at your tools.", de: "<strong>1. Was das Tool prüft:</strong> Dein Unternehmen über 4 Säulen und 12 Dimensionen: Führung und Wertbeitrag, Menschen und Kultur, Technologie und Daten sowie Regeln und Risiko. Es betrachtet Deine Organisation, nicht Deine Tools." },
+      acc2: { en: "<strong>2. How to answer:</strong> Rate each statement from 1 to 4. <strong>1</strong> not in place, <strong>2</strong> started in some areas, <strong>3</strong> established but not consistently, <strong>4</strong> established across the board and reviewed. Tap the same value again to clear it.", de: "<strong>2. Wie Du antwortest:</strong> Bewerte jede Aussage von 1 bis 4. <strong>1</strong> nicht vorhanden, <strong>2</strong> in einzelnen Bereichen angefangen, <strong>3</strong> etabliert, aber nicht durchgängig, <strong>4</strong> durchgängig etabliert und überprüft. Ein zweiter Tipp auf denselben Wert löscht ihn wieder." },
+      acc3: { en: "<strong>3. If you cannot answer:</strong> Use the <strong>?</strong> button. It is not a bad score and it does not count against you; it is excluded from the score and reported separately. What leadership cannot answer about its own company is a finding in its own right, and often the most useful one.", de: "<strong>3. Wenn Du nicht antworten kannst:</strong> Nutz den <strong>?</strong>-Button. Das ist keine schlechte Bewertung und zählt nicht gegen Dich; es fließt nicht in den Score ein und wird separat ausgewiesen. Was die Führung über das eigene Unternehmen nicht beantworten kann, ist ein eigener Befund, und oft der nützlichste." },
+      acc4: { en: "<strong>4. How the score is calculated:</strong> Each dimension gets a maturity score from 0.0 to 5.0. Foundational statements count for more than secondary ones, and dimensions carry different strategic weight. Anything you skip or mark as \\u0022cannot assess\\u0022 is left out of the score entirely, so a partial run still gives you an honest picture.", de: "<strong>4. Wie der Score entsteht:</strong> Jede Dimension bekommt einen Reifegrad von 0,0 bis 5,0. Grundlegende Aussagen zählen mehr als nachgelagerte, und die Dimensionen haben unterschiedliches strategisches Gewicht. Was Du überspringst oder als \\u0022kann ich nicht beurteilen\\u0022 markierst, fließt gar nicht in den Score ein, damit auch ein Teildurchlauf ein ehrliches Bild ergibt." },
+      acc5: { en: "<strong>5. How to read the focus areas:</strong> They are not simply your lowest scores. We combine the size of each gap with how much that area determines whether AI works at all, so you tackle the constraint with the most leverage first.", de: "<strong>5. Wie Du die Fokusfelder liest:</strong> Sie sind nicht einfach Deine schlechtesten Werte. Wir verbinden die Größe der Lücke mit der Bedeutung des Bereichs dafür, ob KI überhaupt funktioniert, damit Du zuerst den Engpass mit der größten Wirkung angehst." },
+      archH3: { en: "Select your organization's primary business profile:", de: "Wähl das Profil, das am besten zu Deinem Unternehmen passt:" },
+      archP: { en: "The wording of some statements adapts to your business model. Everything else stays identical, so results remain comparable.", de: "Der Wortlaut einzelner Aussagen passt sich Deinem Geschäftsmodell an. Alles andere bleibt identisch, damit die Ergebnisse vergleichbar bleiben." },
+      archDigital: { en: "🌐 Pure Digital / SaaS / Tech Products", de: "🌐 Digital / SaaS / Tech-Produkte" },
+      archServices: { en: "💼 Professional Services / Agencies", de: "💼 Dienstleistung / Agentur" },
+      archMittelstand: { en: "🏭 Traditional Mittelstand / Industrial", de: "🏭 Klassischer Mittelstand / Industrie" },
+      archLogistics: { en: "🚚 Retail / E-Com / Logistics Heavy", de: "🚚 Handel / E-Commerce / Logistik" },
+      archSwitchWarn: { en: "Changing your business profile track will wipe all current checkbox selections. Proceed?", de: "Wenn Du das Profil wechselst, werden alle Häkchen gelöscht. Fortfahren?" },
+      wizCaption: { en: "Step <span id=\"stepNow\">1</span> of 4 &middot; tap a step to jump", de: "Schritt <span id=\"stepNow\">1</span> von 4 &middot; tippe einen Schritt an, um zu springen" },
+      prevBtn: { en: "⬅️ Previous Pillar", de: "⬅️ Vorherige Säule" },
+      nextBtn: { en: "Next Pillar ➡️", de: "Nächste Säule ➡️" },
+      genBtn: { en: "📊 Generate analysis", de: "📊 Auswertung erstellen" },
+      resetBtn: { en: "Reset All", de: "Alles zurücksetzen" },
+      resetWarn: { en: "Clear all selections and start over?", de: "Alle Häkchen löschen und neu anfangen?" },
+      scopeTitle: { en: "Before we calculate your score", de: "Bevor wir Deinen Score berechnen" },
+      scopeIntro: { en: "You have not rated anything in <strong><span id=\\u0022scopeCount\\u0022>0</span></strong> of the 12 dimensions. What does that mean?", de: "In <strong><span id=\\u0022scopeCount\\u0022>0</span></strong> von 12 Dimensionen hast Du nichts bewertet. Was heißt das?" },
+      scopeApplies: { en: "That's accurate: nothing established there", de: "Das trifft zu: dort ist nichts etabliert" },
+      scopeSkipped: { en: "I skipped those; leave them out", de: "Die habe ich übersprungen; lass sie weg" },
+      scopeBack: { en: "← Back to the check", de: "← Zurück zum Check" },
+      scopeHint: { en: "Skipped dimensions are excluded from your score and your focus areas, so your result stays meaningful.", de: "Übersprungene Dimensionen fließen nicht in Score und Fokusfelder ein, damit Dein Ergebnis aussagekräftig bleibt." },
+      scopeNone: { en: "We need at least one dimension to work with. Please answer a few items, or mark a dimension as \"nothing established\" so we can score it.", de: "Wir brauchen mindestens eine Dimension. Beantworte ein paar Punkte, oder markiere eine Dimension als \"nichts etabliert\", damit wir sie bewerten können." },
+      gateH2: { en: "Unlock Your AI Readiness Results", de: "Deine Ergebnisse freischalten" },
+      gateP: { en: "Enter your details to unlock your full report: your <strong>AI Readiness Radar</strong>, the pillar that is holding you back, your top 3 focus areas and concrete next steps. You will also receive the report as a PDF by email.", de: "Trag Deine Daten ein und Du bekommst den vollen Report: Dein <strong>AI Readiness Radar</strong>, die Säule, die Dich bremst, Deine drei wichtigsten Fokusfelder und konkrete nächste Schritte. Den Report schicken wir Dir zusätzlich als PDF per E-Mail." },
+      phName: { en: "Your name", de: "Dein Name" },
+      phCompany: { en: "Your company name", de: "Name Deines Unternehmens" },
+      phEmail: { en: "Your work email address", de: "Deine geschäftliche E-Mail-Adresse" },
+      srName: { en: "Your name", de: "Dein Name" },
+      srCompany: { en: "Company Name", de: "Unternehmen" },
+      srEmail: { en: "Your email address", de: "Deine E-Mail-Adresse" },
+      gateConsent: { en: "By submitting this form you are giving consent to be contacted by Tektit Consulting GmbH and to have your assessment data processed to generate and send your report. You can withdraw your consent at any time. See our <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Data Privacy</a> notice.", de: "Mit dem Absenden bist Du damit einverstanden, dass die Tektit Consulting GmbH Dich kontaktiert und Deine Antworten verarbeitet, um Deinen Report zu erstellen und zu versenden. Du kannst Dein Einverständnis jederzeit zurückziehen. Siehe unsere <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzhinweise</a>." },
+      unlockBtn: { en: "Show My Results 📊", de: "Ergebnisse anzeigen 📊" },
+      errEmail: { en: "Please enter a valid work email address so we can send you your report.", de: "Bitte gib eine gültige geschäftliche E-Mail-Adresse ein, damit wir Dir den Report schicken können." },
+      errCompany: { en: "Please enter your company name.", de: "Bitte gib den Namen Deines Unternehmens ein." },
+      errConsent: { en: "Please tick the consent box so we can process your data and send your report.", de: "Bitte setz das Häkchen, damit wir Deine Daten verarbeiten und den Report schicken dürfen." },
+      resultsTitle: { en: "Your Results", de: "Deine Ergebnisse" },
+      greeting: { en: "Hello {name}, Here Are Your Results:", de: "Hallo {name}, hier sind Deine Ergebnisse:" },
+      bandFoundation: { en: "Foundation Stage: AI currently happens here, but it happens on its own. Without ownership, rules and a sanctioned environment, every further step multiplies the risk instead of the return.", de: "Foundation Stage: KI passiert bei Dir, aber sie passiert von selbst. Ohne Verantwortung, Regeln und eine freigegebene Umgebung vervielfacht jeder weitere Schritt das Risiko statt den Nutzen." },
+      bandWorking: { en: "Working Baseline: the basics hold. What is typically missing now is not more tooling but proof of value and a path from experiment to daily operations.", de: "Working Baseline: Die Grundlagen tragen. Was jetzt meist fehlt, sind nicht mehr Werkzeuge, sondern der Nachweis des Nutzens und ein Weg vom Versuch in den Alltag." },
+      bandScale: { en: "Scale-Ready: your organisation can absorb AI. The leverage now lies less in enabling and more in deciding where it genuinely pays and where it does not.", de: "Scale-Ready: Deine Organisation kann KI aufnehmen. Der Hebel liegt jetzt weniger im Befähigen als in der Entscheidung, wo sich KI wirklich lohnt und wo nicht." },
+      reportSubtitle: { en: "AI Readiness Check · 12 Dimensions", de: "AI Readiness Check · 12 Dimensionen" },
+      basis: { en: "Basis: {n} of {t} dimensions assessed", de: "Basis: {n} von {t} Dimensionen bewertet" },
+      basisSkipped: { en: " · {s} not assessed and excluded from the score", de: " · {s} nicht bewertet und nicht im Score enthalten" },
+      radarH3: { en: "Maturity Radar", de: "Maturity Radar" },
+      radarNote: { en: "Dimensions shown in grey were not assessed and are not part of your score.", de: "Grau dargestellte Dimensionen wurden nicht bewertet und zählen nicht in den Score." },
+      notAssessed: { en: "Not assessed", de: "Nicht bewertet" },
+      elementsEstablished: { en: "{c} of {t} statements rated", de: "{c} von {t} Aussagen bewertet" },
+      focusH3: { en: "Your Top 3 Focus Areas", de: "Deine 3 wichtigsten Fokusfelder" },
+      focusH2: { en: "Your Top 2 Focus Areas", de: "Deine 2 wichtigsten Fokusfelder" },
+      focusH1: { en: "Your Focus Area", de: "Dein Fokusfeld" },
+      focusDesc: { en: "<span class=\"tektit-keyword-accent\">Focus creates progress.</span> Changing everything at once slows you down. We weigh how big each gap is against how much that area affects your growth, so you know which one to take on first.", de: "<span class=\"tektit-keyword-accent\">Fokus schafft Fortschritt.</span> Alles gleichzeitig zu ändern bremst Dich. Wir wiegen die Größe der Lücke gegen die Bedeutung des Bereichs für Dein Wachstum ab, damit Du weißt, was zuerst dran ist." },
+      focusNote: { en: "* Note: Focus areas are ranked by leverage: how big each gap is combined with how much that area drives your growth, not strictly by raw score.", de: "* Hinweis: Die Reihenfolge richtet sich nach der Wirkung, also Größe der Lücke mal Bedeutung für Dein Wachstum, nicht nach dem reinen Punktwert." },
+      prioRank: { en: "Priority {n}", de: "Priorität {n}" },
+      nextStepsLabel: { en: "Recommended next steps:", de: "Empfohlene nächste Schritte:" },
+      congratsH: { en: "You've built something rare", de: "Du hast etwas Seltenes aufgebaut" },
+      congratsTitle: { en: "🎉 Nothing urgent to fix", de: "🎉 Nichts, was dringend zu reparieren wäre" },
+      congratsBody: { en: "Across all twelve dimensions, everything is broadly in place; there is no single bottleneck holding you back. That is uncommon, and it usually reflects a lot of deliberate work.<br><br>We would genuinely like to hear how you got there. If you are open to it, let's talk: no pitch, just a conversation about your journey.", de: "Über alle zwölf Dimensionen ist im Wesentlichen alles etabliert; es gibt keinen einzelnen Engpass, der Dich aufhält. Das ist selten und steckt meist viel bewusste Arbeit dahinter.<br><br>Wir würden gern hören, wie Du dahin gekommen bist. Wenn Du magst, sprich mit uns: kein Pitch, nur ein Gespräch über Deinen Weg." },
+      sparringH3: { en: "Understanding Your Constraint", de: "Deinen Engpass verstehen" },
+      diag1: { en: "Across more than 40 client engagements we see the same pattern: the technology is rarely the problem. AI stalls because nobody owns it, because the rules exist only on paper, or because the data cannot be reached without a manual workaround. Meanwhile people use AI anyway, on private accounts, and the organisation cannot see it.", de: "Aus über 40 Kundenprojekten sehen wir immer dasselbe Muster: Die Technik ist selten das Problem. KI bleibt stecken, weil niemand verantwortlich ist, weil die Regeln nur auf dem Papier existieren oder weil die Daten ohne manuellen Umweg nicht erreichbar sind. Genutzt wird KI trotzdem, über private Accounts, und die Organisation sieht es nicht." },
+      diag2: { en: "We work by one rule: <span class=\\u0022tektit-keyword-accent\\u0022>\\u0022Fall in love with the problem, not the solution\\u0022.</span> That includes telling you where AI is not worth it for you. Deciding against it in specific places is what makes the rest credible, and it is usually cheaper than the next licence.", de: "Wir arbeiten nach einer Regel: <span class=\\u0022tektit-keyword-accent\\u0022>\\u0022Verliebe Dich in das Problem, nicht in die Lösung\\u0022.</span> Dazu gehört, Dir zu sagen, wo sich KI für Dich nicht lohnt. Sich an einzelnen Stellen dagegen zu entscheiden, macht den Rest glaubwürdig, und es ist meist günstiger als die nächste Lizenz." },
+      advisorRole: { en: "Associate Partner", de: "Associate Partner" },
+      advisorBio: { en: "Works with leadership teams to find what is actually slowing the business down, and to decide what to fix first.", de: "Arbeitet mit Führungsteams daran, herauszufinden, was das Geschäft wirklich bremst, und was zuerst dran ist." },
+      footerCopy: { en: "Copyright © 2026 Tektit Consulting. All rights reserved. Confidential Executive Report.", de: "Copyright © 2026 Tektit Consulting. Alle Rechte vorbehalten. Vertraulicher Report." },
+      backBtn: { en: "⬆️ Edit selections", de: "⬆️ Antworten ändern" },
+      kioskReset: { en: "🔄 Start over for the next visitor", de: "🔄 Für den nächsten Besucher zurücksetzen" },
+      reportConfirm: { en: "📧 Your report is on its way to {email}.", de: "📧 Dein Report ist unterwegs an {email}." },
+      sendWarn: { en: "⚠️ We couldn't reach our server yet; the connection seems unstable. Your answers are saved and we'll retry automatically. Please tell us at the booth if this message stays.", de: "⚠️ Wir erreichen unseren Server noch nicht; die Verbindung scheint instabil. Deine Antworten sind gespeichert und wir versuchen es automatisch erneut. Sag uns am Stand Bescheid, wenn diese Meldung bleibt." },
+      sendRetry: { en: "Try sending again", de: "Erneut senden" },
+      sending: { en: "Sending…", de: "Wird gesendet…" },
+      sendStillFailing: { en: "Still no connection. Your data is saved and will be sent automatically once you're back online, or please leave us a business card.", de: "Noch keine Verbindung. Deine Daten sind gespeichert und gehen automatisch raus, sobald Du wieder online bist. Sonst lass uns gern eine Visitenkarte da." },
+      bookH2: { en: "Book a 20-Minute Call", de: "20 Minuten sprechen" },
+      bookP: { en: "Your report is ready. In 20 minutes we can go through the pillar that is holding you back and what we would tackle first. No pitch, no slides.", de: "Dein Report ist fertig. In 20 Minuten gehen wir die Säule durch, die Dich bremst, und was wir zuerst angehen würden. Kein Pitch, keine Folien." },
+      bookBtn: { en: "📅 Book a call with Matthias Paratsch", de: "📅 Termin mit Matthias Paratsch" },
+      stickyBtn: { en: "📅 Book a 20-minute call", de: "📅 20 Minuten sprechen" },
+      srRole: { en: "Your role", de: "Deine Rolle" },
+      shortGenBtn: { en: "Show my result", de: "Mein Ergebnis zeigen" },
+      shortSubtitle: { en: "AI Readiness Check · Short version, 12 statements", de: "AI Readiness Check · Kurzversion, 12 Aussagen" },
+      roleNone: { en: "Your role in the company…", de: "Deine Rolle im Unternehmen…" },
+      roleBoard: { en: "Board / Managing Director", de: "Geschäftsführung / Vorstand" },
+      roleUnitLead: { en: "Business unit lead", de: "Bereichsleitung" },
+      roleFunctional: { en: "Functional lead (IT, HR, Legal, …)", de: "Fachverantwortung (IT, HR, Recht, …)" },
+      roleStaff: { en: "Staff / project role", de: "Stab / Projektrolle" },
+      errRole: { en: "Please select your role.", de: "Bitte wähl Deine Rolle aus." },
+      weakestPillar: { en: "Your constraint sits in {pillar} ({score} of 5.0). Work above that level in the other pillars will not hold until this one moves.", de: "Dein Engpass liegt in {pillar} ({score} von 5,0). Was Du in den anderen Säulen darüber aufbaust, trägt erst, wenn diese Säule nachzieht." },
+      cantAssessNote1: { en: "You marked one statement as \u0022cannot assess\u0022. That is a finding, not a gap in the data: it shows where leadership currently has no visibility into its own organisation.", de: "Du hast eine Aussage als \u0022kann ich nicht beurteilen\u0022 markiert. Das ist ein Befund und keine Datenlücke: Er zeigt, wo die Führung derzeit keinen Einblick in die eigene Organisation hat." },
+      cantAssessNote: { en: "You marked {n} statements as \u0022cannot assess\u0022. That is a finding, not a gap in the data: it shows where leadership currently has no visibility into its own organisation.", de: "Du hast {n} Aussagen als \u0022kann ich nicht beurteilen\u0022 markiert. Das ist ein Befund und keine Datenlücke: Es zeigt, wo die Führung derzeit keinen Einblick in die eigene Organisation hat." }
+    };
+
+    /* Cluster values stay English everywhere (keys for colours, payload, Make).
+       Only the display label is translated. */
+    const CLUSTER_LABELS = {
+      "AI Leadership & Value": { en: "AI Leadership & Value", de: "Führung & Wertbeitrag" },
+      "People & Culture": { en: "People & Culture", de: "Menschen & Kultur" },
+      "Technology & Data": { en: "Technology & Data", de: "Technologie & Daten" },
+      "Rules & Risk": { en: "Rules & Risk", de: "Regeln & Risiko" }
+    };
+
+    /* ── Language ──
+       Order of precedence: ?lang= , stored choice, browser language, English. */
+    const SUPPORTED = ["en", "de"];
+    const LANG_KEY = "tektit_lang_v1";       // shared on purpose: one language choice per visitor
+    function detectLang() {
+      const q = (location.search.match(/[?&]lang=(\w\w)/) || [])[1];
+      if (q && SUPPORTED.indexOf(q) !== -1) return q;
+      try {
+        const saved = localStorage.getItem(LANG_KEY);
+        if (saved && SUPPORTED.indexOf(saved) !== -1) return saved;
+      } catch (e) {}
+      const nav = (navigator.language || navigator.userLanguage || "en").slice(0, 2).toLowerCase();
+      return SUPPORTED.indexOf(nav) !== -1 ? nav : "en";
+    }
+    let LANG = detectLang();
+
+    // Resolves a bilingual leaf, then an archetype variant if present.
+    function tr(v) {
+      if (v == null) return "";
+      if (typeof v === "string") return v;
+      const byLang = v[LANG] !== undefined ? v[LANG] : v.en;
+      return typeof byLang === "string" ? byLang : (byLang || {})[selectedArchetype] || "";
+    }
+    function t(key, vars) {
+      const entry = UI[key];
+      let out = entry ? (entry[LANG] !== undefined ? entry[LANG] : entry.en) : key;
+      if (vars) Object.keys(vars).forEach(function(k) { out = out.split("{" + k + "}").join(vars[k]); });
+      return out;
+    }
+    // German writes 2,2 not 2.2. The rest of the copy already says "von 5,0",
+    // so a raw toFixed would read wrong inside the same sentence.
+    function num(v, digits) {
+      const s = Number(v).toFixed(digits === undefined ? 1 : digits);
+      return LANG === "de" ? s.replace(".", ",") : s;
+    }
+    function clusterLabel(c) {
+      const e = CLUSTER_LABELS[c];
+      return e ? (e[LANG] !== undefined ? e[LANG] : e.en) : c;
+    }
+
+    let DIMS = []; 
+    let selectedArchetype = "digital";
+
+    const CLUSTERS = [
+      "AI Leadership & Value",
+      "People & Culture",
+      "Technology & Data",
+      "Rules & Risk"
+    ];
+    // Four consecutive Tektit palette swatches, mirroring the four-facet Bildmarke
+    const PILLAR_COLORS = {
+      "AI Leadership & Value": "#3D4585",
+      "People & Culture":      "#4E58A8",
+      "Technology & Data":     "#52A5B0",
+      "Rules & Risk":          "#52D0B0"
+    };
+    function pillarColor(cluster) { return PILLAR_COLORS[cluster] || "#3D4585"; }
+    // Darker, contrast-safe variants for text/numbers on white
+    const PILLAR_TEXT = {
+      "AI Leadership & Value": "#3D4585",
+      "People & Culture":      "#4E58A8",
+      "Technology & Data":     "#2C7A86",
+      "Rules & Risk":          "#17876B"
+    };
+    function pillarText(cluster) { return PILLAR_TEXT[cluster] || "#3D4585"; }
+
+    /* ── Benchmarking / capture layer ── */
+    const ASSESSMENT = "ai_ready";            // distinguishes this tool from the business Maturity Check
+    const TOOL_VERSION = "1.0.0";
+    const BENCHMARK_SCHEMA_VERSION = 3;       // 3 = scaled answers + role + cantAssess
+    const WEBHOOK_ENDPOINT = "https://hook.eu2.make.com/gijl0dhirgnmo4lmbsvzq76xg3ev4d28";
+    const CONSENT_VERSION = "2026-08-11";
+    const TOOL_URL = "https://matze-tektit.github.io/AI-Check/";
+    // The consent text actually shown to the visitor, in the language they saw.
+    function consentText() {
+      const el = document.querySelector(".lead-consent span");
+      const raw = el ? el.textContent : t("gateConsent");
+      return raw.replace(/\s+/g, " ").trim();
+    }
+    const SESSION_START = Date.now();
+    let SUBMISSION_ID = null;
+
+    function makeId() {
+      try { if (window.crypto && crypto.randomUUID) return crypto.randomUUID(); } catch (e) {}
+      return "sub-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 10);
+    }
+
+    // The single most useful sentence in the report: which pillar is the constraint.
+    function weakestPillar(pillarScores) {
+      let worst = null, worstVal = 99;
+      Object.keys(pillarScores || {}).forEach(function(c) {
+        const v = pillarScores[c];
+        if (v === null || v === undefined) return;
+        if (v < worstVal) { worstVal = v; worst = c; }
+      });
+      return worst;
+    }
+
+    function maturityBand(avg) {
+      if (avg < 1.8) return "Foundation Stage";
+      if (avg < 3.2) return "Working Baseline";
+      return "Scale-Ready";
+    }
+
+    // Assembles one clean, analysis-ready benchmark record from current state.
+    function buildBenchmarkPayload(eventName, lead) {
+      lead = lead || {};
+
+      // A link request carries no assessment yet. Keeping it lean means Make
+      // cannot mistake it for a finished report and mail out an empty one.
+      if (eventName === "link_request") {
+        if (!SUBMISSION_ID) SUBMISSION_ID = makeId();
+        return {
+          event: "link_request",
+          assessment: ASSESSMENT,
+          schemaVersion: BENCHMARK_SCHEMA_VERSION,
+          toolVersion: TOOL_VERSION,
+          submissionId: SUBMISSION_ID,
+          timestamp: new Date().toISOString(),
+          reportReady: false,
+          resumeUrl: TOOL_URL,
+          language: LANG,
+          userEmail: lead.email || "",
+          lead: {
+            email: lead.email || "",
+            consent: !!lead.consent,
+            consentText: consentText(),
+            consentVersion: CONSENT_VERSION,
+            consentTimestamp: lead.consentTimestamp || null
+          }
+        };
+      }
+
+      const dims = DIMS.map(function(d) {
+        const a = ansArr(d.id);
+        const els = d.elements.map(function(el, idx) {
+          const v = a[idx];
+          return {
+            index: idx,
+            weight: (el.w || 1.0),
+            answer: (typeof v === "number") ? v : null,   // 1..4 or null
+            cantAssess: v === "na"
+          };
+        });
+        return {
+          id: d.id,
+          name: d.name,
+          cluster: d.cluster,
+          strategicWeight: (d.strategicWeight || 1.0),
+          assessed: isAssessed(d.id),
+          score: calcScore(d.id),
+          answered: scoredCount(d.id),
+          cantAssess: naCount(d.id),
+          total: d.elements.length,
+          elements: els
+        };
+      });
+
+      // Skipped dimensions are excluded; they would otherwise count as a zero
+      // and drag the score down for something the user never answered.
+      const scored = dims.filter(function(r){ return r.assessed; });
+      const overallWeighted = weightedOverall(scored);
+      const overallSimple = scored.length
+        ? parseFloat((scored.reduce(function(s,r){ return s + r.score; }, 0) / scored.length).toFixed(2))
+        : 0;
+
+      // Weighted per pillar, consistent with the overall score. null = not assessed.
+      const pillarScores = {};
+      CLUSTERS.forEach(function(c) {
+        const inC = scored.filter(function(d){ return d.cluster === c; });
+        pillarScores[c] = inC.length ? weightedOverall(inC) : null;
+      });
+
+      if (!SUBMISSION_ID) SUBMISSION_ID = makeId();
+
+      return {
+        event: eventName,                         // "link_request" | "lead_unlock" | "short_complete"
+        mode: SHORT ? "short" : "full",
+        assessment: ASSESSMENT,
+        schemaVersion: BENCHMARK_SCHEMA_VERSION,
+        toolVersion: TOOL_VERSION,
+        submissionId: SUBMISSION_ID,
+        timestamp: new Date().toISOString(),
+        archetype: selectedArchetype,
+        language: LANG,
+        // Short mode produces no report: Make must not try to mail one.
+        reportReady: !SHORT,
+        resumeUrl: TOOL_URL,
+        suspectedBot: !!lead.suspectedBot,
+        // Flat fields: same names as the original payload, so existing
+        // Make scenario mappings (userEmail / userName / companyName) keep working
+        userEmail: lead.email || "",
+        userName: lead.name || "",
+        companyName: lead.company || "",
+        respondentRole: lead.role || "",
+        lead: {
+          name: lead.name || "",
+          email: lead.email || "",
+          company: lead.company || "",
+          role: lead.role || "",
+          consent: !!lead.consent,
+          consentText: consentText(),
+          consentVersion: CONSENT_VERSION,
+          consentTimestamp: lead.consentTimestamp || null
+        },
+        overallScore: overallWeighted,
+        overallScoreUnweighted: overallSimple,
+        assessedDimensions: scored.length,
+        totalDimensions: dims.length,
+        skippedDimensions: dims.filter(function(r){ return !r.assessed; }).map(function(r){ return r.id; }),
+        maturityBand: maturityBand(overallWeighted),
+        weakestPillar: weakestPillar(pillarScores),
+        cantAssessTotal: totalNaAnswers(),
+        cantAssessDimensions: dims.filter(function(r){ return r.cantAssess > 0; })
+                                  .map(function(r){ return r.id; }),
+        pillarScores: pillarScores,
+        dimensions: dims,
+        meta: {
+          userAgent: navigator.userAgent,
+          language: navigator.language,
+          referrer: document.referrer || "",
+          screen: (window.screen ? (window.screen.width + "x" + window.screen.height) : ""),
+          durationSeconds: Math.round((Date.now() - SESSION_START) / 1000)
+        }
+      };
+    }
+
+    /* ── Delivery layer: nothing may silently disappear ── */
+    const QUEUE_KEY = "tektit_ai_send_queue_v1";
+    const MAX_ATTEMPTS = 3;
+
+    // A non-2xx answer is a failure; fetch() alone would swallow an HTTP 500.
+    function postOnce(payload) {
+      return fetch(WEBHOOK_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        keepalive: true,                          // completes even if the tab is closed
+        body: JSON.stringify(payload)
+      }).then(function(res) {
+        if (!res.ok) throw new Error("HTTP " + res.status + " " + res.statusText);
+        return res;
+      });
+    }
+
+    function wait(ms) { return new Promise(function(r) { setTimeout(r, ms); }); }
+
+    function sendWithRetry(payload, attempt) {
+      attempt = attempt || 1;
+      return postOnce(payload).catch(function(err) {
+        if (attempt >= MAX_ATTEMPTS) throw err;
+        return wait(attempt * 2000).then(function() {
+          return sendWithRetry(payload, attempt + 1);
+        });
+      });
+    }
+
+    function readQueue() {
+      try { return JSON.parse(localStorage.getItem(QUEUE_KEY)) || []; } catch (e) { return []; }
+    }
+    function writeQueue(q) {
+      try {
+        if (q.length) localStorage.setItem(QUEUE_KEY, JSON.stringify(q));
+        else localStorage.removeItem(QUEUE_KEY);
+      } catch (e) {}
+    }
+    function enqueue(payload) {
+      const q = readQueue();
+      if (!q.some(function(p) { return p.submissionId === payload.submissionId && p.event === payload.event; })) {
+        q.push(payload);
+        writeQueue(q);
+      }
+    }
+    function dequeue(payload) {
+      writeQueue(readQueue().filter(function(p) {
+        return !(p.submissionId === payload.submissionId && p.event === payload.event);
+      }));
+    }
+
+    // Retries anything still pending from an earlier (offline) attempt.
+    function flushQueue() {
+      const q = readQueue();
+      if (!q.length) return Promise.resolve();
+      return q.reduce(function(chain, p) {
+        return chain.then(function() {
+          return sendWithRetry(p).then(function() { dequeue(p); }).catch(function() {});
+        });
+      }, Promise.resolve()).then(function() {
+        if (!readQueue().length) hideSendStatus();
+      });
+    }
+
+    function showSendStatus(msg, withRetry) {
+      const el = document.getElementById("sendStatus");
+      if (!el) return;
+      el.textContent = msg;
+      if (withRetry) {
+        const b = document.createElement("button");
+        b.type = "button";
+        b.textContent = t("sendRetry");
+        b.addEventListener("click", function() {
+          el.textContent = t("sending");
+          flushQueue().then(function() {
+            if (readQueue().length) {
+              showSendStatus(t("sendStillFailing"), true);
+            }
+          });
+        });
+        el.appendChild(document.createElement("br"));
+        el.appendChild(b);
+      }
+      el.style.display = "block";
+    }
+    function hideSendStatus() {
+      const el = document.getElementById("sendStatus");
+      if (el) el.style.display = "none";
+    }
+
+    // Single entry point: try to send, otherwise keep it safe for later.
+    function deliver(payload) {
+      return sendWithRetry(payload)
+        .then(function() { dequeue(payload); hideSendStatus(); return true; })
+        .catch(function(err) {
+          console.error("Send failed, queued for retry:", err);
+          enqueue(payload);
+          showSendStatus(t("sendWarn"), true);
+          return false;
+        });
+    }
+
+    // Last resort when the tab is closed while something is still pending.
+    window.addEventListener("pagehide", function() {
+      const q = readQueue();
+      if (!q.length || !navigator.sendBeacon) return;
+      q.forEach(function(p) {
+        try {
+          navigator.sendBeacon(WEBHOOK_ENDPOINT, new Blob([JSON.stringify(p)], { type: "application/json" }));
+        } catch (e) {}
+      });
+    });
+    /* Writes every marked string for the active language. Called on boot and on
+       every language switch. */
+    function applyLang() {
+      document.documentElement.lang = LANG;
+      document.querySelectorAll("[data-i18n]").forEach(function(el) {
+        el.innerHTML = t(el.getAttribute("data-i18n"));
+      });
+      document.querySelectorAll("[data-i18n-ph]").forEach(function(el) {
+        el.setAttribute("placeholder", t(el.getAttribute("data-i18n-ph")));
+      });
+      document.querySelectorAll("[data-wiz-label]").forEach(function(el) {
+        el.textContent = clusterLabel(CLUSTERS[parseInt(el.getAttribute("data-wiz-label"), 10)]);
+      });
+      document.querySelectorAll("#langSwitch button").forEach(function(b) {
+        b.setAttribute("aria-pressed", String(b.dataset.lang === LANG));
+      });
+      const book = document.querySelector(".minto-booking-btn");
+      if (book) book.textContent = t("bookBtn");
+      const sticky = document.getElementById("stickyBookBtn");
+      if (sticky) { sticky.textContent = t("stickyBtn"); sticky.setAttribute("title", t("bookBtn")); }
+      if (SHORT) applyShortLabels();
+    }
+
+    /* Short mode overrides two labels. It must run after applyLang, and again on
+       every language switch, or applyLang would put the long-form wording back. */
+    function applyShortLabels() {
+      const genBtn = document.getElementById("showLeadBtn");
+      if (genBtn) genBtn.textContent = t("shortGenBtn");
+      const sub = document.querySelector('[data-i18n="reportSubtitle"]');
+      if (sub) sub.textContent = t("shortSubtitle");
+    }
+
+    /* Switching language must never cost the visitor their answers. Because ids,
+       order and weights are identical in both languages, the indices still line up. */
+    function setLang(next) {
+      if (next === LANG || SUPPORTED.indexOf(next) === -1) return;
+      // Answers live in ANS, not in the DOM, so a language switch cannot lose them.
+      const step = currentStep;
+
+      LANG = next;
+      if (!KIOSK) { try { localStorage.setItem(LANG_KEY, LANG); } catch (e) {} }
+
+      compileArchetypeData();
+      buildUI();
+      applyLang();
+
+      DIMS.forEach(function(d) { updateDimCard(d.id); });
+
+      currentStep = 0;
+      for (let k = 0; k < step; k++) { /* jump without animation */ }
+      document.getElementById("stepPane-0").classList.remove("active");
+      currentStep = step;
+      const pane = document.getElementById("stepPane-" + currentStep);
+      pane.classList.add("active");
+      pane.style.opacity = "1";
+      pane.style.transform = "translateY(0)";
+
+      syncWizardButtonsState();
+      updateGlobalProgress();
+      document.getElementById("results").style.display = "none";
+      teardownStickyBar();
+    }
+
+    let currentStep = 0;
+    let isTransitioning = false;
+
+    /* ── Which dimensions did the user actually assess? ──
+       A dimension with zero ticks is ambiguous: it can mean "nothing is
+       established here" (a valid answer) or "I skipped this". Only the user
+       can tell us, so we ask once before calculating. */
+    let dimAssessment = {};            // dimId -> "assessed" | "skipped"
+    const KIOSK = /[?&]kiosk=1/.test(location.search);
+    const SHORT = /[?&]short=1/.test(location.search);
+    let earlyLeadEmail = "";
+
+    /* ── Answer state ──
+       ANS[dimId] is an array, one slot per element:
+         1..4  = the four maturity levels
+         "na"  = "cannot assess", deliberately not the same as unanswered
+         null  = untouched
+       "na" is excluded from the score exactly like a skipped dimension, but it
+       is counted and reported: a board that cannot answer is itself a finding. */
+    let ANS = {};
+
+    function ansArr(dimId) {
+      const dim = DIMS.find(function(d){ return d.id === dimId; });
+      const len = dim ? dim.elements.length : 0;
+      if (!ANS[dimId] || ANS[dimId].length !== len) {
+        ANS[dimId] = new Array(len).fill(null);
+      }
+      return ANS[dimId];
+    }
+    function getAns(dimId, idx) { return ansArr(dimId)[idx]; }
+    function setAns(dimId, idx, val) {
+      const a = ansArr(dimId);
+      a[idx] = (a[idx] === val) ? null : val;   // tapping the same value clears it
+      return a[idx];
+    }
+    // Elements carrying a numeric level, i.e. everything that feeds the score.
+    function scoredCount(dimId) {
+      return ansArr(dimId).filter(function(v){ return typeof v === "number"; }).length;
+    }
+    function naCount(dimId) {
+      return ansArr(dimId).filter(function(v){ return v === "na"; }).length;
+    }
+    function answeredCount(dimId) {
+      return ansArr(dimId).filter(function(v){ return v !== null && v !== undefined; }).length;
+    }
+    function hasAnyCheck(dimId) { return scoredCount(dimId) > 0; }
+    function isAssessed(dimId) {
+      return hasAnyCheck(dimId) || dimAssessment[dimId] === "assessed";
+    }
+    function totalScoredAnswers() {
+      let n = 0;
+      DIMS.forEach(function(d){ n += scoredCount(d.id); });
+      return n;
+    }
+    function totalNaAnswers() {
+      let n = 0;
+      DIMS.forEach(function(d){ n += naCount(d.id); });
+      return n;
+    }
+
+    function compileArchetypeData() {
+      DIMS = DIMS_TEMPLATE.map(template => {
+        // Short mode keeps the single heaviest statement per dimension: twelve
+        // items, unchanged ids and weights, and the same 0-5 output, so a short
+        // run stays comparable with a full one in the benchmark.
+        let els = template.elements;
+        if (SHORT) {
+          els = [els.slice().sort(function(a, b) { return (b.w || 1) - (a.w || 1); })[0]];
+        }
+        return {
+          id: template.id,
+          name: tr(template.name),
+          icon: template.icon,
+          cluster: template.cluster,
+          strategicWeight: template.strategicWeight,
+          elements: els.map(el => {
+            return {
+              t: tr(el.t),
+              w: el.w,
+              desc: tr(el.desc)
+            };
+          })
+        };
+      });
+    }
+
+    function buildUI() {
+      const container = document.getElementById("dimsContainer");
+      container.innerHTML = "";
+
+      CLUSTERS.forEach((clusterName, stepIdx) => {
+        const pane = document.createElement("div");
+        pane.className = `step-pane${stepIdx === 0 ? " active" : ""}`;
+        pane.id = `stepPane-${stepIdx}`;
+        if (stepIdx === 0) {
+          pane.style.opacity = "1";
+          pane.style.transform = "translateY(0)";
+        }
+        
+        const heading = document.createElement("h2");
+        heading.className = "pane-title";
+        heading.textContent = clusterLabel(clusterName);
+        pane.appendChild(heading);
+
+        // The anchors are shared across all statements, so they belong once per
+        // pane rather than repeated under every single row.
+        const legend = document.createElement("div");
+        legend.className = "scale-legend";
+        legend.innerHTML =
+          '<span><b>1</b> ' + t("scale1") + '</span>' +
+          '<span><b>2</b> ' + t("scale2") + '</span>' +
+          '<span><b>3</b> ' + t("scale3") + '</span>' +
+          '<span><b>4</b> ' + t("scale4") + '</span>' +
+          '<span><b>?</b> ' + t("scaleNa") + '</span>';
+        pane.appendChild(legend);
+
+        const stepDims = DIMS.filter(d => d.cluster === clusterName);
+        
+        stepDims.forEach(dim => {
+          const card = document.createElement("div");
+          card.className = "dim-card";
+          card.id = "dc-" + dim.id;
+          
+          let elsHtml = "";
+          dim.elements.forEach((el, idx) => {
+            const tt = el.desc ? `<span class="tt-wrap" role="tooltip" tabIndex="0"><span class="tt-icon">?</span><span class="tt-text">${el.desc}</span></span>` : "";
+            let scaleHtml = "";
+            for (let lv = 1; lv <= 4; lv++) {
+              scaleHtml += `<button type="button" class="sc-btn" data-dim="${dim.id}" data-idx="${idx}" data-val="${lv}"
+                              aria-pressed="false" title="${t("scale" + lv)}"><span class="sc-num">${lv}</span><span class="sc-cap">${t("scale" + lv + "Short")}</span></button>`;
+            }
+            elsHtml += `<div class="el-row" id="el-${dim.id}-${idx}" role="group" aria-label="${el.t.replace(/"/g, "&quot;")}">
+                        <div class="el-text">${el.t}${tt}</div>
+                        <div class="el-scale">
+                          ${scaleHtml}
+                          <button type="button" class="sc-btn sc-na" data-dim="${dim.id}" data-idx="${idx}" data-val="na"
+                            aria-pressed="false" title="${t("scaleNa")}"><span class="sc-num">?</span><span class="sc-cap">${t("scaleNaShort")}</span></button>
+                        </div>
+                      </div>`;
+          });
+          
+          const pc = pillarColor(dim.cluster);
+          card.style.borderLeft = `3px solid ${pc}`;
+          card.innerHTML = `
+            <div class="dim-head">
+              <div class="dim-title">
+                <div class="dim-icon" style="background:${pc}1f;">${dim.icon}</div>
+                <span class="dim-name">${dim.name}</span>
+              </div>
+              <div class="dim-badge" id="db-${dim.id}">0 / ${dim.elements.length}</div>
+            </div>
+            <div class="elements">${elsHtml}</div>`;
+          pane.appendChild(card);
+        });
+
+        container.appendChild(pane);
+      });
+    }
+
+    function initArchetypeControls() {
+      const group = document.getElementById("archetypeSelector");
+      group.addEventListener("click", (e) => {
+        const btn = e.target.closest(".arch-btn");
+        if (!btn) return;
+        
+        const targetArch = btn.dataset.arch;
+        if (targetArch === selectedArchetype) return;
+
+        const dynamicCheckedCount = totalScoredAnswers() + totalNaAnswers();
+        if (dynamicCheckedCount > 0) {
+          if (!confirm(t("archSwitchWarn"))) {
+            return;
+          }
+        }
+
+        document.querySelectorAll(".arch-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        
+        selectedArchetype = targetArch;
+        dimAssessment = {};
+        ANS = {};
+        
+        compileArchetypeData();
+        buildUI();
+        
+        currentStep = 0;
+        syncWizardButtonsState();
+        updateGlobalProgress();
+        
+        document.getElementById("results").style.display = "none";
+      });
+    }
+
+    function moveWizardStep(direction) {
+      if (isTransitioning) return;
+      const clamped = Math.min(3, Math.max(0, currentStep + direction));
+      if (clamped === currentStep) return;
+      isTransitioning = true;
+      const oldPane = document.getElementById(`stepPane-${currentStep}`);
+      oldPane.style.opacity = "0";
+      oldPane.style.transform = "translateY(8px)";
+      
+      setTimeout(() => {
+        oldPane.classList.remove("active");
+        
+        currentStep += direction;
+        if(currentStep < 0) currentStep = 0;
+        if(currentStep > 3) currentStep = 3;
+
+        const newPane = document.getElementById(`stepPane-${currentStep}`);
+        newPane.classList.add("active");
+        
+        void newPane.offsetWidth;
+        
+        newPane.style.opacity = "1";
+        newPane.style.transform = "translateY(0)";
+
+        syncWizardButtonsState();
+        updateGlobalProgress();
+        document.getElementById("wizardStepsNav").scrollIntoView({behavior: "smooth", block: "start"});
+        isTransitioning = false;
+      }, 150);
+    }
+
+    function syncWizardButtonsState() {
+      document.getElementById("prevStepBtn").style.display = currentStep === 0 ? "none" : "inline-flex";
+      
+      if (currentStep === 3) {
+        document.getElementById("nextStepBtn").style.display = "none";
+        document.getElementById("showLeadBtn").style.display = "inline-flex";
+      } else {
+        document.getElementById("nextStepBtn").style.display = "inline-flex";
+        document.getElementById("showLeadBtn").style.display = "none";
+      }
+
+      const now = document.getElementById("stepNow");
+      if (now) now.textContent = currentStep + 1;
+
+      CLUSTERS.forEach((_, idx) => {
+        const ind = document.querySelector(`[data-step-idx="${idx}"]`);
+        if (!ind) return;
+        const isNow = idx === currentStep;
+        ind.classList.toggle("active", isNow);
+        if (isNow) ind.setAttribute("aria-current", "step");
+        else ind.removeAttribute("aria-current");
+      });
+    }
+
+    function updateDimCard(dimId) {
+      const checked = answeredCount(dimId);
+      const total = DIMS.find(d => d.id === dimId).elements.length;
+      const badge = document.getElementById(`db-${dimId}`);
+      if (!badge) return;
+
+      badge.textContent = `${checked} / ${total}`;
+
+      // Reflect the stored answers back onto the buttons.
+      const a = ansArr(dimId);
+      a.forEach(function(v, idx) {
+        const row = document.getElementById(`el-${dimId}-${idx}`);
+        if (!row) return;
+        row.classList.toggle("is-answered", v !== null && v !== undefined);
+        row.classList.toggle("is-na", v === "na");
+        row.querySelectorAll(".sc-btn").forEach(function(btn) {
+          const raw = btn.dataset.val;
+          const val = raw === "na" ? "na" : parseInt(raw, 10);
+          const on = v === val;
+          btn.classList.toggle("active", on);
+          btn.setAttribute("aria-pressed", on ? "true" : "false");
+        });
+      });
+
+      if (checked === total) {
+        badge.className = "dim-badge completed";
+      } else if (checked > 0) {
+        badge.className = "dim-badge active";
+      } else {
+        badge.className = "dim-badge";
+      }
+    }
+
+    function updateGlobalProgress() {
+      const totalChecked = totalScoredAnswers() + totalNaAnswers();
+      
+      // A pillar counts as completed once every dimension in it has an answer,
+      // not merely because the user clicked past it.
+      CLUSTERS.forEach((clusterName, idx) => {
+        const stepIndicator = document.querySelector(`[data-step-idx="${idx}"]`);
+        if (!stepIndicator) return;
+        const dimsIn = DIMS.filter(function(d){ return d.cluster === clusterName; });
+        const done = dimsIn.length > 0 && dimsIn.every(function(d){ return hasAnyCheck(d.id); });
+        stepIndicator.classList.toggle("completed", done && idx !== currentStep);
+      });
+
+      // Honest progress: reflect dimensions the user has actually engaged with
+      // (at least one element selected), not just steps clicked past.
+      let assessedCount = 0;
+      DIMS.forEach(d => {
+        if (answeredCount(d.id) > 0) assessedCount++;
+      });
+
+      document.getElementById("progFill").style.width = (assessedCount / DIMS.length * 100) + "%";
+      document.getElementById("progText").textContent = t("progText", { n: assessedCount, t: DIMS.length });
+      document.getElementById("headerCount").textContent = totalChecked;
+
+      updateLiveScore();
+      persistProgress();
+    }
+
+    function updateLiveScore() {
+      const total = totalScoredAnswers();
+      const pill = document.getElementById("liveScorePill");
+      const val = document.getElementById("liveScoreVal");
+      if (!pill || !val) return;
+      if (total > 0) {
+        // Only dimensions with at least one scored answer, so the running number
+        // is not dragged down by pillars the visitor has not reached yet.
+        const scores = DIMS.filter(function(d){ return scoredCount(d.id) > 0; })
+          .map(function(d) {
+            return { score: calcScore(d.id), strategicWeight: (d.strategicWeight || 1.0) };
+          });
+        pill.style.display = "";
+        val.textContent = weightedOverall(scores).toFixed(1);
+      } else {
+        pill.style.display = "none";
+      }
+    }
+
+    const PROGRESS_KEY = "tektit_ai_progress_v1";
+    function persistProgress() {
+      if (KIOSK) return;                 // shared booth device: keep nothing
+      try {
+        const answers = {};
+        DIMS.forEach(function(d) {
+          const a = ansArr(d.id);
+          if (a.some(function(v){ return v !== null && v !== undefined; })) answers[d.id] = a;
+        });
+        localStorage.setItem(PROGRESS_KEY, JSON.stringify({ archetype: selectedArchetype, answers: answers }));
+      } catch (e) { /* storage unavailable (private mode), fail silently */ }
+    }
+
+    function restoreProgress() {
+      if (KIOSK) {
+        try { localStorage.removeItem(PROGRESS_KEY); } catch (e) {}
+        return;
+      }
+      let saved;
+      try { saved = JSON.parse(localStorage.getItem(PROGRESS_KEY)); } catch (e) { return; }
+      if (!saved || !saved.answers) return;
+
+      if (saved.archetype && saved.archetype !== selectedArchetype) {
+        selectedArchetype = saved.archetype;
+        document.querySelectorAll(".arch-btn").forEach(function(b) {
+          b.classList.toggle("active", b.dataset.arch === selectedArchetype);
+        });
+        compileArchetypeData();
+        buildUI();
+      }
+
+      let restoredAny = false;
+      Object.keys(saved.answers).forEach(function(dimId) {
+        const dim = DIMS.find(function(d){ return d.id === dimId; });
+        if (!dim) return;                          // stale key from an older version
+        const incoming = saved.answers[dimId] || [];
+        const a = ansArr(dimId);
+        incoming.forEach(function(v, idx) {
+          if (idx >= a.length) return;
+          if (v === "na" || (typeof v === "number" && v >= 1 && v <= 4)) {
+            a[idx] = v;
+            restoredAny = true;
+          }
+        });
+        updateDimCard(dimId);
+      });
+      if (restoredAny) updateGlobalProgress();
+    }
+
+    function resetAll() {
+      if (!confirm(t("resetWarn"))) return;
+      try { localStorage.removeItem(PROGRESS_KEY); } catch (e) {}
+      dimAssessment = {};
+      ANS = {};
+      DIMS.forEach(d => updateDimCard(d.id));
+      
+      document.getElementById(`stepPane-${currentStep}`).classList.remove("active");
+      
+      currentStep = 0;
+      const zeroPane = document.getElementById(`stepPane-0`);
+      zeroPane.classList.add("active");
+      zeroPane.style.opacity = "1";
+      zeroPane.style.transform = "translateY(0)";
+      
+      syncWizardButtonsState();
+      updateGlobalProgress();
+      
+      document.getElementById("results").style.display = "none";
+      window.scrollTo({top: 0, behavior: "smooth"});
+    }
+
+    function initGlobalApp() {
+      compileArchetypeData();
+      buildUI();
+      initArchetypeControls();
+
+      const mainContainer = document.getElementById("dimsContainer");
+      mainContainer.addEventListener("click", (e) => {
+        const btn = e.target.closest(".sc-btn");
+        if (!btn) return;
+        const dimId = btn.dataset.dim;
+        const idx = parseInt(btn.dataset.idx, 10);
+        const raw = btn.dataset.val;
+        setAns(dimId, idx, raw === "na" ? "na" : parseInt(raw, 10));
+        updateDimCard(dimId);
+        updateGlobalProgress();
+      });
+
+      // Keyboard: 1-4 sets a level, 0 marks "cannot assess", on the focused row.
+      mainContainer.addEventListener("keydown", (e) => {
+        const btn = e.target.closest(".sc-btn");
+        if (!btn) return;
+        let val = null;
+        if (e.key >= "1" && e.key <= "4") val = parseInt(e.key, 10);
+        else if (e.key === "0" || e.key.toLowerCase() === "n") val = "na";
+        if (val === null) return;
+        e.preventDefault();
+        setAns(btn.dataset.dim, parseInt(btn.dataset.idx, 10), val);
+        updateDimCard(btn.dataset.dim);
+        updateGlobalProgress();
+      });
+
+      // Handle raw tab link adjustments across panels
+      document.getElementById("wizardStepsNav").addEventListener("click", (e) => {
+        const targetBtn = e.target.closest(".wiz-step");
+        if (!targetBtn) return;
+        
+        const targetIdx = parseInt(targetBtn.dataset.stepIdx);
+        const delta = targetIdx - currentStep;
+        if (delta !== 0) {
+          moveWizardStep(delta);
+        }
+      });
+
+      document.getElementById("prevStepBtn").addEventListener("click", () => moveWizardStep(-1));
+      document.getElementById("nextStepBtn").addEventListener("click", () => moveWizardStep(1));
+      document.getElementById("resetBtn").addEventListener("click", resetAll);
+      document.getElementById("backBtn").addEventListener("click", function() {
+        document.getElementById("results").style.display = "none";
+        teardownStickyBar();
+        window.scrollTo({top: 0, behavior: "smooth"});
+      });
+
+      document.getElementById("showLeadBtn").addEventListener("click", () => {
+        const open = DIMS.filter(function(d) {
+          return !hasAnyCheck(d.id) && !dimAssessment[d.id];
+        });
+        if (open.length) { openScopeDialog(open); return; }
+        proceedToGate();
+      });
+
+      document.getElementById("scopeApplies").addEventListener("click", function() {
+        applyScopeChoice("assessed");
+      });
+      document.getElementById("scopeSkipped").addEventListener("click", function() {
+        applyScopeChoice("skipped");
+      });
+      document.getElementById("scopeBack").addEventListener("click", function() {
+        document.getElementById("scopeModal").style.display = "none";
+      });
+
+      if (KIOSK) {
+        const kb = document.getElementById("kioskResetBtn");
+        kb.style.display = "inline-flex";
+        kb.addEventListener("click", function() {
+          try { localStorage.removeItem(PROGRESS_KEY); } catch (e) {}
+          location.reload();
+        });
+      }
+
+      document.getElementById("langSwitch").addEventListener("click", function(e) {
+        const b = e.target.closest("button[data-lang]");
+        if (b) setLang(b.dataset.lang);
+      });
+
+      if (SHORT) {
+        const early = document.getElementById("earlyLink");
+        if (early) early.style.display = "none";
+        const gate = document.getElementById("leadGate");
+        if (gate) gate.style.display = "none";
+        document.body.classList.add("is-short");
+      }
+
+      initEarlyLink();
+      flushQueue();
+
+      document.getElementById("unlockResultsBtn").addEventListener("click", () => {
+        const emailInput = document.getElementById("leadEmail");
+        const nameInput = document.getElementById("leadName");
+        const companyInput = document.getElementById("leadCompany");
+        const roleInput = document.getElementById("leadRole");
+        const consentInput = document.getElementById("leadConsent");
+        const honeypot = document.getElementById("tk_hp_field");
+
+        // Bot trap: never block a real submission (browser autofill can fill
+        // even hidden fields). Flag it instead and let the backend filter.
+        const suspectedBot = !!(honeypot && honeypot.value.trim() !== "");
+
+        const emailVal = (emailInput.value || "").trim();
+        const nameVal = (nameInput.value || "").trim();
+        const companyVal = (companyInput.value || "").trim();
+
+        if (!emailInput.checkValidity() || !emailVal) {
+          alert(t("errEmail"));
+          emailInput.focus();
+          return;
+        }
+        if (!companyVal) {
+          alert(t("errCompany"));
+          companyInput.focus();
+          return;
+        }
+        if (!roleInput.value) {
+          alert(t("errRole"));
+          roleInput.focus();
+          return;
+        }
+        if (!consentInput.checked) {
+          alert(t("errConsent"));
+          consentInput.focus();
+          return;
+        }
+
+        const lead = {
+          name: nameVal,
+          email: emailVal,
+          company: companyVal,
+          role: roleInput.value,
+          consent: true,
+          consentTimestamp: new Date().toISOString(),
+          suspectedBot: suspectedBot
+        };
+
+        // Capture the lead RIGHT NOW; no second click required. Make stores the
+        // row and emails the PDF report. Nothing containing personal data is
+        // written to this device unless a send actually failed (see deliver()).
+        deliver(buildBenchmarkPayload("lead_unlock", lead));
+
+        const confirm = document.getElementById("reportConfirm");
+        confirm.textContent = t("reportConfirm", { email: emailVal });
+        confirm.style.display = "block";
+
+        document.getElementById("userGreeting").textContent = nameVal ? t("greeting", { name: nameVal.split(" ")[0] }) : t("resultsTitle");
+        evaluate(false); 
+      });
+
+      applyLang();
+
+      // Restore any in-progress answers from a previous (unfinished) session
+      restoreProgress();
+
+      // Synchronize starting navigation values explicitly on application boot
+      syncWizardButtonsState();
+      updateGlobalProgress();
+    }
+
+    /* ── Early link capture: secures the lead even if the visitor leaves ── */
+    function initEarlyLink() {
+      const btn = document.getElementById("earlyLinkBtn");
+      if (!btn) return;
+      btn.addEventListener("click", function() {
+        const input = document.getElementById("earlyEmail");
+        const consent = document.getElementById("earlyConsent");
+        const msg = document.getElementById("earlyMsg");
+        const email = (input.value || "").trim();
+
+        if (!email || !input.checkValidity()) {
+          msg.className = "early-msg err";
+          msg.textContent = t("earlyErrEmail");
+          input.focus();
+          return;
+        }
+        if (!consent.checked) {
+          msg.className = "early-msg err";
+          msg.textContent = t("earlyErrConsent");
+          consent.focus();
+          return;
+        }
+
+        earlyLeadEmail = email;                    // prefills the gate later
+        deliver(buildBenchmarkPayload("link_request", {
+          email: email,
+          consent: true,
+          consentTimestamp: new Date().toISOString()
+        }));
+
+        document.getElementById("earlyLinkForm").style.display = "none";
+        document.getElementById("earlyConsentRow").style.display = "none";
+        msg.className = "early-msg ok";
+        msg.textContent = t("earlyOk", { email: email });
+      });
+    }
+
+    function openScopeDialog(open) {
+      const modal = document.getElementById("scopeModal");
+      document.getElementById("scopeCount").textContent = open.length;
+      document.getElementById("scopeList").innerHTML =
+        open.map(function(d) { return "<li>" + d.icon + " " + d.name + "</li>"; }).join("");
+      modal.dataset.ids = open.map(function(d) { return d.id; }).join(",");
+      modal.style.display = "flex";
+    }
+
+    function applyScopeChoice(choice) {
+      const modal = document.getElementById("scopeModal");
+      (modal.dataset.ids || "").split(",").filter(Boolean).forEach(function(id) {
+        dimAssessment[id] = choice;
+      });
+      modal.style.display = "none";
+      proceedToGate();
+    }
+
+    function proceedToGate() {
+      const assessed = DIMS.filter(function(d) { return isAssessed(d.id); });
+      if (!assessed.length) {
+        const modal = document.getElementById("scopeModal");
+        dimAssessment = {};
+        modal.style.display = "none";
+        alert(t("scopeNone"));
+        return;
+      }
+      if (SHORT) {
+        // No gate, no email, no PDF. One anonymous record for the benchmark,
+        // then the result straight on screen.
+        deliver(buildBenchmarkPayload("short_complete", { consent: false }));
+        document.getElementById("userGreeting").textContent = t("resultsTitle");
+        evaluate(false);
+        return;
+      }
+      evaluate(true);
+    }
+
+    /* A level of 1 maps to 0.0 and a level of 4 maps to 5.0, so the output scale
+       is identical to the business Maturity Check and every downstream consumer
+       (ring, radar, bands, PDF, Copper) keeps working unchanged.
+       Elements marked "cannot assess" drop out of numerator and denominator both;
+       counting them as zero would punish honesty. */
+    function levelToScore(level) { return (level - 1) / 3 * 5; }
+
+    function calcScore(dimId) {
+      const dim = DIMS.find(d => d.id === dimId);
+      if (!dim) return 0;
+      const a = ansArr(dimId);
+      let totalWeight = 0;
+      let earned = 0;
+
+      dim.elements.forEach((el, idx) => {
+        const v = a[idx];
+        if (typeof v !== "number") return;       // null or "na": not part of the score
+        const w = el.w || 1.0;
+        totalWeight += w;
+        earned += w * levelToScore(v);
+      });
+
+      return totalWeight === 0 ? 0 : parseFloat((earned / totalWeight).toFixed(2));
+    }
+
+    // Weighted overall score: matches the stated methodology (foundational dimensions
+    // carry a higher strategic weighting than secondary ones).
+    function weightedOverall(scores) {
+      let wSum = 0, wTot = 0;
+      scores.forEach(function(r) {
+        const sw = r.strategicWeight || 1.0;
+        wSum += r.score * sw;
+        wTot += sw;
+      });
+      return wTot === 0 ? 0 : parseFloat((wSum / wTot).toFixed(2));
+    }
+
+    const RING_CIRCUMFERENCE = 2 * Math.PI * 58; // r=58 in the SVG
+    function drawScoreRing(score) {
+      const ring = document.getElementById("scoreRingFill");
+      if (!ring) return;
+      const pct = Math.max(0, Math.min(1, score / 5));
+      ring.style.strokeDashoffset = (RING_CIRCUMFERENCE * (1 - pct)).toFixed(1);
+    }
+
+    let scoreTimer = null;
+    function animateScoreCounter(targetScore) {
+      const el = document.getElementById("totalScoreEl");
+      if (scoreTimer) clearInterval(scoreTimer);
+      let current = 0;
+      const duration = 1000;
+      const stepTime = 25;
+      const steps = duration / stepTime;
+      const increment = targetScore / steps;
+
+      if (targetScore <= 0 || !isFinite(increment)) {
+        el.textContent = (targetScore || 0).toFixed(1);
+        return;
+      }
+
+      scoreTimer = setInterval(() => {
+        current += increment;
+        if (current >= targetScore) {
+          clearInterval(scoreTimer);
+          scoreTimer = null;
+          el.textContent = targetScore.toFixed(1);
+        } else {
+          el.textContent = current.toFixed(1);
+        }
+      }, stepTime);
+    }
+
+    function evaluate(isLocked) {
+      const scores = DIMS.map(function(d) {
+        const finalScore = calcScore(d.id);
+        const assessed = isAssessed(d.id);
+        const normScore = finalScore / 5;
+        // Skipped dimensions must never win a focus slot: -1 sorts them out.
+        const leverage = assessed ? (1.0 - normScore) * (d.strategicWeight || 1.0) : -1;
+        const chkCount = scoredCount(d.id);
+        
+        return {
+          id: d.id, 
+          name: d.name, 
+          icon: d.icon, 
+          cluster: d.cluster,
+          assessed: assessed,
+          score: finalScore, 
+          leverage: leverage,
+          strategicWeight: (d.strategicWeight || 1.0),
+          checked: chkCount, 
+          total: d.elements.length
+        };
+      });
+
+      const scored = scores.filter(function(r){ return r.assessed; });
+      const skipped = scores.length - scored.length;
+      const avg = weightedOverall(scored);
+
+      document.getElementById("assessmentBasis").textContent =
+        t("basis", { n: scored.length, t: scores.length }) +
+        (skipped ? t("basisSkipped", { s: skipped }) : "");
+      document.getElementById("radarNote").textContent = skipped ? t("radarNote") : "";
+      animateScoreCounter(avg);
+      drawScoreRing(avg);
+      
+      document.getElementById("scoreSubtitle").textContent =
+        avg < 1.8 ? t("bandFoundation") : avg < 3.2 ? t("bandWorking") : t("bandScale");
+
+      // Which pillar is the constraint, and how much the board could not answer.
+      // Both lines are diagnostic, so they sit directly under the score.
+      const pillarNow = {};
+      CLUSTERS.forEach(function(c) {
+        const inC = scored.filter(function(d){ return d.cluster === c; });
+        pillarNow[c] = inC.length ? weightedOverall(inC) : null;
+      });
+      const weakest = weakestPillar(pillarNow);
+      const diagEl = document.getElementById("diagLines");
+      if (diagEl) {
+        let html = "";
+        if (weakest && scored.length >= 2) {
+          html += '<p class="diag-line">' +
+            t("weakestPillar", { pillar: clusterLabel(weakest), score: num(pillarNow[weakest], 1) }) +
+            '</p>';
+        }
+        const na = totalNaAnswers();
+        if (na > 0) {
+          html += '<p class="diag-line diag-na">' +
+            t(na === 1 ? "cantAssessNote1" : "cantAssessNote", { n: na }) + '</p>';
+        }
+        diagEl.innerHTML = html;
+      }
+
+      const cards = document.getElementById("resCards");
+      let cardsHtml = "";
+      scores.forEach(function(r) {
+        if (!r.assessed) {
+          cardsHtml += `<div class="res-card res-card-skipped" style="border-top-color:#cbd5e0 !important;">
+            <div class="rc-head"><span class="rc-name">${r.icon} ${r.name}</span><span class="rc-badge" style="color:#a0aec0 !important;">–</span></div>
+            <div class="rc-bar-wrap"><div class="rc-bar" style="width:0%; background:#cbd5e0 !important;"></div></div>
+            <div class="rc-detail">${t("notAssessed")}</div>
+            </div>`;
+          return;
+        }
+        const pct = r.score / 5 * 100;
+        const pc = pillarColor(r.cluster);
+        cardsHtml += `<div class="res-card" style="opacity:${r.score === 0 ? "0.45" : "1"}; border-top-color:${pc} !important;">
+          <div class="rc-head"><span class="rc-name">${r.icon} ${r.name}</span><span class="rc-badge" style="color:${pillarText(r.cluster)} !important;">${r.score.toFixed(1)}</span></div>
+          <div class="rc-bar-wrap"><div class="rc-bar" style="width:${pct}%; background:${pc} !important;"></div></div>
+          <div class="rc-detail">${t("elementsEstablished", { c: r.checked, t: r.total })}</div>
+          </div>`;
+      });
+      cards.innerHTML = cardsHtml;
+
+      drawRadarChart(scores);
+
+      const sorted = scored.slice().sort(function(a, b) { return b.leverage - a.leverage; });
+      const top3 = sorted.slice(0, 3);
+
+      const focusCard = document.getElementById("focusCard");
+      const focusDescEl = focusCard.querySelector(".focus-desc");
+      const focusNoteEl = focusCard.querySelector("#prioList + p");
+      const pList = document.getElementById("prioList");
+      pList.innerHTML = "";
+
+      // Congratulations instead of focus areas: only when the whole picture is
+      // assessed and genuinely strong, so it never fires on a partial or so-so run.
+      const STRONG = 4.5;
+      const allStrong = scored.length === scores.length && scored.every(function(r){ return r.score >= STRONG; });
+
+      if (allStrong) {
+        document.getElementById("focusHeading").textContent = t("congratsH");
+        if (focusDescEl) focusDescEl.style.display = "none";
+        if (focusNoteEl) focusNoteEl.style.display = "none";
+        pList.innerHTML =
+          '<div class="prio-row" style="border-left-color:#52A5B0;">' +
+          '<div class="prio-content">' +
+          '<div class="prio-name">' + t("congratsTitle") + '</div>' +
+          '<p style="font-size:0.92rem; color:#051F2E; line-height:1.6; margin-bottom:0;">' + t("congratsBody") + '</p></div></div>';
+      } else {
+      // With fewer than three assessed dimensions the heading must not promise three.
+      if (focusDescEl) focusDescEl.style.display = "";
+      if (focusNoteEl) focusNoteEl.style.display = "";
+      document.getElementById("focusHeading").textContent =
+        top3.length >= 3 ? t("focusH3") : top3.length === 2 ? t("focusH2") : t("focusH1");
+
+      top3.forEach(function(r, i) {
+        const nextStepsText = tr(ACTIONABLE_NEXT_STEPS[r.id]) || "";
+        const hintText = tr(CONTEXT_HINTS[r.id]) || "";
+        
+        pList.innerHTML += `<div class="prio-row">
+          <div class="prio-rank">${t("prioRank", { n: i + 1 })}</div>
+          <div class="prio-content">
+            <div class="prio-name">${r.icon} ${r.name} &bull; Score: ${r.score.toFixed(1)}/5.0</div>
+            <p style="font-size: 0.85rem; color: #3D4585; margin-bottom: 8px; font-weight: 600; line-height: 1.45;">${hintText}</p>
+            <div style="margin: 12px 0 0; padding: 16px; background: #fafbfc; border-left: 4px solid #52A5B0; font-size: 0.9rem; color: #051F2E; line-height: 1.55;">
+              <strong>${t("nextStepsLabel")}</strong> ${nextStepsText}
+            </div>
+          </div>
+        </div>`;
+      });
+      }
+
+      const resultsSection = document.getElementById("results");
+      const previewWrapper = document.getElementById("lockedPreviewWrapper");
+      const actionButtons = document.getElementById("resultsActionButtonGroup");
+      const leadGate = document.getElementById("leadGate");
+      const bookingSec = document.getElementById("bookingSection");
+
+      resultsSection.style.display = "block";
+
+      if (isLocked && earlyLeadEmail) {
+        const gateEmail = document.getElementById("leadEmail");
+        if (gateEmail && !gateEmail.value.trim()) gateEmail.value = earlyLeadEmail;
+      }
+
+      if (isLocked) {
+        previewWrapper.classList.add("locked-preview");
+        actionButtons.classList.add("locked-preview");
+        leadGate.style.display = "block";
+        bookingSec.style.display = "none";
+        bookingSec.innerHTML = "";
+        leadGate.scrollIntoView({behavior: "smooth", block: "center"});
+      } else {
+        previewWrapper.classList.remove("locked-preview");
+        actionButtons.classList.remove("locked-preview");
+        leadGate.style.display = "none";
+        
+        bookingSec.innerHTML = `
+          <div class="minto-booking-card">
+            <h2>${t("bookH2")}</h2>
+            <p>${t("bookP")}</p>
+            <a href="https://calendar.app.google/D4xqjmvEALBMTgg47" target="_blank" rel="noopener noreferrer" class="minto-booking-btn">${t("bookBtn")}</a>
+          </div>`;
+        bookingSec.style.display = "block";
+        
+        resultsSection.scrollIntoView({behavior: "smooth", block: "start"});
+        setupStickyBar();
+      }
+    }
+
+    function drawRadarChart(scores) {
+      const svg = document.getElementById("radarSvg");
+      svg.innerHTML = ""; 
+      
+      const cx = 300, cy = 258, rMax = 152;
+      const numDims = scores.length;
+      
+      for (let i = 1; i <= 5; i++) {
+        const r = (rMax / 5) * i;
+        const points = [];
+        for (let j = 0; j < numDims; j++) {
+          const angle = (j * 2 * Math.PI / numDims) - Math.PI / 2;
+          points.push(`${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`);
+        }
+        const polygon = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+        polygon.setAttribute("points", points.join(" "));
+        polygon.setAttribute("fill", "none");
+        polygon.setAttribute("stroke", "#e2e8f0");
+        polygon.setAttribute("stroke-width", "1");
+        svg.appendChild(polygon);
+      }
+      
+      const dataPoints = [];
+      const dotColors = [];
+      scores.forEach((s, j) => {
+        const angle = (j * 2 * Math.PI / numDims) - Math.PI / 2;
+        const pc = s.assessed === false ? "#cbd5e0" : pillarColor(s.cluster);
+        
+        const xMax = cx + rMax * Math.cos(angle);
+        const yMax = cy + rMax * Math.sin(angle);
+        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+        line.setAttribute("x1", cx);
+        line.setAttribute("y1", cy);
+        line.setAttribute("x2", xMax);
+        line.setAttribute("y2", yMax);
+        line.setAttribute("stroke", pc);
+        line.setAttribute("stroke-opacity", "0.35");
+        line.setAttribute("stroke-width", "1");
+        svg.appendChild(line);
+        
+        const labelR = rMax + 26;
+        const labelX = cx + labelR * Math.cos(angle);
+        const labelY = cy + labelR * Math.sin(angle);
+        const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+        text.setAttribute("x", labelX);
+        text.setAttribute("fill", s.assessed === false ? "#a0aec0" : "#051F2E");
+        text.setAttribute("font-size", "15");
+        text.setAttribute("font-weight", "700");
+        text.setAttribute("text-anchor", Math.abs(labelX - cx) < 15 ? "middle" : (labelX > cx ? "start" : "end"));
+
+        // Word-wrap the label onto at most three lines (keeps the full name)
+        const words = (s.icon + " " + s.name).split(" ");
+        const lines = [];
+        let cur = "";
+        words.forEach(function(w) {
+          if ((cur + " " + w).trim().length <= 12) { cur = (cur + " " + w).trim(); }
+          else { if (cur) lines.push(cur); cur = w; }
+        });
+        if (cur) lines.push(cur);
+        // Up to three lines: forcing two produced an over-long second line
+        // ("Infrastructure & Automation") that ran outside the viewBox.
+        if (lines.length > 3) { lines[2] = lines.slice(2).join(" "); lines.length = 3; }
+
+        const lineH = 16;
+        const yStart = labelY - (lines.length - 1) * lineH / 2;
+        text.setAttribute("y", yStart);
+        text.setAttribute("dominant-baseline", "middle");
+        lines.forEach(function(ln, li) {
+          const tspan = document.createElementNS("http://www.w3.org/2000/svg", "tspan");
+          tspan.setAttribute("x", labelX);
+          tspan.setAttribute("dy", li === 0 ? 0 : lineH);
+          tspan.textContent = ln;
+          text.appendChild(tspan);
+        });
+        svg.appendChild(text);
+        
+        const dataR = (rMax / 5) * s.score;
+        dataPoints.push(`${cx + dataR * Math.cos(angle)},${cy + dataR * Math.sin(angle)}`);
+        dotColors.push(pc);
+      });
+      
+      const poly = document.createElementNS("http://www.w3.org/2000/svg", "polygon");
+      poly.setAttribute("points", dataPoints.join(" "));
+      poly.setAttribute("fill", "rgba(82, 165, 176, 0.25)"); 
+      poly.setAttribute("stroke", "#52A5B0");
+      poly.setAttribute("stroke-width", "2");
+      svg.appendChild(poly);
+      
+      dataPoints.forEach((p, i) => {
+        const coord = p.split(",");
+        const circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+        circle.setAttribute("cx", coord[0]);
+        circle.setAttribute("cy", coord[1]);
+        circle.setAttribute("r", "4");
+        circle.setAttribute("fill", dotColors[i] || "#051F2E");
+        if (dotColors[i] === "#cbd5e0") circle.setAttribute("fill", "#ffffff");
+        circle.setAttribute("stroke", "#ffffff");
+        circle.setAttribute("stroke-width", "1.5");
+        svg.appendChild(circle);
+      });
+    }
+
+    /* ── Sticky results conversion bar ── */
+    let stickyObserver = null;
+    function setupStickyBar() {
+      let bar = document.getElementById("stickyActionBar");
+      if (!bar) {
+        bar = document.createElement("div");
+        bar.id = "stickyActionBar";
+        bar.setAttribute("role", "region");
+
+        const bookBtn = document.createElement("button");
+        bookBtn.type = "button";
+        bookBtn.id = "stickyBookBtn";
+        bookBtn.className = "btn btn-primary";
+        bookBtn.addEventListener("click", function() {
+          const a = document.querySelector(".minto-booking-btn");
+          if (a) a.click();
+        });
+
+        bar.appendChild(bookBtn);
+        document.body.appendChild(bar);
+      }
+
+      // Short dedicated label; the long one belongs on the full booking card.
+      const bookSource = document.querySelector(".minto-booking-btn");
+      const bookBtn = document.getElementById("stickyBookBtn");
+      if (bookBtn) {
+        bookBtn.textContent = t("stickyBtn");
+        bookBtn.setAttribute("title", t("bookBtn"));
+      }
+
+      // Show the sticky bar only while the real action row is off-screen
+      const anchor = document.getElementById("resultsActionButtonGroup");
+      if (stickyObserver) stickyObserver.disconnect();
+      if ("IntersectionObserver" in window && anchor) {
+        stickyObserver = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            bar.classList.toggle("visible", !entry.isIntersecting);
+          });
+        }, { threshold: 0 });
+        stickyObserver.observe(anchor);
+      } else {
+        bar.classList.add("visible");
+      }
+    }
+
+    function teardownStickyBar() {
+      const bar = document.getElementById("stickyActionBar");
+      if (bar) bar.classList.remove("visible");
+      if (stickyObserver) { stickyObserver.disconnect(); stickyObserver = null; }
+    }
+
+    initGlobalApp();
+  </script>
+</body>
+</html>
