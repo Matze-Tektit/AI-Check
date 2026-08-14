@@ -564,13 +564,20 @@
       gap: 6px 18px;
       font-size: 0.76rem;
       color: var(--tk-text-muted);
-      background: #fff;
+      background: rgba(255, 255, 255, 0.97);
       border: 1px solid var(--tk-border);
       border-radius: 6px;
-      padding: 12px 16px;
+      padding: 10px 14px;
       margin-bottom: 18px;
+      /* Sticks while scrolling: nobody remembers what level 3 means by the
+         ninth statement. */
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: 0 2px 6px rgba(5, 31, 46, 0.07);
     }
     .scale-legend b { color: var(--tk-dark); font-weight: 800; }
+    @media print { .scale-legend { position: static; box-shadow: none; } }
 
     @media (prefers-reduced-motion: reduce) {
       .sc-btn, .el-row, .header-progress-fill, .step-pane { transition: none !important; }
@@ -727,6 +734,60 @@
       border-left-color: #5b6577;
       background: #f3f4f7;
       color: #3d4457;
+    }
+
+    /* Offered after the result is already on screen, so it reads as an offer
+       rather than a toll gate. */
+    .short-capture {
+      background: var(--tk-light-bg);
+      border: 1px solid var(--tk-border);
+      border-left: 4px solid var(--tk-teal);
+      border-radius: 0 6px 6px 0;
+      padding: 20px 22px;
+      margin-bottom: 26px;
+    }
+    .short-capture h3 {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--tk-dark);
+      margin-bottom: 6px;
+    }
+    .short-capture > p {
+      font-size: 0.88rem;
+      line-height: 1.55;
+      color: var(--tk-text-muted);
+      margin-bottom: 14px;
+    }
+    .short-capture-form {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+    .short-capture-form input {
+      flex: 1 1 220px;
+      padding: 13px 15px;
+      border-radius: 5px;
+      border: 1.5px solid var(--tk-border);
+      font-family: inherit;
+      font-size: 0.95rem;
+    }
+    .short-capture-form input:focus { outline: none; border-color: var(--tk-teal); }
+    .short-capture-consent {
+      display: flex;
+      gap: 9px;
+      align-items: flex-start;
+      font-size: 0.78rem;
+      line-height: 1.45;
+      color: var(--tk-text-muted);
+      cursor: pointer;
+    }
+    .short-capture-consent input { margin-top: 2px; flex-shrink: 0; }
+    .short-capture-done {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--tk-teal-dark, #2C7A86);
+      margin: 0;
     }
 
     .lead-form select {
@@ -1404,6 +1465,21 @@
         <img src="TEKTIT_Cons-Logo_color-white.png" alt="Tektit Logo Accent" class="res-logo" loading="lazy">
       </div>
 
+      <section id="shortCapture" class="short-capture" style="display: none;">
+        <h3 data-i18n="shortCapH3"></h3>
+        <p data-i18n="shortCapP"></p>
+        <div class="short-capture-form">
+          <label for="shortEmail" class="sr-only" data-i18n="srEmail"></label>
+          <input type="email" id="shortEmail" placeholder="" data-i18n-ph="phEmail" autocomplete="email" inputmode="email">
+          <button type="button" class="btn btn-primary" id="shortSendBtn" data-i18n="shortCapBtn"></button>
+        </div>
+        <label class="short-capture-consent">
+          <input type="checkbox" id="shortConsent">
+          <span data-i18n="shortCapConsent"></span>
+        </label>
+        <p class="short-capture-done" id="shortCapDone" style="display: none;" data-i18n="shortCapDone"></p>
+      </section>
+
       <section id="leadGate" class="lead-gate">
         <img src="Tektit Consulting Bildmarke square.png" alt="Tektit Consulting" class="lead-logo" loading="lazy">
         <h2 data-i18n="gateH2"></h2>
@@ -1530,60 +1606,60 @@
       {id:"mandate", name:{
         en:"Ownership & Mandate",
         de:"Mandat & Verantwortung"
-       }, icon:"🧭", cluster:"AI Leadership & Value", strategicWeight: 1.5, elements:[
+       }, icon:"\U0001F9ED", cluster:"AI Leadership & Value", strategicWeight: 1.5, elements:[
         {t:{
-          en:"Leadership works on AI in a fixed rhythm, not only when something comes up.",
-          de:"Die Geschäftsführung befasst sich in einem festen Rhythmus mit KI, nicht nur anlassbezogen."
+          en:"Our leadership team works on AI in a fixed rhythm.",
+          de:"Unsere Gesch\u00e4ftsf\u00fchrung befasst sich in einem festen Rhythmus mit KI."
          }, w: 1.5, desc:{
-          en:"A standing slot in the leadership agenda is what separates a real transformation from a side project.",
-          de:"Ein fester Platz in der Führungsagenda unterscheidet eine echte Transformation von einem Nebenprojekt."
+          en:"A standing slot in the leadership agenda is what separates a real transformation from a side project. Occasional attention when something comes up does not count.",
+          de:"Ein fester Platz in der F\u00fchrungsagenda unterscheidet eine echte Transformation von einem Nebenprojekt. Gelegentliche Aufmerksamkeit, wenn etwas ansteht, z\u00e4hlt nicht."
          }},
         {t:{
-          en:"There is a named person responsible for AI in our company, with the authority to decide, not just an interest in the topic.",
-          de:"Bei uns ist namentlich klar, wer für KI verantwortlich ist, mit Entscheidungsbefugnis und nicht nur mit Interesse am Thema."
+          en:"One named person is responsible for AI and can decide.",
+          de:"Eine namentlich benannte Person ist f\u00fcr KI verantwortlich und kann entscheiden."
          }, w: 2, desc:{
-          en:"Without one person holding the mandate, AI splinters into parallel initiatives that nobody brings back together.",
-          de:"Ohne eine Person mit Mandat zerfällt das Thema in parallele Initiativen, die niemand zusammenführt."
+          en:"Responsibility without the authority to decide produces a figurehead. Without both in one person, AI splinters into parallel initiatives that nobody brings back together.",
+          de:"Verantwortung ohne Entscheidungsbefugnis erzeugt eine Galionsfigur. Ohne beides in einer Person zerf\u00e4llt das Thema in parallele Initiativen, die niemand zusammenf\u00fchrt."
          }},
         {t:{
-          en:"AI has its own budget, and we know what our usage costs us per month.",
-          de:"Für KI ist ein eigenes Budget hinterlegt, und wir wissen, was die Nutzung uns pro Monat kostet."
+          en:"AI has its own budget.",
+          de:"F\u00fcr KI ist ein eigenes Budget eingeplant."
          }, w: 1, desc:{
-          en:"Usage-based pricing can escalate quietly during the learning phase. Knowing the monthly number is what keeps the topic fundable.",
-          de:"Verbrauchsabhängige Preise können in der Lernphase unbemerkt eskalieren. Die monatliche Zahl zu kennen, hält das Thema finanzierbar."
+          en:"A budget line makes the topic plannable. It also forces the question of what the monthly usage actually costs, and usage-based pricing can escalate quietly during the learning phase.",
+          de:"Eine Budgetzeile macht das Thema planbar. Sie erzwingt auch die Frage, was die Nutzung monatlich kostet, und verbrauchsabh\u00e4ngige Preise k\u00f6nnen in der Lernphase unbemerkt eskalieren."
          }}
       ]},
       {id:"focus", name:{
         en:"Focus & Prioritization",
         de:"Priorisierung & Fokus"
-       }, icon:"🎯", cluster:"AI Leadership & Value", strategicWeight: 1.3, elements:[
+       }, icon:"\U0001F3AF", cluster:"AI Leadership & Value", strategicWeight: 1.3, elements:[
         {t:{
           en:{
-            digital:"We can name the points in our value chain where AI has the greatest leverage, and explain why it is those and not others.",
-            services:"We can name where AI has the greatest leverage in our delivery and client work, and explain why it is those steps and not others.",
-            mittelstand:"We can name where AI has the greatest leverage along our value chain, from order intake to production to service, and explain why it is those steps.",
-            logistics:"We can name where AI has the greatest leverage across our operations, from planning to fulfilment to customer service, and explain why it is those steps."
+            digital:"We know where AI has the greatest leverage in our work.",
+            services:"We know where AI has the greatest leverage in our client work.",
+            mittelstand:"We know where AI has the greatest leverage along our value chain.",
+            logistics:"We know where AI has the greatest leverage in our operations."
            },
           de:{
-            digital:"Wir können die Stellen in unserer Wertschöpfung benennen, an denen KI den größten Hebel hat, und begründen, warum es diese sind und nicht andere.",
-            services:"Wir können benennen, wo KI in unserer Leistungserbringung und Kundenarbeit den größten Hebel hat, und begründen, warum es diese Schritte sind.",
-            mittelstand:"Wir können benennen, wo KI entlang unserer Wertschöpfung den größten Hebel hat, von der Auftragsannahme über die Produktion bis zum Service, und begründen, warum es diese Schritte sind.",
-            logistics:"Wir können benennen, wo KI in unseren Abläufen den größten Hebel hat, von der Planung über die Abwicklung bis zum Kundenservice, und begründen, warum es diese Schritte sind."
+            digital:"Wir wissen, an welchen Stellen unserer Arbeit KI den gr\u00f6\u00dften Hebel hat.",
+            services:"Wir wissen, an welchen Stellen unserer Kundenarbeit KI den gr\u00f6\u00dften Hebel hat.",
+            mittelstand:"Wir wissen, an welchen Stellen unserer Wertsch\u00f6pfung KI den gr\u00f6\u00dften Hebel hat.",
+            logistics:"Wir wissen, an welchen Stellen unserer Abl\u00e4ufe KI den gr\u00f6\u00dften Hebel hat."
            }
          }, w: 2, desc:{
           en:"A list of possible use cases is not a priority. A priority comes with a reason why this one and not the other twelve.",
-          de:"Eine Liste möglicher Anwendungsfälle ist keine Priorität. Eine Priorität hat eine Begründung, warum dieser Fall und nicht die anderen zwölf."
+          de:"Eine Liste m\u00f6glicher Anwendungsf\u00e4lle ist keine Priorit\u00e4t. Eine Priorit\u00e4t hat eine Begr\u00fcndung, warum dieser Fall und nicht die anderen zw\u00f6lf."
          }},
         {t:{
-          en:"We have been just as explicit about where we deliberately do not use AI.",
-          de:"Wir haben klar benannt, wo wir KI bewusst nicht einsetzen."
+          en:"We have named the places where we deliberately do not use AI.",
+          de:"Wir haben benannt, wo wir KI bewusst nicht einsetzen."
          }, w: 1.5, desc:{
           en:"Deciding against AI in specific places is a sign of maturity, not of hesitation. It protects budget and credibility.",
-          de:"Sich an bestimmten Stellen gegen KI zu entscheiden, ist ein Zeichen von Reife, nicht von Zögern. Es schützt Budget und Glaubwürdigkeit."
+          de:"Sich an bestimmten Stellen gegen KI zu entscheiden, ist ein Zeichen von Reife, nicht von Z\u00f6gern. Es sch\u00fctzt Budget und Glaubw\u00fcrdigkeit."
          }},
         {t:{
-          en:"New AI ideas are assessed for value and feasibility before effort goes into them.",
-          de:"Neue KI-Ideen werden auf Nutzen und Umsetzbarkeit geprüft, bevor Aufwand hineinfließt."
+          en:"We assess new AI ideas before we invest effort in them.",
+          de:"Neue KI-Ideen pr\u00fcfen wir, bevor wir Aufwand hineinstecken."
          }, w: 1, desc:{
           en:"Two questions are enough: how much does this save or earn, and how hard is it to build. Asked in that order.",
           de:"Zwei Fragen reichen: Was bringt es an Zeit oder Geld, und wie schwer ist es zu bauen. In dieser Reihenfolge gestellt."
@@ -1592,127 +1668,119 @@
       {id:"impact", name:{
         en:"Impact & Portfolio",
         de:"Wirkung & Portfolio"
-       }, icon:"📈", cluster:"AI Leadership & Value", strategicWeight: 1.2, elements:[
+       }, icon:"\U0001F4C8", cluster:"AI Leadership & Value", strategicWeight: 1.2, elements:[
         {t:{
-          en:"For at least one AI use case we can evidence the benefit in hours or euros.",
-          de:"Für mindestens einen KI-Einsatz können wir den Nutzen in Stunden oder Euro belegen."
+          en:"For at least one AI use case we can name the benefit in hours or euros.",
+          de:"F\u00fcr mindestens einen KI-Einsatz k\u00f6nnen wir den Nutzen in Stunden oder Euro belegen."
          }, w: 2, desc:{
           en:"Not an estimate and not a feeling. A number somebody would defend in a management meeting.",
-          de:"Keine Schätzung und kein Gefühl. Eine Zahl, die jemand in einer Führungsrunde verteidigen würde."
+          de:"Keine Sch\u00e4tzung und kein Gef\u00fchl. Eine Zahl, die jemand in einer F\u00fchrungsrunde verteidigen w\u00fcrde."
          }},
         {t:{
           en:{
-            digital:"AI is noticeably part of at least one product or feature we sell to customers.",
-            services:"AI is noticeably part of at least one service we sell to clients.",
-            mittelstand:"AI is noticeably part of at least one product or service our customers pay for.",
-            logistics:"AI is noticeably part of at least one service our customers experience, for example in availability, delivery reliability or support."
+            digital:"Our customers can see AI in at least one of our products.",
+            services:"Our clients can see AI in at least one of our services.",
+            mittelstand:"Our customers can see AI in at least one product or service they pay for.",
+            logistics:"Our customers notice AI in at least one of our services."
            },
           de:{
-            digital:"KI steckt für unsere Kunden sichtbar in mindestens einem Produkt oder Feature.",
-            services:"KI steckt spürbar in mindestens einer Leistung, die wir unseren Kunden verkaufen.",
-            mittelstand:"KI steckt spürbar in mindestens einem Produkt oder Service, für den unsere Kunden zahlen.",
-            logistics:"KI steckt spürbar in mindestens einer Leistung, die unsere Kunden merken, etwa bei Verfügbarkeit, Liefertreue oder Support."
+            digital:"KI steckt f\u00fcr unsere Kunden sichtbar in mindestens einem Produkt oder Feature.",
+            services:"KI steckt f\u00fcr unsere Kunden sichtbar in mindestens einer Leistung.",
+            mittelstand:"KI steckt f\u00fcr unsere Kunden sichtbar in mindestens einem Produkt oder Service.",
+            logistics:"Unsere Kunden merken KI in mindestens einer unserer Leistungen."
            }
          }, w: 1.5, desc:{
           en:"Internal efficiency lowers your cost. Only what reaches the customer changes your market position.",
-          de:"Interne Effizienz senkt Deine Kosten. Erst was beim Kunden ankommt, verändert Deine Marktposition."
+          de:"Interne Effizienz senkt deine Kosten. Erst was beim Kunden ankommt, ver\u00e4ndert deine Marktposition."
          }},
         {t:{
-          en:"We keep measuring the benefit after rollout, not just during the pilot.",
-          de:"Wir messen den Nutzen auch nach dem Rollout weiter, nicht nur im Pilotprojekt."
+          en:"We keep measuring the benefit after rollout.",
+          de:"Wir messen den Nutzen auch nach dem Rollout weiter."
          }, w: 1, desc:{
-          en:"Pilots are measured because they need to prove something. Live systems stop being measured, and that is where the value quietly disappears.",
-          de:"Pilotprojekte werden gemessen, weil sie sich beweisen müssen. Im Betrieb hört das Messen auf, und genau dort verschwindet der Nutzen unbemerkt."
+          en:"Pilots get measured because they have to prove something. Live systems stop being measured, and that is where the value quietly disappears.",
+          de:"Pilotprojekte werden gemessen, weil sie sich beweisen m\u00fcssen. Im Betrieb h\u00f6rt das Messen auf, und genau dort verschwindet der Nutzen unbemerkt."
          }}
       ]},
 
-      /* Pillar 2: People & Culture */
+      /* Pillar 2: People & Culture
+         Thread across the three statements: we talked about it, people are
+         allowed to push back, people actually use it. Talking, trusting, doing. */
       {id:"enablement", name:{
         en:"Enablement",
-        de:"Befähigung"
-       }, icon:"🎓", cluster:"People & Culture", strategicWeight: 1.3, elements:[
+        de:"Bef\u00e4higung"
+       }, icon:"\U0001F393", cluster:"People & Culture", strategicWeight: 1.3, elements:[
         {t:{
-          en:{
-            digital:"Our people have been trained to use AI in their own work, not just informed that it exists.",
-            services:"Our consultants and delivery teams have been trained to use AI in their own client work, not just informed that it exists.",
-            mittelstand:"Our people have been trained to use AI in their own work, in administration as well as in production and service.",
-            logistics:"Our people have been trained to use AI in their own work, in the office as well as in operations."
-           },
-          de:{
-            digital:"Unsere Leute sind darin geschult, KI in ihrer eigenen Arbeit einzusetzen, nicht nur darüber informiert, dass es sie gibt.",
-            services:"Unsere Beraterinnen und Projektteams sind darin geschult, KI in ihrer eigenen Kundenarbeit einzusetzen, nicht nur darüber informiert.",
-            mittelstand:"Unsere Leute sind darin geschult, KI in ihrer eigenen Arbeit einzusetzen, in der Verwaltung wie in Produktion und Service.",
-            logistics:"Unsere Leute sind darin geschult, KI in ihrer eigenen Arbeit einzusetzen, im Büro wie im operativen Betrieb."
-           }
+          en:"Our people can use AI in their daily work.",
+          de:"Unsere Mitarbeitenden k\u00f6nnen KI in ihrer t\u00e4glichen Arbeit einsetzen."
          }, w: 2, desc:{
-          en:"An information event creates awareness. Only practice on your own tasks creates capability.",
-          de:"Eine Infoveranstaltung schafft Aufmerksamkeit. Erst Übung an den eigenen Aufgaben schafft Können."
+          en:"An information event creates awareness. Only practice on your own tasks creates capability, and tools bought before that point sit unused.",
+          de:"Eine Infoveranstaltung schafft Aufmerksamkeit. Erst \u00dcbung an den eigenen Aufgaben schafft K\u00f6nnen, und Werkzeuge, die vorher gekauft werden, bleiben ungenutzt."
          }},
         {t:{
-          en:"In the business units there are people others can turn to with a practical AI question.",
-          de:"In den Fachbereichen gibt es Personen, an die sich andere mit einer praktischen KI-Frage wenden können."
+          en:"In the business units there are people others can ask about AI.",
+          de:"In den Fachbereichen gibt es Personen, die andere zu KI fragen k\u00f6nnen."
          }, w: 1.5, desc:{
           en:"Capability spreads through colleagues, not through documents. Two or three visible people per unit are enough.",
-          de:"Können verbreitet sich über Kolleginnen und Kollegen, nicht über Dokumente. Zwei oder drei sichtbare Personen pro Bereich reichen."
+          de:"K\u00f6nnen verbreitet sich \u00fcber Kolleginnen und Kollegen, nicht \u00fcber Dokumente. Zwei oder drei sichtbare Personen pro Bereich reichen."
          }},
         {t:{
-          en:"Our managers can judge what AI can do in their area and where its limits are.",
-          de:"Unsere Führungskräfte können beurteilen, was KI in ihrem Bereich leisten kann und wo ihre Grenzen liegen."
+          en:"Our managers can judge what AI can do in their area.",
+          de:"Unsere F\u00fchrungskr\u00e4fte k\u00f6nnen einsch\u00e4tzen, was KI in ihrem Bereich leisten kann."
          }, w: 1, desc:{
-          en:"Most stalled AI projects sit in the gap between people who understand the technology and people who understand the process.",
-          de:"Die meisten steckengebliebenen KI-Vorhaben sitzen in der Lücke zwischen denen, die die Technik verstehen, und denen, die den Prozess verstehen."
+          en:"Most stalled AI projects sit in the gap between people who understand the technology and people who understand the process. Judging the limits matters as much as judging the potential.",
+          de:"Die meisten steckengebliebenen KI-Vorhaben sitzen in der L\u00fccke zwischen denen, die die Technik verstehen, und denen, die den Prozess verstehen. Die Grenzen einzusch\u00e4tzen ist so wichtig wie das Potenzial."
          }}
       ]},
       {id:"adoption", name:{
         en:"Adoption & Communication",
         de:"Akzeptanz & Kommunikation"
-       }, icon:"💬", cluster:"People & Culture", strategicWeight: 1.2, elements:[
+       }, icon:"\U0001F4AC", cluster:"People & Culture", strategicWeight: 1.2, elements:[
         {t:{
-          en:"We have openly communicated what AI means for roles and tasks here, including the uncomfortable parts.",
-          de:"Wir haben offen kommuniziert, was KI für Rollen und Aufgaben bei uns bedeutet, auch das Unbequeme."
+          en:"We have openly addressed what AI means for jobs here.",
+          de:"Wir haben offen angesprochen, was KI f\u00fcr die Arbeitspl\u00e4tze bei uns bedeutet."
          }, w: 2, desc:{
-          en:"What is not said openly gets filled in with the worst assumption. Silence is the most expensive communication choice.",
-          de:"Was nicht offen gesagt wird, füllen die Leute mit der schlechtesten Annahme. Schweigen ist die teuerste Variante von Kommunikation."
+          en:"This is the question everyone has and nobody asks. What is not said openly gets filled in with the worst assumption, and silence is the most expensive communication choice available.",
+          de:"Das ist die Frage, die alle haben und niemand stellt. Was nicht offen gesagt wird, f\u00fcllen die Leute mit der schlechtesten Annahme, und Schweigen ist die teuerste Variante von Kommunikation."
          }},
         {t:{
-          en:"People can raise concerns about AI without being seen as blockers.",
-          de:"Bei uns kann man Bedenken zu KI äußern, ohne als Bremser zu gelten."
+          en:"People who raise concerns about AI are not seen as blockers.",
+          de:"Wer Bedenken gegen KI \u00e4u\u00dfert, gilt bei uns nicht als Bremser."
          }, w: 1.5, desc:{
-          en:"Concerns that cannot be voiced do not disappear. They turn into quiet non-use, which is much harder to fix.",
-          de:"Bedenken, die nicht geäußert werden dürfen, verschwinden nicht. Sie werden zu stiller Nichtnutzung, und die ist deutlich schwerer zu beheben."
+          en:"Concerns that cannot be voiced do not disappear. They turn into quiet non-use, which is much harder to fix than an open objection.",
+          de:"Bedenken, die nicht ge\u00e4u\u00dfert werden d\u00fcrfen, verschwinden nicht. Sie werden zu stiller Nichtnutzung, und die ist deutlich schwerer zu beheben als ein offener Einwand."
          }},
         {t:{
-          en:"We know how many of our people actually use the AI tools we provide.",
-          de:"Wir wissen, wie viele unserer Leute die bereitgestellten KI-Werkzeuge tatsächlich nutzen."
+          en:"We know how many of our people actually use AI.",
+          de:"Wir wissen, wie viele unserer Mitarbeitenden KI tats\u00e4chlich nutzen."
          }, w: 1, desc:{
           en:"Licences bought is not usage. The gap between the two is the single most common reason AI shows no effect.",
-          de:"Gekaufte Lizenzen sind keine Nutzung. Die Lücke zwischen beidem ist der häufigste Grund, warum KI keine Wirkung zeigt."
+          de:"Gekaufte Lizenzen sind keine Nutzung. Die L\u00fccke zwischen beidem ist der h\u00e4ufigste Grund, warum KI keine Wirkung zeigt."
          }}
       ]},
       {id:"learning", name:{
         en:"Institutional Learning",
         de:"Wissenssicherung"
-       }, icon:"📚", cluster:"People & Culture", strategicWeight: 1.0, elements:[
-        {t:{
-          en:"Findings from AI experiments are recorded so that somebody else can build on them.",
-          de:"Erkenntnisse aus KI-Versuchen werden so festgehalten, dass jemand anders damit weiterarbeiten kann."
-         }, w: 2, desc:{
-          en:"Learning that lives only in the head of whoever ran the experiment leaves the company when they do.",
-          de:"Wissen, das nur im Kopf der Person steckt, die den Versuch gemacht hat, verlässt das Unternehmen mit ihr."
-         }},
-        {t:{
-          en:"What works in one area gets passed on to other areas systematically.",
-          de:"Was in einem Bereich funktioniert, wird systematisch an andere Bereiche weitergegeben."
-         }, w: 1.5, desc:{
-          en:"Without transfer, every department pays the same tuition fee for the same lesson.",
-          de:"Ohne Weitergabe zahlt jede Abteilung dasselbe Lehrgeld für dieselbe Lektion."
-         }},
+       }, icon:"\U0001F4DA", cluster:"People & Culture", strategicWeight: 1.0, elements:[
         {t:{
           en:"There is one place where prompts, templates and experience come together.",
           de:"Es gibt einen festen Ort, an dem Prompts, Vorlagen und Erfahrungen zusammenlaufen."
          }, w: 1, desc:{
           en:"A shared library is the cheapest productivity gain in this whole topic, and the one most often skipped.",
-          de:"Eine gemeinsame Sammlung ist der günstigste Produktivitätsgewinn im ganzen Thema und der, der am häufigsten übersprungen wird."
+          de:"Eine gemeinsame Sammlung ist der g\u00fcnstigste Produktivit\u00e4tsgewinn im ganzen Thema und der, der am h\u00e4ufigsten \u00fcbersprungen wird."
+         }},
+        {t:{
+          en:"Findings from AI experiments are written down.",
+          de:"Erkenntnisse aus KI-Versuchen werden festgehalten."
+         }, w: 2, desc:{
+          en:"Written down well enough that somebody else can build on them. Learning that lives only in the head of whoever ran the experiment leaves the company when they do.",
+          de:"So festgehalten, dass jemand anders damit weiterarbeiten kann. Wissen, das nur im Kopf der Person steckt, die den Versuch gemacht hat, verl\u00e4sst das Unternehmen mit ihr."
+         }},
+        {t:{
+          en:"What works in one area gets passed on to other areas.",
+          de:"Was in einem Bereich funktioniert, geben wir an andere Bereiche weiter."
+         }, w: 1.5, desc:{
+          en:"Without transfer, every department pays the same tuition fee for the same lesson.",
+          de:"Ohne Weitergabe zahlt jede Abteilung dasselbe Lehrgeld f\u00fcr dieselbe Lektion."
          }}
       ]},
 
@@ -1720,109 +1788,109 @@
       {id:"access", name:{
         en:"Access & Workspace",
         de:"Zugang & Arbeitsumgebung"
-       }, icon:"🔐", cluster:"Technology & Data", strategicWeight: 1.4, elements:[
+       }, icon:"\U0001F510", cluster:"Technology & Data", strategicWeight: 1.4, elements:[
         {t:{
-          en:"There is an approved company AI environment in which internal information may be processed.",
-          de:"Es gibt eine freigegebene, unternehmenseigene KI-Umgebung, in der auch interne Informationen verarbeitet werden dürfen."
-         }, w: 2, desc:{
-          en:"Without a sanctioned place to work, people will find an unsanctioned one. This is the single highest-leverage item on this list.",
-          de:"Ohne einen erlaubten Ort zum Arbeiten finden die Leute einen unerlaubten. Das ist der wirksamste Punkt auf dieser Liste."
-         }},
-        {t:{
-          en:"We know which AI tools are actually in use across the company, private accounts included.",
-          de:"Wir wissen, welche KI-Werkzeuge im Unternehmen tatsächlich genutzt werden, private Accounts eingeschlossen."
+          en:"We know which AI tools are in use across the company.",
+          de:"Wir wissen, welche KI-Werkzeuge im Unternehmen genutzt werden."
          }, w: 1.5, desc:{
-          en:"Most companies are already using AI heavily. They just cannot see it, which means they cannot govern it.",
-          de:"Die meisten Unternehmen nutzen KI längst intensiv. Sie sehen es nur nicht, und deshalb können sie es nicht steuern."
+          en:"Private accounts included. Most companies are already using AI heavily; they just cannot see it, which means they cannot govern it.",
+          de:"Private Accounts eingeschlossen. Die meisten Unternehmen nutzen KI l\u00e4ngst intensiv. Sie sehen es nur nicht, und deshalb k\u00f6nnen sie es nicht steuern."
          }},
         {t:{
-          en:"The approved environment is good enough that nobody has a reason to fall back on private accounts.",
-          de:"Die freigegebene Umgebung ist so gut, dass niemand einen Grund hat, auf private Accounts auszuweichen."
+          en:"There is an approved AI environment for internal information.",
+          de:"Es gibt eine freigegebene KI-Umgebung f\u00fcr interne Informationen."
+         }, w: 2, desc:{
+          en:"A place where company information may be processed without anyone breaking a rule. Without a sanctioned place to work, people will find an unsanctioned one. This is the single highest-leverage item on this list.",
+          de:"Ein Ort, an dem Firmeninformationen verarbeitet werden d\u00fcrfen, ohne dass jemand eine Regel bricht. Ohne einen erlaubten Ort zum Arbeiten finden die Leute einen unerlaubten. Das ist der wirksamste Punkt auf dieser Liste."
+         }},
+        {t:{
+          en:"Our approved environment is better than the free alternatives.",
+          de:"Unsere freigegebene Umgebung ist besser als die kostenlosen Alternativen."
          }, w: 1, desc:{
           en:"A compliant tool that is worse than the free alternative does not create compliance. It creates workarounds.",
-          de:"Ein regelkonformes Werkzeug, das schlechter ist als die kostenlose Alternative, schafft keine Regelkonformität. Es schafft Umwege."
+          de:"Ein regelkonformes Werkzeug, das schlechter ist als die kostenlose Alternative, schafft keine Regelkonformit\u00e4t. Es schafft Umwege."
          }}
       ]},
       {id:"data", name:{
         en:"Data Access & Quality",
-        de:"Datenzugang & Datenqualität"
-       }, icon:"📊", cluster:"Technology & Data", strategicWeight: 1.4, elements:[
+        de:"Datenzugang & Datenqualit\u00e4t"
+       }, icon:"\U0001F4CA", cluster:"Technology & Data", strategicWeight: 1.4, elements:[
         {t:{
-          en:{
-            digital:"The data sources that matter for AI are identified and technically reachable.",
-            services:"The knowledge that matters for AI, project documents, offers, methods, is identified and technically reachable.",
-            mittelstand:"The data sources that matter for AI, from ERP to machine and quality data, are identified and technically reachable.",
-            logistics:"The data sources that matter for AI, from inventory to transport and order data, are identified and technically reachable."
-           },
-          de:{
-            digital:"Die für KI relevanten Datenquellen sind identifiziert und technisch erreichbar.",
-            services:"Das für KI relevante Wissen, also Projektunterlagen, Angebote und Methoden, ist identifiziert und technisch erreichbar.",
-            mittelstand:"Die für KI relevanten Datenquellen, von ERP bis zu Maschinen- und Qualitätsdaten, sind identifiziert und technisch erreichbar.",
-            logistics:"Die für KI relevanten Datenquellen, von Bestands- bis zu Transport- und Auftragsdaten, sind identifiziert und technisch erreichbar."
-           }
-         }, w: 2, desc:{
-          en:"Most AI projects do not fail on the model. They fail because the data cannot be reached without a manual workaround.",
-          de:"Die meisten KI-Vorhaben scheitern nicht am Modell. Sie scheitern daran, dass die Daten ohne manuellen Umweg nicht erreichbar sind."
-         }},
-        {t:{
-          en:"Our data is maintained and described well enough that a system can make sense of it.",
-          de:"Unsere Daten sind so gepflegt und beschrieben, dass ein System sie sinnvoll nutzen kann."
-         }, w: 1.5, desc:{
-          en:"Cryptic field names and half-filled records confuse a language model in exactly the way they confuse a new colleague.",
-          de:"Kryptische Feldnamen und halb gefüllte Datensätze verwirren ein Sprachmodell genauso wie eine neue Kollegin."
-         }},
-        {t:{
-          en:"For our key data it is clear who owns it and keeps it current.",
-          de:"Für unsere wichtigen Daten ist geklärt, wer sie verantwortet und aktuell hält."
+          en:"For our key data it is clear who is responsible.",
+          de:"F\u00fcr unsere wichtigen Daten ist gekl\u00e4rt, wer sie verantwortet."
          }, w: 1, desc:{
           en:"Data without an owner degrades. AI makes that degradation visible faster than any report ever did.",
           de:"Daten ohne Verantwortliche verfallen. KI macht diesen Verfall schneller sichtbar als jeder Bericht."
+         }},
+        {t:{
+          en:"Our data is maintained well enough for a system to use it.",
+          de:"Unsere Daten sind so gepflegt, dass ein System sie nutzen kann."
+         }, w: 1.5, desc:{
+          en:"Cryptic field names and half-filled records confuse a language model in exactly the way they confuse a new colleague.",
+          de:"Kryptische Feldnamen und halb gef\u00fcllte Datens\u00e4tze verwirren ein Sprachmodell genauso wie eine neue Kollegin."
+         }},
+        {t:{
+          en:{
+            digital:"The data sources that matter for AI are technically reachable.",
+            services:"The project knowledge that matters for AI is technically reachable.",
+            mittelstand:"The data sources that matter for AI, from ERP to machine data, are technically reachable.",
+            logistics:"The data sources that matter for AI, from stock to transport data, are technically reachable."
+           },
+          de:{
+            digital:"Die f\u00fcr KI relevanten Datenquellen sind technisch erreichbar.",
+            services:"Das f\u00fcr KI relevante Projektwissen ist technisch erreichbar.",
+            mittelstand:"Die f\u00fcr KI relevanten Datenquellen, von ERP bis Maschinendaten, sind technisch erreichbar.",
+            logistics:"Die f\u00fcr KI relevanten Datenquellen, von Bestands- bis Transportdaten, sind technisch erreichbar."
+           }
+         }, w: 2, desc:{
+          en:"Reachable without a manual step. Most AI projects do not fail on the model; they fail because the data can only be got at by hand.",
+          de:"Erreichbar ohne manuellen Schritt. Die meisten KI-Vorhaben scheitern nicht am Modell, sondern daran, dass die Daten nur per Hand zu bekommen sind."
          }}
       ]},
       {id:"integration", name:{
         en:"Process Integration",
         de:"Integration in Prozesse"
-       }, icon:"🔗", cluster:"Technology & Data", strategicWeight: 1.1, elements:[
+       }, icon:"\U0001F517", cluster:"Technology & Data", strategicWeight: 1.1, elements:[
+        {t:{
+          en:"There is a defined path from experiment to productive use.",
+          de:"Vom Versuch zum produktiven Einsatz gibt es bei uns einen geregelten Weg."
+         }, w: 1.5, desc:{
+          en:"With IT and the business unit both involved. If IT joins too late you get a blocked launch; if the business unit joins too late you get a tool nobody uses.",
+          de:"Mit IT und Fachbereich gemeinsam. Kommt die IT zu sp\u00e4t dazu, wird der Start blockiert. Kommt der Fachbereich zu sp\u00e4t dazu, entsteht ein Werkzeug, das niemand nutzt."
+         }},
         {t:{
           en:{
-            digital:"AI sits inside the tools where the work already happens, not as a separate application next to them.",
-            services:"AI sits inside the tools where the work already happens, for example in our documents and project systems, not as a separate application next to them.",
-            mittelstand:"AI sits inside the systems where the work already happens, for example in ERP or the order process, not as a separate application next to them.",
-            logistics:"AI sits inside the systems where the work already happens, for example in planning or the order process, not as a separate application next to them."
+            digital:"AI sits inside the tools where our work already happens.",
+            services:"AI sits inside the tools where our client work already happens.",
+            mittelstand:"AI sits inside the systems where our work already happens, for example the ERP.",
+            logistics:"AI sits inside the systems where our work already happens, for example planning."
            },
           de:{
-            digital:"KI sitzt in den Werkzeugen, in denen die Arbeit ohnehin passiert, und nicht als separate Anwendung daneben.",
-            services:"KI sitzt in den Werkzeugen, in denen die Arbeit ohnehin passiert, etwa in unseren Dokumenten und Projektsystemen, und nicht als separate Anwendung daneben.",
-            mittelstand:"KI sitzt in den Systemen, in denen die Arbeit ohnehin passiert, etwa im ERP oder im Auftragsprozess, und nicht als separate Anwendung daneben.",
-            logistics:"KI sitzt in den Systemen, in denen die Arbeit ohnehin passiert, etwa in der Planung oder im Auftragsprozess, und nicht als separate Anwendung daneben."
+            digital:"KI sitzt in den Werkzeugen, in denen unsere Arbeit ohnehin passiert.",
+            services:"KI sitzt in den Werkzeugen, in denen unsere Kundenarbeit ohnehin passiert.",
+            mittelstand:"KI sitzt in den Systemen, in denen unsere Arbeit ohnehin passiert, etwa im ERP.",
+            logistics:"KI sitzt in den Systemen, in denen unsere Arbeit ohnehin passiert, etwa in der Planung."
            }
          }, w: 2, desc:{
-          en:"Every switch between systems costs adoption. Tools that require a detour get used twice and then forgotten.",
-          de:"Jeder Wechsel zwischen Systemen kostet Akzeptanz. Werkzeuge, die einen Umweg verlangen, werden zweimal genutzt und dann vergessen."
-         }},
-        {t:{
-          en:"There is a defined path from experiment to production use, with IT and the business unit both involved.",
-          de:"Vom Versuch zum produktiven Einsatz gibt es bei uns einen geregelten Weg, an dem IT und Fachbereich beteiligt sind."
-         }, w: 1.5, desc:{
-          en:"If IT joins too late you get a blocked launch. If the business unit joins too late you get a tool nobody uses.",
-          de:"Kommt die IT zu spät dazu, wird der Start blockiert. Kommt der Fachbereich zu spät dazu, entsteht ein Werkzeug, das niemand nutzt."
+          en:"Not as a separate application next to them. Every switch between systems costs adoption, which is why standalone tools get used twice and then forgotten.",
+          de:"Nicht als separate Anwendung daneben. Jeder Wechsel zwischen Systemen kostet Akzeptanz, und deshalb werden separate Werkzeuge zweimal genutzt und dann vergessen."
          }},
         {t:{
           en:{
-            digital:"Where AI output reaches customers or decisions, it is defined who reviews it first.",
-            services:"Where AI output goes into client deliverables, it is defined who reviews it first.",
-            mittelstand:"Where AI output affects customers, quality or production decisions, it is defined who reviews it first.",
-            logistics:"Where AI output affects customers or operational decisions, it is defined who reviews it first."
+            digital:"It is defined who reviews AI output before it reaches customers.",
+            services:"It is defined who reviews AI output before it reaches clients.",
+            mittelstand:"It is defined who reviews AI output before it affects customers or production.",
+            logistics:"It is defined who reviews AI output before it affects customers or operations."
            },
           de:{
-            digital:"Wenn KI-Ergebnisse zu Kunden oder in Entscheidungen gehen, ist geregelt, wer sie vorher prüft.",
-            services:"Wenn KI-Ergebnisse in Kundenleistungen einfließen, ist geregelt, wer sie vorher prüft.",
-            mittelstand:"Wenn KI-Ergebnisse Kunden, Qualität oder Produktionsentscheidungen betreffen, ist geregelt, wer sie vorher prüft.",
-            logistics:"Wenn KI-Ergebnisse Kunden oder operative Entscheidungen betreffen, ist geregelt, wer sie vorher prüft."
+            digital:"Es ist geregelt, wer KI-Ergebnisse pr\u00fcft, bevor sie zu Kunden gehen.",
+            services:"Es ist geregelt, wer KI-Ergebnisse pr\u00fcft, bevor sie zu Kunden gehen.",
+            mittelstand:"Es ist geregelt, wer KI-Ergebnisse pr\u00fcft, bevor sie Kunden oder Produktion betreffen.",
+            logistics:"Es ist geregelt, wer KI-Ergebnisse pr\u00fcft, bevor sie Kunden oder den Betrieb betreffen."
            }
          }, w: 1, desc:{
           en:"A named reviewer is what lets you use AI on things that matter. Without one you are limited to the harmless cases.",
-          de:"Eine benannte Prüfinstanz erlaubt Dir, KI dort einzusetzen, wo es zählt. Ohne sie bleibst Du auf die harmlosen Fälle beschränkt."
+          de:"Eine benannte Pr\u00fcfinstanz erlaubt dir, KI dort einzusetzen, wo es z\u00e4hlt. Ohne sie bleibst du auf die harmlosen F\u00e4lle beschr\u00e4nkt."
          }}
       ]},
 
@@ -1830,112 +1898,112 @@
       {id:"rules", name:{
         en:"Usage Rules",
         de:"Nutzungsregeln"
-       }, icon:"📋", cluster:"Rules & Risk", strategicWeight: 1.3, elements:[
+       }, icon:"\U0001F4CB", cluster:"Rules & Risk", strategicWeight: 1.3, elements:[
         {t:{
-          en:"There are binding rules for using AI, and our people could state them in one sentence.",
-          de:"Es gibt verbindliche Regeln für den KI-Einsatz, und unsere Leute könnten sie in einem Satz wiedergeben."
+          en:"Our people know our rules for using AI.",
+          de:"Unsere Mitarbeitenden kennen unsere Regeln f\u00fcr den KI-Einsatz."
          }, w: 2, desc:{
-          en:"A policy nobody can paraphrase is not a policy. It is a document that protects nobody.",
-          de:"Eine Richtlinie, die niemand in eigenen Worten wiedergeben kann, ist keine Richtlinie. Sie ist ein Dokument, das niemanden schützt."
+          en:"Knowing them means being able to state them in one sentence. A policy nobody can paraphrase is not a policy; it is a document that protects nobody.",
+          de:"Kennen hei\u00dft: in einem Satz wiedergeben k\u00f6nnen. Eine Richtlinie, die niemand in eigenen Worten wiedergeben kann, ist keine Richtlinie, sondern ein Dokument, das niemanden sch\u00fctzt."
          }},
         {t:{
-          en:"The rules say concretely which data may go into which system, and which may not.",
-          de:"Die Regeln sagen konkret, welche Daten in welches System dürfen und welche nicht."
+          en:"The rules say concretely which data may go into which system.",
+          de:"Die Regeln sagen konkret, welche Daten in welches System d\u00fcrfen."
          }, w: 1.5, desc:{
           en:"General appeals to caution do not help anyone at the moment of pasting. Named data categories and named systems do.",
-          de:"Allgemeine Appelle zur Vorsicht helfen niemandem in dem Moment, in dem er etwas einfügt. Benannte Datenarten und benannte Systeme helfen."
+          de:"Allgemeine Appelle zur Vorsicht helfen niemandem in dem Moment, in dem er etwas einf\u00fcgt. Benannte Datenarten und benannte Systeme helfen."
          }},
         {t:{
-          en:"The rules are reviewed regularly, because both the technology and the legal position keep moving.",
-          de:"Die Regeln werden regelmäßig überprüft, weil sich Technik und Rechtslage laufend verändern."
+          en:"We review the rules regularly.",
+          de:"Wir \u00fcberpr\u00fcfen die Regeln regelm\u00e4\u00dfig."
          }, w: 1, desc:{
-          en:"A policy written once ages faster in this field than in any other. Compliance here is a routine, not a project.",
-          de:"Eine einmal geschriebene Richtlinie veraltet hier schneller als in jedem anderen Feld. Compliance ist eine Routine, kein Projekt."
+          en:"A policy written once ages faster in this field than in any other, because both the technology and the legal position keep moving. Compliance here is a routine, not a project.",
+          de:"Eine einmal geschriebene Richtlinie veraltet hier schneller als in jedem anderen Feld, weil sich Technik und Rechtslage laufend ver\u00e4ndern. Compliance ist eine Routine, kein Projekt."
          }}
       ]},
       {id:"security", name:{
         en:"Permissions & Security",
         de:"Berechtigungen & Informationssicherheit"
-       }, icon:"🔒", cluster:"Rules & Risk", strategicWeight: 1.4, elements:[
+       }, icon:"\U0001F512", cluster:"Rules & Risk", strategicWeight: 1.4, elements:[
         {t:{
           en:{
-            digital:"We know which documents an AI could find in our systems if we switched it on today.",
-            services:"We know which client documents an AI could find on our drives if we switched it on today.",
-            mittelstand:"We know which documents an AI could find on our drives and in our systems if we switched it on today.",
-            logistics:"We know which documents and data an AI could find in our systems if we switched it on today."
+            digital:"We know which documents an AI can reach in our systems.",
+            services:"We know which client documents an AI can reach on our drives.",
+            mittelstand:"We know which documents an AI can reach on our drives and systems.",
+            logistics:"We know which documents and data an AI can reach in our systems."
            },
           de:{
-            digital:"Wir wissen, welche Dokumente eine KI in unseren Systemen finden könnte, wenn wir sie heute freischalten.",
-            services:"Wir wissen, welche Kundenunterlagen eine KI auf unseren Laufwerken finden könnte, wenn wir sie heute freischalten.",
-            mittelstand:"Wir wissen, welche Dokumente eine KI auf unseren Laufwerken und in unseren Systemen finden könnte, wenn wir sie heute freischalten.",
-            logistics:"Wir wissen, welche Dokumente und Daten eine KI in unseren Systemen finden könnte, wenn wir sie heute freischalten."
+            digital:"Wir wissen, auf welche Dokumente eine KI in unseren Systemen zugreifen kann.",
+            services:"Wir wissen, auf welche Kundenunterlagen eine KI auf unseren Laufwerken zugreifen kann.",
+            mittelstand:"Wir wissen, auf welche Dokumente eine KI auf unseren Laufwerken und Systemen zugreifen kann.",
+            logistics:"Wir wissen, auf welche Dokumente und Daten eine KI in unseren Systemen zugreifen kann."
            }
          }, w: 2, desc:{
           en:"AI does not create new access. It makes existing over-permissioning searchable, which is a different kind of problem.",
-          de:"KI schafft keine neuen Zugriffe. Sie macht vorhandene zu weite Berechtigungen durchsuchbar, und das ist ein anderes Problem."
+          de:"KI schafft keine neuen Zugriffe. Sie macht vorhandene zu weite Berechtigungen durchsuchbar, und das ist ein Problem anderer Art."
          }},
         {t:{
-          en:"Access rights to documents and systems are current and reviewed regularly.",
-          de:"Zugriffsrechte auf Dokumente und Systeme sind aktuell und werden regelmäßig überprüft."
+          en:"Access rights to documents and systems are current.",
+          de:"Zugriffsrechte auf Dokumente und Systeme sind aktuell."
          }, w: 1.5, desc:{
           en:"Permissions accumulate over years of role changes. Almost nobody removes them, and AI reads all of them.",
-          de:"Berechtigungen sammeln sich über Jahre von Rollenwechseln an. Fast niemand nimmt sie zurück, und KI liest sie alle."
+          de:"Berechtigungen sammeln sich \u00fcber Jahre von Rollenwechseln an. Fast niemand nimmt sie zur\u00fcck, und KI liest sie alle."
          }},
         {t:{
-          en:"With our AI providers it is settled where data is stored and that it is not used for training.",
-          de:"Bei unseren KI-Anbietern ist geklärt, wo Daten gespeichert werden und dass sie nicht zum Training verwendet werden."
+          en:"Our AI providers do not use our data for training.",
+          de:"Unsere KI-Anbieter nutzen unsere Daten nicht zum Training."
          }, w: 1, desc:{
-          en:"Free tiers rarely give that guarantee. This is usually a contract question, not a technical one.",
-          de:"Kostenlose Varianten geben diese Zusage selten. Das ist meist eine Vertragsfrage, keine technische."
+          en:"Settled in the contract, not assumed. Free tiers rarely give that guarantee, and the same contract should say where the data is stored.",
+          de:"Vertraglich gekl\u00e4rt, nicht angenommen. Kostenlose Varianten geben diese Zusage selten, und derselbe Vertrag sollte auch sagen, wo die Daten gespeichert werden."
          }}
       ]},
       {id:"regulatory", name:{
         en:"Regulatory Readiness",
-        de:"Regulatorik & Nachweisfähigkeit"
-       }, icon:"⚖️", cluster:"Rules & Risk", strategicWeight: 1.0, elements:[
+        de:"Regulatorik & Nachweisf\u00e4higkeit"
+       }, icon:"\u2696\uFE0F", cluster:"Rules & Risk", strategicWeight: 1.0, elements:[
         {t:{
-          en:"We know which of our AI applications fall under which obligations of the EU AI Act.",
-          de:"Wir wissen, welche unserer KI-Anwendungen unter welche Pflichten des EU AI Act fallen."
+          en:"We know which obligations of the EU AI Act apply to us.",
+          de:"Wir wissen, welche Pflichten aus dem EU AI Act f\u00fcr uns gelten."
          }, w: 2, desc:{
           en:"Obligations depend on the risk class of the specific application, not on the company. Most uses are low-risk, but you need to be able to say so.",
-          de:"Die Pflichten hängen an der Risikoklasse der einzelnen Anwendung, nicht am Unternehmen. Die meisten Einsätze sind unkritisch, aber man muss das sagen können."
+          de:"Die Pflichten h\u00e4ngen an der Risikoklasse der einzelnen Anwendung, nicht am Unternehmen. Die meisten Eins\u00e4tze sind unkritisch, aber man muss das sagen k\u00f6nnen."
          }},
         {t:{
-          en:"Our AI applications are documented: purpose, data sources, and who is responsible.",
-          de:"Unsere KI-Anwendungen sind dokumentiert: Zweck, Datenquellen und Verantwortliche."
+          en:"Our AI applications are documented.",
+          de:"Unsere KI-Anwendungen sind dokumentiert."
          }, w: 1.5, desc:{
-          en:"A simple register of what runs where covers most evidence obligations and takes an afternoon to start.",
-          de:"Eine einfache Übersicht, was wo läuft, deckt die meisten Nachweispflichten ab und ist an einem Nachmittag begonnen."
+          en:"Purpose, data sources, and who is responsible. A simple register of what runs where covers most evidence obligations and takes an afternoon to start.",
+          de:"Zweck, Datenquellen und Verantwortliche. Eine einfache \u00dcbersicht, was wo l\u00e4uft, deckt die meisten Nachweispflichten ab und ist an einem Nachmittag begonnen."
          }},
         {t:{
-          en:"Data protection and, where applicable, employee representation are involved early, not only at sign-off.",
-          de:"Datenschutz und, wo vorhanden, die Mitbestimmung sind früh eingebunden, nicht erst zur Freigabe."
+          en:"Data protection is involved from the start of an AI project.",
+          de:"Bei neuen KI-Vorhaben ist der Datenschutz von Anfang an beteiligt."
          }, w: 1, desc:{
-          en:"Late involvement turns a partner into a gatekeeper. The same people asked early usually clear the path.",
-          de:"Späte Einbindung macht aus einem Partner eine Hürde. Früh gefragt räumen dieselben Leute den Weg meist frei."
+          en:"And employee representation where you have it. Late involvement turns a partner into a gatekeeper; the same people asked early usually clear the path.",
+          de:"Und die Mitbestimmung, wo es sie gibt. Sp\u00e4te Einbindung macht aus einem Partner eine H\u00fcrde. Fr\u00fch gefragt r\u00e4umen dieselben Leute den Weg meist frei."
          }}
       ]}
     ];
 
     const ACTIONABLE_NEXT_STEPS = {
-      mandate: { en: "Name one person as responsible for AI, in writing, with a budget line and the authority to decide. Give the topic a fixed slot in the leadership meeting. Both steps take one decision, not a project.", de: "Benenne schriftlich eine Person als verantwortlich für KI, mit Budgetzeile und Entscheidungsbefugnis. Gib dem Thema einen festen Platz in der Führungsrunde. Beides ist eine Entscheidung, kein Projekt." },
-      focus: { en: "Take your three biggest cost or time drivers and ask for each one what AI would remove. Then write down two places where you will deliberately not use it. The second list is what makes the first credible.", de: "Nimm Deine drei größten Kosten- oder Zeittreiber und frag bei jedem, was KI davon abnehmen würde. Schreib danach zwei Stellen auf, an denen Du KI bewusst nicht einsetzt. Die zweite Liste macht die erste glaubwürdig." },
+      mandate: { en: "Name one person as responsible for AI, in writing, with a budget line and the authority to decide. Give the topic a fixed slot in the leadership meeting. Both steps take one decision, not a project.", de: "Gib dem Thema einen festen Platz in der Führungsrunde und benenne schriftlich eine Person als verantwortlich, mit Budgetzeile und Entscheidungsbefugnis. Beides ist eine Entscheidung, kein Projekt." },
+      focus: { en: "Take your three biggest cost or time drivers and ask for each one what AI would remove. Then write down two places where you will deliberately not use it. The second list is what makes the first credible.", de: "Nimm deine drei größten Kosten- oder Zeittreiber und frag bei jedem, was KI davon abnehmen würde. Schreib danach zwei Stellen auf, an denen du KI bewusst nicht einsetzt. Die zweite Liste macht die erste glaubwürdig." },
       impact: { en: "Pick the AI use case that is already running and measure it properly once: hours before, hours after, over two weeks. One defensible number opens more doors internally than ten pilots.", de: "Nimm den KI-Einsatz, der schon läuft, und miss ihn einmal richtig: Stunden vorher, Stunden nachher, über zwei Wochen. Eine belastbare Zahl öffnet intern mehr Türen als zehn Pilotprojekte." },
       enablement: { en: "Replace the next information session with a working session on real tasks people brought with them. Then ask each business unit to name two people others can turn to.", de: "Ersetz die nächste Infoveranstaltung durch eine Arbeitssitzung an echten Aufgaben, die die Leute selbst mitbringen. Lass danach jeden Fachbereich zwei Personen benennen, an die sich andere wenden können." },
-      adoption: { en: "Say out loud what AI means for roles here, including what you do not yet know. Then check actual usage of the tools you pay for. The gap between licences and use is usually the real finding.", de: "Sag offen, was KI für Rollen bei Euch bedeutet, auch das, was Du noch nicht weißt. Prüf danach die tatsächliche Nutzung der Werkzeuge, für die Du zahlst. Die Lücke zwischen Lizenz und Nutzung ist meist der eigentliche Befund." },
+      adoption: { en: "Say out loud what AI means for roles here, including what you do not yet know. Then check actual usage of the tools you pay for. The gap between licences and use is usually the real finding.", de: "Sag offen, was KI für Rollen bei Euch bedeutet, auch das, was du noch nicht weißt. Prüf danach die tatsächliche Nutzung der Werkzeuge, für die du zahlst. Die Lücke zwischen Lizenz und Nutzung ist meist der eigentliche Befund." },
       learning: { en: "Set up one shared place for prompts, templates and findings, and make it somebody's job to keep it tidy. A folder that is maintained beats a platform that is not.", de: "Richte einen gemeinsamen Ort für Prompts, Vorlagen und Erkenntnisse ein und mach das Pflegen zur Aufgabe einer Person. Ein gepflegter Ordner schlägt eine ungepflegte Plattform." },
       access: { en: "Give people one approved AI environment that is genuinely good, and make it easier to reach than the free alternative. Nothing else in this list reduces shadow usage as fast.", de: "Gib den Leuten eine freigegebene KI-Umgebung, die wirklich gut ist, und mach sie leichter erreichbar als die kostenlose Alternative. Nichts anderes auf dieser Liste senkt die Schattennutzung so schnell." },
-      data: { en: "Pick the one use case you care about most and follow its data backwards: where does it sit, who owns it, can a system read it without a manual step. Fix that path before you buy anything.", de: "Nimm den Anwendungsfall, der Dir am wichtigsten ist, und verfolg seine Daten zurück: Wo liegen sie, wer verantwortet sie, kann ein System sie ohne manuellen Schritt lesen. Räum diesen Weg frei, bevor Du etwas kaufst." },
+      data: { en: "Pick the one use case you care about most and follow its data backwards: where does it sit, who owns it, can a system read it without a manual step. Fix that path before you buy anything.", de: "Nimm den Anwendungsfall, der dir am wichtigsten ist, und verfolg seine Daten zurück: Wo liegen sie, wer verantwortet sie, kann ein System sie ohne manuellen Schritt lesen. Räum diesen Weg frei, bevor du etwas kaufst." },
       integration: { en: "Move AI into the tool where the work already happens, even if the first version is cruder than a standalone app. Then define the path from experiment to production with IT and the business unit in the same room.", de: "Hol KI in das Werkzeug, in dem die Arbeit ohnehin passiert, auch wenn die erste Version gröber ist als eine eigene Anwendung. Definiere danach den Weg vom Versuch zum Betrieb mit IT und Fachbereich im selben Raum." },
       rules: { en: "Write rules short enough that people remember them: which data may go where, and who to ask when in doubt. One page beats twelve. Then put a review date on it.", de: "Schreib die Regeln so kurz, dass die Leute sie behalten: Welche Daten dürfen wohin, und wen frage ich im Zweifel. Eine Seite schlägt zwölf. Setz danach ein Datum für die Überprüfung darauf." },
-      security: { en: "Before you connect AI to anything, run a permissions check on your most sensitive folders. You will find access that should have been removed years ago. Fix that first; it is cheaper than any AI project.", de: "Bevor Du KI an irgendetwas anschließt, prüf die Berechtigungen auf Deinen sensibelsten Ablagen. Du wirst Zugriffe finden, die vor Jahren hätten entfernt werden müssen. Räum das zuerst auf, es ist günstiger als jedes KI-Projekt." },
+      security: { en: "Before you connect AI to anything, run a permissions check on your most sensitive folders. You will find access that should have been removed years ago. Fix that first; it is cheaper than any AI project.", de: "Bevor du KI an irgendetwas anschließt, prüf die Berechtigungen auf deinen sensibelsten Ablagen. Du wirst Zugriffe finden, die vor Jahren hätten entfernt werden müssen. Räum das zuerst auf, es ist günstiger als jedes KI-Projekt." },
       regulatory: { en: "Start a simple register: what runs where, for what purpose, on which data, who is responsible. That single list answers most evidence questions and takes an afternoon to begin.", de: "Beginn eine einfache Übersicht: Was läuft wo, zu welchem Zweck, auf welchen Daten, wer ist verantwortlich. Diese eine Liste beantwortet die meisten Nachweisfragen und ist an einem Nachmittag begonnen." }
     };
 
     const CONTEXT_HINTS = {
       mandate: { en: "A topic without an owner becomes everybody's hobby and nobody's result.", de: "Ein Thema ohne Verantwortliche wird das Hobby aller und das Ergebnis von niemandem." },
       focus: { en: "Knowing where not to use AI is what makes the rest credible.", de: "Zu wissen, wo KI nicht hingehört, macht den Rest glaubwürdig." },
-      impact: { en: "Internal efficiency lowers cost. Only the customer side changes your position.", de: "Interne Effizienz senkt Kosten. Erst die Kundenseite verändert Deine Position." },
+      impact: { en: "Internal efficiency lowers cost. Only the customer side changes your position.", de: "Interne Effizienz senkt Kosten. Erst die Kundenseite verändert deine Position." },
       enablement: { en: "Awareness is not ability. Ability comes from practising on your own work.", de: "Informiert sein ist nicht können. Können kommt vom Üben an der eigenen Arbeit." },
       adoption: { en: "What is not said openly gets filled in with the worst assumption.", de: "Was nicht offen gesagt wird, füllen die Leute mit der schlechtesten Annahme." },
       learning: { en: "Learning that lives in one head leaves with that head.", de: "Wissen, das in einem Kopf lebt, geht mit diesem Kopf." },
@@ -1950,74 +2018,74 @@
     /* ── UI strings. Product name and band names stay English in both languages. ── */
     const UI = {
       headTitle: { en: "Tektit AI Readiness Check", de: "Tektit AI Readiness Check" },
-      scale1: { en: "Not in place", de: "Nicht vorhanden" },
-      scale2: { en: "Started, in some areas", de: "Angefangen, in einzelnen Bereichen" },
-      scale3: { en: "Established, not consistently", de: "Etabliert, aber nicht durchgängig" },
-      scale4: { en: "Established and reviewed", de: "Durchgängig etabliert und überprüft" },
-      scaleNa: { en: "Cannot assess this", de: "Kann ich nicht beurteilen" },
-      scale1Short: { en: "no", de: "Nein" },
-      scale2Short: { en: "started", de: "angefangen" },
-      scale3Short: { en: "partly", de: "teilweise" },
-      scale4Short: { en: "consistent", de: "durchgängig" },
-      scaleNaShort: { en: "can't say", de: "unklar" },
+      scale1: { en: "no — we do not have this", de: "nein — gibt es bei uns nicht" },
+      scale2: { en: "partly — in some areas", de: "teilweise — in einzelnen Bereichen" },
+      scale3: { en: "mostly — nearly everywhere, not binding", de: "meistens — fast überall, aber nicht verbindlich" },
+      scale4: { en: "yes — everywhere and binding", de: "ja — überall und verbindlich" },
+      scaleNa: { en: "unclear — I cannot assess this", de: "unklar — kann ich nicht beurteilen" },
+      scale1Short: { en: "no", de: "nein" },
+      scale2Short: { en: "partly", de: "teilweise" },
+      scale3Short: { en: "mostly", de: "meistens" },
+      scale4Short: { en: "yes", de: "ja" },
+      scaleNaShort: { en: "unclear", de: "unklar" },
       progText: { en: "{n} of {t} dimensions reviewed", de: "{n} von {t} Dimensionen bearbeitet" },
       liveScoreLabel: { en: "Live score:", de: "Live-Score:" },
       selectedLabel: { en: "Selected:", de: "Ausgewählt:" },
       langHint: { en: "Language", de: "Sprache" },
       introH2: { en: "Most companies don't know how AI-ready they actually are.", de: "Die meisten Unternehmen wissen nicht, wie KI-ready sie wirklich sind." },
       introP1: { en: "They have bought licences, run a training session, maybe written a policy. And still nobody in the building can answer the question of where the company actually stands. Meanwhile the tools get used anyway, on private accounts, with no rules and no record of what was learned.", de: "Sie haben Lizenzen gekauft, eine Schulung gemacht, vielleicht eine Richtlinie geschrieben. Und trotzdem kann niemand im Haus die Frage beantworten, wo das Unternehmen eigentlich steht. Genutzt wird KI ohnehin, über private Accounts, ohne Regeln und ohne dass jemand die Erkenntnisse festhält." },
-      introP2: { en: "Introducing AI is not an IT project. It is a company-wide change with a technical, a cultural, an organisational and a legal side, and it fails on whichever of the four gets ignored. This check looks at all four.", de: "Die Einführung von KI ist kein IT-Projekt. Sie ist eine unternehmensweite Veränderung mit einer technischen, einer kulturellen, einer organisatorischen und einer rechtlichen Seite, und sie scheitert an der Seite, die übersehen wird. Dieser Check betrachtet alle vier." },
-      introP3: { en: "In under ten minutes you will see which pillar is your constraint, what to fix first, and where AI is not worth it for you.", de: "In unter zehn Minuten siehst Du, welche Säule Dein Engpass ist, was Du zuerst angehen solltest und wo sich KI für Dich nicht lohnt." },
+      introP2: { en: "Introducing AI is not an IT project. It is a company-wide change with a technical, a cultural, an organisational and a legal side, and it fails on whichever of the four gets ignored. This check looks at all four.", de: "Die Einführung von KI ist kein IT-Projekt. Sie ist eine unternehmensweite Veränderung mit vier Säulen: Führung, Technologie, Regeln und Menschen. Sie scheitert an der Säule, die übersehen wird. Dieser Check prüft alle vier." },
+      introP3: { en: "In under ten minutes you will see which pillar is your constraint, what to fix first, and where AI is not worth it for you.", de: "In unter zehn Minuten siehst du, welche Säule dein Engpass ist, was du zuerst angehen solltest und wo sich KI für dich nicht lohnt." },
       introP4: { en: "No fluff. No consultant-speak. Just clarity.", de: "Kein Blabla. Kein Beratersprech. Nur Klarheit." },
-      earlyText: { en: "<strong>Short on time?</strong> We'll email you the link; complete the check later, for example on your way home.", de: "<strong>Keine Zeit?</strong> Wir schicken Dir den Link; Du kannst den Check später machen, zum Beispiel auf der Rückfahrt." },
-      earlyPlaceholder: { en: "your.name@company.com", de: "dein.name@firma.de" },
+      earlyText: { en: "<strong>Short on time?</strong> We'll email you the link; complete the check later, for example on your way home.", de: "<strong>Keine Zeit?</strong> Wir schicken dir den Link. Du kannst den Check später machen." },
+      earlyPlaceholder: { en: "your.name@company.com", de: "Dein.name@firma.de" },
       earlyBtn: { en: "Send me the link", de: "Link schicken" },
       earlyConsent: { en: "I agree to be contacted by Tektit Consulting GmbH and to receive the link and my report by email. See our <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Data Privacy</a> notice.", de: "Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und mir den Link sowie meinen Report per E-Mail schickt. Siehe unsere <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzhinweise</a>." },
       earlyErrEmail: { en: "Please enter a valid email address.", de: "Bitte gib eine gültige E-Mail-Adresse ein." },
-      earlyErrConsent: { en: "Please tick the consent box so we may email you the link.", de: "Bitte setz das Häkchen, damit wir Dir den Link schicken dürfen." },
+      earlyErrConsent: { en: "Please tick the consent box so we may email you the link.", de: "Bitte setz das Häkchen, damit wir dir den Link schicken dürfen." },
       earlyOk: { en: "✅ Link sent to {email}; you can also just start below.", de: "✅ Link an {email} geschickt; Du kannst auch direkt unten anfangen." },
-      accSummary: { en: "How to use this tool", de: "So nutzt Du das Tool" },
-      acc1: { en: "<strong>1. What the tool assesses:</strong> Your organisation across 4 pillars and 12 dimensions: AI leadership and value, people and culture, technology and data, and rules and risk. It looks at your organisation, not at your tools.", de: "<strong>1. Was das Tool prüft:</strong> Dein Unternehmen über 4 Säulen und 12 Dimensionen: Führung und Wertbeitrag, Menschen und Kultur, Technologie und Daten sowie Regeln und Risiko. Es betrachtet Deine Organisation, nicht Deine Tools." },
-      acc2: { en: "<strong>2. How to answer:</strong> Rate each statement from 1 to 4. <strong>1</strong> not in place, <strong>2</strong> started in some areas, <strong>3</strong> established but not consistently, <strong>4</strong> established across the board and reviewed. Tap the same value again to clear it.", de: "<strong>2. Wie Du antwortest:</strong> Bewerte jede Aussage von 1 bis 4. <strong>1</strong> nicht vorhanden, <strong>2</strong> in einzelnen Bereichen angefangen, <strong>3</strong> etabliert, aber nicht durchgängig, <strong>4</strong> durchgängig etabliert und überprüft. Ein zweiter Tipp auf denselben Wert löscht ihn wieder." },
-      acc3: { en: "<strong>3. If you cannot answer:</strong> Use the <strong>?</strong> button. It is not a bad score and it does not count against you; it is excluded from the score and reported separately. What leadership cannot answer about its own company is a finding in its own right, and often the most useful one.", de: "<strong>3. Wenn Du nicht antworten kannst:</strong> Nutz den <strong>?</strong>-Button. Das ist keine schlechte Bewertung und zählt nicht gegen Dich; es fließt nicht in den Score ein und wird separat ausgewiesen. Was die Führung über das eigene Unternehmen nicht beantworten kann, ist ein eigener Befund, und oft der nützlichste." },
-      acc4: { en: "<strong>4. How the score is calculated:</strong> Each dimension gets a maturity score from 0.0 to 5.0. Foundational statements count for more than secondary ones, and dimensions carry different strategic weight. Anything you skip or mark as “cannot assess” is left out of the score entirely, so a partial run still gives you an honest picture.", de: "<strong>4. Wie der Score entsteht:</strong> Jede Dimension bekommt einen Reifegrad von 0,0 bis 5,0. Grundlegende Aussagen zählen mehr als nachgelagerte, und die Dimensionen haben unterschiedliches strategisches Gewicht. Was Du überspringst oder als „kann ich nicht beurteilen“ markierst, fließt gar nicht in den Score ein, damit auch ein Teildurchlauf ein ehrliches Bild ergibt." },
-      acc5: { en: "<strong>5. How to read the focus areas:</strong> They are not simply your lowest scores. We combine the size of each gap with how much that area determines whether AI works at all, so you tackle the constraint with the most leverage first.", de: "<strong>5. Wie Du die Fokusfelder liest:</strong> Sie sind nicht einfach Deine schlechtesten Werte. Wir verbinden die Größe der Lücke mit der Bedeutung des Bereichs dafür, ob KI überhaupt funktioniert, damit Du zuerst den Engpass mit der größten Wirkung angehst." },
-      archH3: { en: "Select your organization's primary business profile:", de: "Wähl das Profil, das am besten zu Deinem Unternehmen passt:" },
-      archP: { en: "The wording of some statements adapts to your business model. Everything else stays identical, so results remain comparable.", de: "Der Wortlaut einzelner Aussagen passt sich Deinem Geschäftsmodell an. Alles andere bleibt identisch, damit die Ergebnisse vergleichbar bleiben." },
+      accSummary: { en: "How to use this tool", de: "So nutzt du das Tool" },
+      acc1: { en: "<strong>1. What the tool assesses:</strong> Your organisation across 4 pillars and 12 dimensions: AI leadership and value, technology and data, rules and risk, and people and culture. It looks at your organisation, not at your tools.", de: "<strong>1. Was das Tool prüft:</strong> dein Unternehmen über 4 Säulen und 12 Dimensionen: Führung und Wertbeitrag, Technologie und Daten, Regeln und Risiko sowie Menschen und Kultur. Es betrachtet deine Organisation, nicht deine Tools." },
+      acc2: { en: "<strong>2. How to answer:</strong> Rate each statement from 1 to 4. <strong>1</strong> not in place, <strong>2</strong> started in some areas, <strong>3</strong> established but not consistently, <strong>4</strong> established across the board and reviewed. Tap the same value again to clear it.", de: "<strong>2. Wie du antwortest:</strong> Bewerte jede Aussage von 1 bis 4. <strong>1</strong> nicht vorhanden, <strong>2</strong> in einzelnen Bereichen angefangen, <strong>3</strong> etabliert, aber nicht durchgängig, <strong>4</strong> durchgängig etabliert und überprüft. Ein zweiter Tipp auf denselben Wert löscht ihn wieder." },
+      acc3: { en: "<strong>3. If you cannot answer:</strong> Use the <strong>?</strong> button. It is not a bad score and it does not count against you; it is excluded from the score and reported separately. What leadership cannot answer about its own company is a finding in its own right, and often the most useful one.", de: "<strong>3. Wenn du nicht antworten kannst:</strong> Nutz den <strong>?</strong>-Button. Das ist keine schlechte Bewertung und zählt nicht gegen dich; es fließt nicht in den Score ein und wird separat ausgewiesen. Was die Führung über das eigene Unternehmen nicht beantworten kann, ist ein eigener Befund, und oft der nützlichste." },
+      acc4: { en: "<strong>4. How the score is calculated:</strong> Each dimension gets a maturity score from 0.0 to 5.0. Foundational statements count for more than secondary ones, and dimensions carry different strategic weight. Anything you skip or mark as “cannot assess” is left out of the score entirely, so a partial run still gives you an honest picture.", de: "<strong>4. Wie der Score entsteht:</strong> Jede Dimension bekommt einen Reifegrad von 0,0 bis 5,0. Grundlegende Aussagen zählen mehr als nachgelagerte, und die Dimensionen haben unterschiedliches strategisches Gewicht. Was du überspringst oder als „kann ich nicht beurteilen“ markierst, fließt gar nicht in den Score ein. So bekommst du auch dann ein ehrliches Bild, wenn du nur einen Teil der Dimensionen bewertest." },
+      acc5: { en: "<strong>5. How to read the focus areas:</strong> They are not simply your lowest scores. We combine the size of each gap with how much that area determines whether AI works at all, so you tackle the constraint with the most leverage first.", de: "<strong>5. Was am Ende herauskommt:</strong> Deine drei <strong>Fokusfelder</strong> — die Dimensionen, die du zuerst angehen solltest. Das sind nicht einfach deine schlechtesten Werte: Wir verbinden die Größe der Lücke mit der Bedeutung des Bereichs dafür, ob KI überhaupt funktioniert. So gehst du zuerst den Engpass mit der größten Wirkung an." },
+      archH3: { en: "Select your organization's primary business profile:", de: "Wähle das Profil, das am besten zu deinem Unternehmen passt:" },
+      archP: { en: "The wording of some statements adapts to your business model. Everything else stays identical, so results remain comparable.", de: "Der Wortlaut einzelner Aussagen passt sich deinem Geschäftsmodell an. Alles andere bleibt identisch, damit die Ergebnisse vergleichbar bleiben." },
       archDigital: { en: "🌐 Pure Digital / SaaS / Tech Products", de: "🌐 Digital / SaaS / Tech-Produkte" },
       archServices: { en: "💼 Professional Services / Agencies", de: "💼 Dienstleistung / Agentur" },
       archMittelstand: { en: "🏭 Traditional Mittelstand / Industrial", de: "🏭 Klassischer Mittelstand / Industrie" },
       archLogistics: { en: "🚚 Retail / E-Com / Logistics Heavy", de: "🚚 Handel / E-Commerce / Logistik" },
-      archSwitchWarn: { en: "Changing your business profile track will wipe all current checkbox selections. Proceed?", de: "Wenn Du das Profil wechselst, werden alle Häkchen gelöscht. Fortfahren?" },
+      archSwitchWarn: { en: "Changing your business profile track will wipe all current checkbox selections. Proceed?", de: "Wenn du das Profil wechselst, werden alle Häkchen gelöscht. Fortfahren?" },
       wizCaption: { en: "Step <span id=\"stepNow\">1</span> of 4 &middot; tap a step to jump", de: "Schritt <span id=\"stepNow\">1</span> von 4 &middot; tippe einen Schritt an, um zu springen" },
       prevBtn: { en: "⬅️ Previous Pillar", de: "⬅️ Vorherige Säule" },
       nextBtn: { en: "Next Pillar ➡️", de: "Nächste Säule ➡️" },
       genBtn: { en: "📊 Generate analysis", de: "📊 Auswertung erstellen" },
       resetBtn: { en: "Reset All", de: "Alles zurücksetzen" },
       resetWarn: { en: "Clear all selections and start over?", de: "Alle Häkchen löschen und neu anfangen?" },
-      scopeTitle: { en: "Before we calculate your score", de: "Bevor wir Deinen Score berechnen" },
-      scopeIntro: { en: "You have not rated anything in <strong><span id=\"scopeCount\">0</span></strong> of the 12 dimensions. What does that mean?", de: "In <strong><span id=\"scopeCount\">0</span></strong> von 12 Dimensionen hast Du nichts bewertet. Was heißt das?" },
+      scopeTitle: { en: "Before we calculate your score", de: "Bevor wir deinen Score berechnen" },
+      scopeIntro: { en: "You have not rated anything in <strong><span id=\"scopeCount\">0</span></strong> of the 12 dimensions. What does that mean?", de: "In <strong><span id=\"scopeCount\">0</span></strong> von 12 Dimensionen hast du nichts bewertet. Was heißt das?" },
       scopeApplies: { en: "That's accurate: nothing established there", de: "Das trifft zu: dort ist nichts etabliert" },
       scopeSkipped: { en: "I skipped those; leave them out", de: "Die habe ich übersprungen; lass sie weg" },
       scopeBack: { en: "← Back to the check", de: "← Zurück zum Check" },
-      scopeHint: { en: "Skipped dimensions are excluded from your score and your focus areas, so your result stays meaningful.", de: "Übersprungene Dimensionen fließen nicht in Score und Fokusfelder ein, damit Dein Ergebnis aussagekräftig bleibt." },
+      scopeHint: { en: "Skipped dimensions are excluded from your score and your focus areas, so your result stays meaningful.", de: "Übersprungene Dimensionen fließen nicht in Score und Fokusfelder ein, damit dein Ergebnis aussagekräftig bleibt." },
       scopeNone: { en: "We need at least one dimension to work with. Please answer a few items, or mark a dimension as \"nothing established\" so we can score it.", de: "Wir brauchen mindestens eine Dimension. Beantworte ein paar Punkte, oder markiere eine Dimension als \"nichts etabliert\", damit wir sie bewerten können." },
       gateH2: { en: "Unlock Your AI Readiness Results", de: "Deine Ergebnisse freischalten" },
-      gateP: { en: "Enter your details to unlock your full report: your <strong>AI Readiness Radar</strong>, the pillar that is holding you back, your top 3 focus areas and concrete next steps. You will also receive the report as a PDF by email.", de: "Trag Deine Daten ein und Du bekommst den vollen Report: Dein <strong>AI Readiness Radar</strong>, die Säule, die Dich bremst, Deine drei wichtigsten Fokusfelder und konkrete nächste Schritte. Den Report schicken wir Dir zusätzlich als PDF per E-Mail." },
+      gateP: { en: "Enter your details to unlock your full report: your <strong>AI Readiness Radar</strong>, the pillar that is holding you back, your top 3 focus areas and concrete next steps. You will also receive the report as a PDF by email.", de: "Trag deine Daten ein und du bekommst den vollen Report: Dein <strong>AI Readiness Radar</strong>, die Säule, die dich bremst, deine drei wichtigsten Fokusfelder und konkrete nächste Schritte. Den Report schicken wir dir zusätzlich als PDF per E-Mail." },
       phName: { en: "Your name", de: "Dein Name" },
-      phCompany: { en: "Your company name", de: "Name Deines Unternehmens" },
+      phCompany: { en: "Your company name", de: "Name deines Unternehmens" },
       phEmail: { en: "Your work email address", de: "Deine geschäftliche E-Mail-Adresse" },
       srName: { en: "Your name", de: "Dein Name" },
       srCompany: { en: "Company Name", de: "Unternehmen" },
       srEmail: { en: "Your email address", de: "Deine E-Mail-Adresse" },
-      gateConsent: { en: "By submitting this form you are giving consent to be contacted by Tektit Consulting GmbH and to have your answers processed to generate and send your report. Your scores are additionally stored in pseudonymised form \u2014 without your name, email address or company \u2014 so that we can build a comparison benchmark. You can withdraw your consent at any time. See our <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Data Privacy</a> notice.", de: "Mit dem Absenden bist Du damit einverstanden, dass die Tektit Consulting GmbH Dich kontaktiert und Deine Antworten verarbeitet, um Deinen Report zu erstellen und zu versenden. Deine Ergebniswerte werden zusätzlich pseudonymisiert gespeichert — ohne Namen, E-Mail-Adresse und Firma — damit wir eine Vergleichsbasis aufbauen können. Du kannst Dein Einverständnis jederzeit zurückziehen. Siehe unsere <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzhinweise</a>." },
+      gateConsent: { en: "By submitting this form you are giving consent to be contacted by Tektit Consulting GmbH and to have your answers processed to generate and send your report. Your scores are additionally stored in pseudonymised form \u2014 without your name, email address or company \u2014 so that we can build a comparison benchmark. You can withdraw your consent at any time. See our <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Data Privacy</a> notice.", de: "Mit dem Absenden bist du damit einverstanden, dass die Tektit Consulting GmbH dich kontaktiert und deine Antworten verarbeitet, um deinen Report zu erstellen und zu versenden. Deine Ergebniswerte werden zusätzlich pseudonymisiert gespeichert — ohne Namen, E-Mail-Adresse und Firma — damit wir eine Vergleichsbasis aufbauen können. Du kannst dein Einverständnis jederzeit zurückziehen. Siehe unsere <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzhinweise</a>." },
       unlockBtn: { en: "Show My Results 📊", de: "Ergebnisse anzeigen 📊" },
-      errEmail: { en: "Please enter a valid work email address so we can send you your report.", de: "Bitte gib eine gültige geschäftliche E-Mail-Adresse ein, damit wir Dir den Report schicken können." },
-      errCompany: { en: "Please enter your company name.", de: "Bitte gib den Namen Deines Unternehmens ein." },
-      errConsent: { en: "Please tick the consent box so we can process your data and send your report.", de: "Bitte setz das Häkchen, damit wir Deine Daten verarbeiten und den Report schicken dürfen." },
+      errEmail: { en: "Please enter a valid work email address so we can send you your report.", de: "Bitte gib eine gültige geschäftliche E-Mail-Adresse ein, damit wir dir den Report schicken können." },
+      errCompany: { en: "Please enter your company name.", de: "Bitte gib den Namen deines Unternehmens ein." },
+      errConsent: { en: "Please tick the consent box so we can process your data and send your report.", de: "Bitte setz das Häkchen, damit wir deine Daten verarbeiten und den Report schicken dürfen." },
       resultsTitle: { en: "Your Results", de: "Deine Ergebnisse" },
-      greeting: { en: "Hello {name}, Here Are Your Results:", de: "Hallo {name}, hier sind Deine Ergebnisse:" },
-      bandFoundation: { en: "Foundation Stage: AI currently happens here, but it happens on its own. Without ownership, rules and a sanctioned environment, every further step multiplies the risk instead of the return.", de: "Foundation Stage: KI passiert bei Dir, aber sie passiert von selbst. Ohne Verantwortung, Regeln und eine freigegebene Umgebung vervielfacht jeder weitere Schritt das Risiko statt den Nutzen." },
+      greeting: { en: "Hello {name}, Here Are Your Results:", de: "Hallo {name}, hier sind deine Ergebnisse:" },
+      bandFoundation: { en: "Foundation Stage: AI currently happens here, but it happens on its own. Without ownership, rules and a sanctioned environment, every further step multiplies the risk instead of the return.", de: "Foundation Stage: KI passiert bei dir, aber sie passiert von selbst. Ohne Verantwortung, Regeln und eine freigegebene Umgebung vervielfacht jeder weitere Schritt das Risiko statt den Nutzen." },
       bandWorking: { en: "Working Baseline: the basics hold. What is typically missing now is not more tooling but proof of value and a path from experiment to daily operations.", de: "Working Baseline: Die Grundlagen tragen. Was jetzt meist fehlt, sind nicht mehr Werkzeuge, sondern der Nachweis des Nutzens und ein Weg vom Versuch in den Alltag." },
       bandScale: { en: "Scale-Ready: your organisation can absorb AI. The leverage now lies less in enabling and more in deciding where it genuinely pays and where it does not.", de: "Scale-Ready: Deine Organisation kann KI aufnehmen. Der Hebel liegt jetzt weniger im Befähigen als in der Entscheidung, wo sich KI wirklich lohnt und wo nicht." },
       reportSubtitle: { en: "AI Readiness Check · 12 Dimensions", de: "AI Readiness Check · 12 Dimensionen" },
@@ -2030,41 +2098,46 @@
       focusH3: { en: "Your Top 3 Focus Areas", de: "Deine 3 wichtigsten Fokusfelder" },
       focusH2: { en: "Your Top 2 Focus Areas", de: "Deine 2 wichtigsten Fokusfelder" },
       focusH1: { en: "Your Focus Area", de: "Dein Fokusfeld" },
-      focusDesc: { en: "<span class=\"tektit-keyword-accent\">Focus creates progress.</span> Changing everything at once slows you down. We weigh how big each gap is against how much that area affects your growth, so you know which one to take on first.", de: "<span class=\"tektit-keyword-accent\">Fokus schafft Fortschritt.</span> Alles gleichzeitig zu ändern bremst Dich. Wir wiegen die Größe der Lücke gegen die Bedeutung des Bereichs für Dein Wachstum ab, damit Du weißt, was zuerst dran ist." },
-      focusNote: { en: "* Note: Focus areas are ranked by leverage: how big each gap is combined with how much that area drives your growth, not strictly by raw score.", de: "* Hinweis: Die Reihenfolge richtet sich nach der Wirkung, also Größe der Lücke mal Bedeutung für Dein Wachstum, nicht nach dem reinen Punktwert." },
+      focusDesc: { en: "<span class=\"tektit-keyword-accent\">Focus creates progress.</span> Changing everything at once slows you down. We weigh how big each gap is against how much that area affects your growth, so you know which one to take on first.", de: "<span class=\"tektit-keyword-accent\">Fokus schafft Fortschritt.</span> Alles gleichzeitig zu ändern bremst dich. Wir wiegen die Größe der Lücke gegen die Bedeutung des Bereichs für dein Wachstum ab, damit du weißt, was zuerst dran ist." },
+      focusNote: { en: "* Note: Focus areas are ranked by leverage: how big each gap is combined with how much that area drives your growth, not strictly by raw score.", de: "* Hinweis: Die Reihenfolge richtet sich nach der Wirkung, also Größe der Lücke mal Bedeutung für dein Wachstum, nicht nach dem reinen Punktwert." },
       prioRank: { en: "Priority {n}", de: "Priorität {n}" },
       nextStepsLabel: { en: "Recommended next steps:", de: "Empfohlene nächste Schritte:" },
       congratsH: { en: "You've built something rare", de: "Du hast etwas Seltenes aufgebaut" },
       congratsTitle: { en: "🎉 Nothing urgent to fix", de: "🎉 Nichts, was dringend zu reparieren wäre" },
-      congratsBody: { en: "Across all twelve dimensions, everything is broadly in place; there is no single bottleneck holding you back. That is uncommon, and it usually reflects a lot of deliberate work.<br><br>We would genuinely like to hear how you got there. If you are open to it, let's talk: no pitch, just a conversation about your journey.", de: "Über alle zwölf Dimensionen ist im Wesentlichen alles etabliert; es gibt keinen einzelnen Engpass, der Dich aufhält. Das ist selten und steckt meist viel bewusste Arbeit dahinter.<br><br>Wir würden gern hören, wie Du dahin gekommen bist. Wenn Du magst, sprich mit uns: kein Pitch, nur ein Gespräch über Deinen Weg." },
+      congratsBody: { en: "Across all twelve dimensions, everything is broadly in place; there is no single bottleneck holding you back. That is uncommon, and it usually reflects a lot of deliberate work.<br><br>We would genuinely like to hear how you got there. If you are open to it, let's talk: no pitch, just a conversation about your journey.", de: "Über alle zwölf Dimensionen ist im Wesentlichen alles etabliert; es gibt keinen einzelnen Engpass, der dich aufhält. Das ist selten und steckt meist viel bewusste Arbeit dahinter.<br><br>Wir würden gern hören, wie du dahin gekommen bist. Wenn du magst, sprich mit uns: kein Pitch, nur ein Gespräch über deinen Weg." },
       sparringH3: { en: "Understanding Your Constraint", de: "Deinen Engpass verstehen" },
       diag1: { en: "Across more than 40 client engagements we see the same pattern: the technology is rarely the problem. AI stalls because nobody owns it, because the rules exist only on paper, or because the data cannot be reached without a manual workaround. Meanwhile people use AI anyway, on private accounts, and the organisation cannot see it.", de: "Aus über 40 Kundenprojekten sehen wir immer dasselbe Muster: Die Technik ist selten das Problem. KI bleibt stecken, weil niemand verantwortlich ist, weil die Regeln nur auf dem Papier existieren oder weil die Daten ohne manuellen Umweg nicht erreichbar sind. Genutzt wird KI trotzdem, über private Accounts, und die Organisation sieht es nicht." },
-      diag2: { en: "We work by one rule: <span class=\"tektit-keyword-accent\">“Fall in love with the problem, not the solution.”</span> That includes telling you where AI is not worth it for you. Deciding against it in specific places is what makes the rest credible, and it is usually cheaper than the next licence.", de: "Wir arbeiten nach einer Regel: <span class=\"tektit-keyword-accent\">„Verliebe Dich in das Problem, nicht in die Lösung.“</span> Dazu gehört, Dir zu sagen, wo sich KI für Dich nicht lohnt. Sich an einzelnen Stellen dagegen zu entscheiden, macht den Rest glaubwürdig, und es ist meist günstiger als die nächste Lizenz." },
+      diag2: { en: "We work by one rule: <span class=\"tektit-keyword-accent\">“Fall in love with the problem, not the solution.”</span> That includes telling you where AI is not worth it for you. Deciding against it in specific places is what makes the rest credible, and it is usually cheaper than the next licence.", de: "Wir arbeiten nach einer Regel: <span class=\"tektit-keyword-accent\">„Verliebe dich in das Problem, nicht in die Lösung.“</span> Dazu gehört, dir zu sagen, wo sich KI für dich nicht lohnt. Sich an einzelnen Stellen dagegen zu entscheiden, macht den Rest glaubwürdig, und es ist meist günstiger als die nächste Lizenz." },
       advisorRole: { en: "Associate Partner", de: "Associate Partner" },
       advisorBio: { en: "Works with leadership teams to find what is actually slowing the business down, and to decide what to fix first.", de: "Arbeitet mit Führungsteams daran, herauszufinden, was das Geschäft wirklich bremst, und was zuerst dran ist." },
       footerCopy: { en: "Copyright © 2026 Tektit Consulting. All rights reserved. Confidential Executive Report.", de: "Copyright © 2026 Tektit Consulting. Alle Rechte vorbehalten. Vertraulicher Report." },
       backBtn: { en: "⬆️ Edit selections", de: "⬆️ Antworten ändern" },
       kioskReset: { en: "🔄 Start over for the next visitor", de: "🔄 Für den nächsten Besucher zurücksetzen" },
-      reportConfirm: { en: "📧 Your report is on its way to {email}.", de: "📧 Dein Report ist unterwegs an {email}." },
+      reportConfirm: { en: "📧 Your report is on its way to {email}.", de: "📧 dein Report ist unterwegs an {email}." },
       sendWarn: { en: "⚠️ We couldn't reach our server yet; the connection seems unstable. Your answers are saved and we'll retry automatically. Please tell us at the booth if this message stays.", de: "⚠️ Wir erreichen unseren Server noch nicht; die Verbindung scheint instabil. Deine Antworten sind gespeichert und wir versuchen es automatisch erneut. Sag uns am Stand Bescheid, wenn diese Meldung bleibt." },
       sendRetry: { en: "Try sending again", de: "Erneut senden" },
       sending: { en: "Sending…", de: "Wird gesendet…" },
-      sendStillFailing: { en: "Still no connection. Your data is saved and will be sent automatically once you're back online, or please leave us a business card.", de: "Noch keine Verbindung. Deine Daten sind gespeichert und gehen automatisch raus, sobald Du wieder online bist. Sonst lass uns gern eine Visitenkarte da." },
-      bookH2: { en: "Book a 20-Minute Call", de: "20 Minuten sprechen" },
-      bookP: { en: "Your report is ready. In 20 minutes we can go through the pillar that is holding you back and what we would tackle first. No pitch, no slides.", de: "Dein Report ist fertig. In 20 Minuten gehen wir die Säule durch, die Dich bremst, und was wir zuerst angehen würden. Kein Pitch, keine Folien." },
+      sendStillFailing: { en: "Still no connection. Your data is saved and will be sent automatically once you're back online, or please leave us a business card.", de: "Noch keine Verbindung. Deine Daten sind gespeichert und gehen automatisch raus, sobald du wieder online bist. Sonst lass uns gern eine Visitenkarte da." },
+      bookH2: { en: "Arrange 30 Minutes", de: "30 Minuten vereinbaren" },
+      bookP: { en: "Your report is ready. In half an hour we can go through the pillar that is holding you back and what we would tackle first. No pitch, no slides.", de: "Dein Report ist fertig. In einer halben Stunde gehen wir die Säule durch, die dich bremst, und was wir zuerst angehen würden. Kein Pitch, keine Folien." },
       bookBtn: { en: "📅 Book a call with Matthias Paratsch", de: "📅 Termin mit Matthias Paratsch" },
-      stickyBtn: { en: "📅 Book a 20-minute call", de: "📅 20 Minuten sprechen" },
+      stickyBtn: { en: "📅 Arrange 30 minutes", de: "📅 30 Minuten vereinbaren" },
       srRole: { en: "Your role", de: "Deine Rolle" },
-      disclaimer: { en: "Self-assessment based on your own answers. Not a conformity assessment under the EU AI Act and not legal advice.", de: "Selbsteinschätzung auf Basis Deiner eigenen Angaben. Keine Konformitätsbewertung nach EU AI Act und keine Rechtsberatung." },
+      disclaimer: { en: "Self-assessment based on your own answers. Not a conformity assessment under the EU AI Act and not legal advice.", de: "Selbsteinschätzung auf Basis deiner eigenen Angaben. Keine Konformitätsbewertung nach EU AI Act und keine Rechtsberatung." },
       shortGenBtn: { en: "Show my result", de: "Mein Ergebnis zeigen" },
       shortSubtitle: { en: "AI Readiness Check · Short version, 12 statements", de: "AI Readiness Check · Kurzversion, 12 Aussagen" },
+      shortCapH3: { en: "Want this by email?", de: "Willst du das per Mail?" },
+      shortCapP: { en: "We will send you your result together with the benchmark of everyone in this room, plus the link to the full check with all 36 statements. Optional — your result is already on screen either way.", de: "Wir schicken dir dein Ergebnis zusammen mit dem Benchmark aller im Raum, dazu den Link zur Vollversion mit allen 36 Aussagen. Freiwillig — dein Ergebnis steht ohnehin schon auf dem Bildschirm." },
+      shortCapBtn: { en: "Send it to me", de: "Schick es mir" },
+      shortCapConsent: { en: "I agree that Tektit Consulting GmbH may contact me and process my answers to send me my result, the room benchmark and the link to the full check. See our data privacy notice.", de: "Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und meine Antworten verarbeitet, um mir mein Ergebnis, den Raum-Benchmark und den Link zur Vollversion zu schicken. Siehe unsere Datenschutzhinweise." },
+      shortCapDone: { en: "Done. You will hear from us shortly after the session.", de: "Erledigt. Du hörst kurz nach der Session von uns." },
       roleNone: { en: "Your role in the company…", de: "Deine Rolle im Unternehmen…" },
       roleBoard: { en: "Board / Managing Director", de: "Geschäftsführung / Vorstand" },
       roleUnitLead: { en: "Business unit lead", de: "Bereichsleitung" },
       roleFunctional: { en: "Functional lead (IT, HR, Legal, …)", de: "Fachverantwortung (IT, HR, Recht, …)" },
       roleStaff: { en: "Staff / project role", de: "Stab / Projektrolle" },
-      errRole: { en: "Please select your role.", de: "Bitte wähl Deine Rolle aus." },
-      weakestPillar: { en: "Your constraint sits in {pillar} ({score} of 5.0). Work above that level in the other pillars will not hold until this one moves.", de: "Dein Engpass liegt in {pillar} ({score} von 5,0). Was Du in den anderen Säulen darüber aufbaust, trägt erst, wenn diese Säule nachzieht." },
+      errRole: { en: "Please select your role.", de: "Bitte wähl deine Rolle aus." },
+      weakestPillar: { en: "Your constraint sits in {pillar} ({score} of 5.0). Work above that level in the other pillars will not hold until this one moves.", de: "Dein Engpass liegt in {pillar} ({score} von 5,0). Was du in den anderen Säulen darüber aufbaust, trägt erst, wenn diese Säule nachzieht." },
       cantAssessNote1: { en: "You marked one statement as “cannot assess”. That is a finding, not a gap in the data: it shows where leadership currently has no visibility into its own organisation.", de: "Du hast eine Aussage als „kann ich nicht beurteilen“ markiert. Das ist ein Befund und keine Datenlücke: Er zeigt, wo die Führung derzeit keinen Einblick in die eigene Organisation hat." },
       cantAssessNote: { en: "You marked {n} statements as “cannot assess”. That is a finding, not a gap in the data: it shows where leadership currently has no visibility into its own organisation.", de: "Du hast {n} Aussagen als „kann ich nicht beurteilen“ markiert. Das ist ein Befund und keine Datenlücke: Es zeigt, wo die Führung derzeit keinen Einblick in die eigene Organisation hat." }
     };
@@ -2123,24 +2196,24 @@
 
     const CLUSTERS = [
       "AI Leadership & Value",
-      "People & Culture",
       "Technology & Data",
-      "Rules & Risk"
+      "Rules & Risk",
+      "People & Culture"
     ];
     // Four consecutive Tektit palette swatches, mirroring the four-facet Bildmarke
     const PILLAR_COLORS = {
       "AI Leadership & Value": "#3D4585",
-      "People & Culture":      "#4E58A8",
-      "Technology & Data":     "#52A5B0",
-      "Rules & Risk":          "#52D0B0"
+      "Technology & Data":     "#4E58A8",
+      "Rules & Risk":          "#52A5B0",
+      "People & Culture":      "#52D0B0"
     };
     function pillarColor(cluster) { return PILLAR_COLORS[cluster] || "#3D4585"; }
     // Darker, contrast-safe variants for text/numbers on white
     const PILLAR_TEXT = {
       "AI Leadership & Value": "#3D4585",
-      "People & Culture":      "#4E58A8",
-      "Technology & Data":     "#2C7A86",
-      "Rules & Risk":          "#17876B"
+      "Technology & Data":     "#4E58A8",
+      "Rules & Risk":          "#2C7A86",
+      "People & Culture":      "#17876B"
     };
     function pillarText(cluster) { return PILLAR_TEXT[cluster] || "#3D4585"; }
 
@@ -2152,9 +2225,14 @@
     const CONSENT_VERSION = "2026-08-12-proposal";   // provisional until legal sign-off
     const TOOL_URL = "https://matze-tektit.github.io/AI-Check/";
     // The consent text actually shown to the visitor, in the language they saw.
-    function consentText() {
-      const el = document.querySelector(".lead-consent span");
-      const raw = el ? el.textContent : t("gateConsent");
+    function consentText(explicit) {
+      // An explicitly supplied wording wins: the short-mode capture has its own
+      // consent, and storing the lead-gate text against that record would be a
+      // false record of what the person agreed to.
+      const raw = explicit || (function() {
+        const el = document.querySelector(".lead-consent span");
+        return el ? el.textContent : t("gateConsent");
+      })();
       return raw.replace(/\s+/g, " ").trim();
     }
     const SESSION_START = Date.now();
@@ -2204,7 +2282,7 @@
           lead: {
             email: lead.email || "",
             consent: !!lead.consent,
-            consentText: consentText(),
+            consentText: consentText(lead.consentText),
             consentVersion: CONSENT_VERSION,
             consentTimestamp: lead.consentTimestamp || null
           }
@@ -2263,8 +2341,11 @@
         timestamp: new Date().toISOString(),
         archetype: selectedArchetype,
         language: LANG,
-        // Short mode produces no report: Make must not try to mail one.
+        // Short mode produces no report at submission time. For a live session
+        // the report follows once the room benchmark is complete, which is a
+        // separate Make run, so Make must not mail one from here.
         reportReady: !SHORT,
+        wantsReport: eventName === "short_lead",
         resumeUrl: TOOL_URL,
         suspectedBot: !!lead.suspectedBot,
         // Flat fields: same names as the original payload, so existing
@@ -2279,7 +2360,7 @@
           company: lead.company || "",
           role: lead.role || "",
           consent: !!lead.consent,
-          consentText: consentText(),
+          consentText: consentText(lead.consentText),
           consentVersion: CONSENT_VERSION,
           consentTimestamp: lead.consentTimestamp || null
         },
@@ -2971,6 +3052,7 @@
         document.body.classList.add("is-short");
       }
 
+      initShortCapture();
       initEarlyLink();
       flushQueue();
 
@@ -3045,6 +3127,42 @@
     }
 
     /* ── Early link capture: secures the lead even if the visitor leaves ── */
+    /* Sends the same scores again, this time with an email address and its own
+       consent. The record is tagged so Make can tell the two apart: the first
+       is anonymous benchmark data, the second is a lead who asked for a report.
+       The report itself is not generated here; for a live session it is sent
+       afterwards, once the room benchmark is complete. */
+    function initShortCapture() {
+      const btn = document.getElementById("shortSendBtn");
+      if (!btn) return;
+      btn.addEventListener("click", function() {
+        const input = document.getElementById("shortEmail");
+        const email = (input.value || "").trim();
+        const consent = document.getElementById("shortConsent").checked;
+        // Same validation the lead gate uses: the browser's own check on a
+        // type="email" field, plus a non-empty test.
+        if (!email || !input.checkValidity()) {
+          alert(t("errEmail"));
+          input.focus();
+          return;
+        }
+        if (!consent) {
+          alert(t("errConsent"));
+          document.getElementById("shortConsent").focus();
+          return;
+        }
+        const consentText = document.querySelector("#shortCapture .short-capture-consent span").textContent.trim();
+        deliver(buildBenchmarkPayload("short_lead", {
+          email: email,
+          consent: true,
+          consentText: consentText
+        }));
+        document.querySelector("#shortCapture .short-capture-form").style.display = "none";
+        document.querySelector("#shortCapture .short-capture-consent").style.display = "none";
+        document.getElementById("shortCapDone").style.display = "";
+      });
+    }
+
     function initEarlyLink() {
       const btn = document.getElementById("earlyLinkBtn");
       if (!btn) return;
@@ -3109,11 +3227,14 @@
         return;
       }
       if (SHORT) {
-        // No gate, no email, no PDF. One anonymous record for the benchmark,
-        // then the result straight on screen.
+        // The pseudonymised record goes out immediately so the room benchmark is
+        // complete even for people who do not want an email. The email is asked
+        // for afterwards, separately, with its own consent.
         deliver(buildBenchmarkPayload("short_complete", { consent: false }));
         document.getElementById("userGreeting").textContent = t("resultsTitle");
         evaluate(false);
+        const cap = document.getElementById("shortCapture");
+        if (cap) cap.style.display = "";
         return;
       }
       evaluate(true);
