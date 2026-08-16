@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<title>Tektit · Live-Benchmark</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   Projector display. Every size assumes a room, not a desk: the back
+   row is 15 metres away, so nothing is below 18px and the numbers that
+   carry the argument are enormous.
+   ═══════════════════════════════════════════════════════════════════ */
+:root{
+  --dark:#051F2E; --indigo:#3D4585; --blue:#4E58A8; --teal:#52A5B0; --mint:#52D0B0;
+  --l1:#C4463F; --l2:#D98634; --l3:#4E9BB0; --l4:#3FBF8F; --na:#5B6577;
+  --ink:#EAF0F6; --muted:#8FA3B5;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%}
+body{
+  background:var(--dark); color:var(--ink); overflow:hidden;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+  font-variant-numeric:tabular-nums; /* digits must not jitter while counting up */
+}
+body::before{ /* one soft light source, no gradients competing with the data */
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(120% 90% at 15% -10%, rgba(78,88,168,.35), transparent 60%);
+}
+.wrap{position:relative;height:100%;display:flex;flex-direction:column;padding:2.6vh 3vw}
+
+/* ── Header ────────────────────────────────────────────────────── */
+header{display:flex;align-items:flex-end;justify-content:space-between;gap:3vw;flex:0 0 auto}
+.brand{font-size:1.05vw;font-weight:800;letter-spacing:.42em;color:var(--mint)}
+h1{font-size:2.5vw;font-weight:800;line-height:1.1;margin-top:.4vh}
+h1 small{display:block;font-size:1.05vw;font-weight:600;color:var(--muted);letter-spacing:.02em;margin-top:.6vh}
+.kpis{display:flex;gap:2.6vw;text-align:right}
+.kpi-num{font-size:5vw;font-weight:800;line-height:.92;letter-spacing:-.02em}
+.kpi-lab{font-size:.82vw;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:.7vh}
+.kpi.teal .kpi-num{color:var(--mint)}
+.kpi.na .kpi-num{color:#9AA7B8}
+
+/* ── Distribution rows ─────────────────────────────────────────── */
+main{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:.55vh;margin:2vh 0 1vh}
+.row{display:grid;grid-template-columns:19vw 1fr 5.2vw;align-items:center;gap:1.1vw}
+.row.pillar-start{margin-top:1.15vh}
+.rlab{display:flex;align-items:center;gap:.55vw;font-size:1.02vw;font-weight:600;justify-content:flex-end;text-align:right}
+.rlab .dot{width:.5vw;height:.5vw;border-radius:50%;flex:0 0 auto}
+.bar{position:relative;height:3.5vh;display:flex;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.055)}
+.seg{height:100%;display:flex;align-items:center;justify-content:center;
+     font-size:.88vw;font-weight:800;color:#fff;
+     transition:width .7s cubic-bezier(.22,.9,.3,1);white-space:nowrap;overflow:hidden}
+.seg.l1{background:var(--l1)} .seg.l2{background:var(--l2)}
+.seg.l3{background:var(--l3)} .seg.l4{background:var(--l4)}
+.seg.na{background:repeating-linear-gradient(135deg,var(--na),var(--na) 5px,#4b5464 5px,#4b5464 10px)}
+.avg{position:absolute;top:-.55vh;bottom:-.55vh;width:2px;background:#fff;box-shadow:0 0 0 2px rgba(5,31,46,.65);
+     transition:left .7s cubic-bezier(.22,.9,.3,1)}
+.rval{font-size:1.35vw;font-weight:800;text-align:right}
+
+/* ── Footer ────────────────────────────────────────────────────── */
+footer{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:2vw;
+       border-top:1px solid rgba(255,255,255,.1);padding-top:1.4vh}
+.legend{display:flex;gap:1.5vw;font-size:.86vw;font-weight:600}
+.legend span{display:flex;align-items:center;gap:.42vw;color:var(--muted)}
+.legend i{width:1vw;height:1vw;border-radius:2px;display:block}
+.status{font-size:.8vw;color:var(--muted);letter-spacing:.04em}
+.status.err{color:#E08A84}
+.pulse{display:inline-block;width:.55vw;height:.55vw;border-radius:50%;background:var(--mint);margin-right:.45vw;
+       animation:p 2.4s ease-in-out infinite}
+@keyframes p{0%,100%{opacity:.28}50%{opacity:1}}
+
+/* ── Radar view ────────────────────────────────────────────────── */
+#radarView{display:none;flex:1 1 auto;align-items:center;justify-content:center;gap:4vw}
+#radarView.on{display:flex}
+main.off{display:none}
+.rlegend{max-width:22vw}
+.rlegend h2{font-size:1.6vw;margin-bottom:1.4vh}
+.rlegend p{font-size:1vw;line-height:1.6;color:var(--muted)}
+.rkey{display:flex;align-items:center;gap:.6vw;font-size:1vw;font-weight:700;margin-top:1.6vh}
+.rkey s{width:2.4vw;height:0;border-top:3px solid var(--mint);display:block;text-decoration:none}
+
+.empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+       flex-direction:column;gap:2vh;text-align:center;background:var(--dark);z-index:5}
+.empty h2{font-size:3vw}.empty p{font-size:1.2vw;color:var(--muted)}
+.empty.hide{display:none}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div>
+      <div class="brand">TEKTIT</div>
+      <h1>Wie KI-ready ist dieser Raum?
+        <small id="sub">AI Readiness Check · Live-Auswertung</small></h1>
+    </div>
+    <div class="kpis">
+      <div class="kpi"><div class="kpi-num" id="kN">0</div><div class="kpi-lab">Teilnehmende</div></div>
+      <div class="kpi teal"><div class="kpi-num" id="kAvg">–</div><div class="kpi-lab">Reifegrad Ø</div></div>
+      <div class="kpi na"><div class="kpi-num" id="kNa">0</div><div class="kpi-lab">mal „unklar“</div></div>
+    </div>
+  </header>
+
+  <main id="bars"></main>
+
+  <div id="radarView">
+    <svg id="radar" viewBox="0 0 640 560" width="46vw"></svg>
+    <div class="rlegend">
+      <h2>Das Profil dieses Raums</h2>
+      <p>Zwölf Dimensionen, vier Säulen. Je weiter außen, desto belastbarer ist der Bereich
+         über alle Unternehmen im Raum hinweg.</p>
+      <div class="rkey"><s></s> Durchschnitt aller Antworten</div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="legend">
+      <span><i style="background:var(--l1)"></i>nein</span>
+      <span><i style="background:var(--l2)"></i>teilweise</span>
+      <span><i style="background:var(--l3)"></i>meistens</span>
+      <span><i style="background:var(--l4)"></i>ja</span>
+      <span><i style="background:#5B6577"></i>unklar</span>
+    </div>
+    <div class="status" id="status"><span class="pulse"></span>verbinde…</div>
+  </footer>
+</div>
+
+<div class="empty" id="empty">
+  <h2>Gleich geht es los</h2>
+  <p>Sobald die ersten Antworten eintreffen, baut sich die Auswertung hier auf.</p>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   KONFIGURATION — nur diese drei Zeilen anpassen.
+   Die Tabelle muss über "Freigeben → Jeder mit dem Link → Betrachter"
+   lesbar sein. Deshalb DARF DORT KEINE E-MAIL-ADRESSE STEHEN.
+   ═══════════════════════════════════════════════════════════════════ */
+const SHEET_ID   = "HIER_DIE_ID_DER_ANZEIGE_TABELLE";
+const SHEET_NAME = "Live_Display";
+const REFRESH_MS = 8000;
+
+/* Reihenfolge muss der Tabelle und dem Tool entsprechen. */
+const DIMS = [
+  ["Mandat & Verantwortung",       "p1"], ["Priorisierung & Fokus",    "p1"], ["Wirkung & Portfolio",   "p1"],
+  ["Zugang & Arbeitsumgebung",     "p2"], ["Datenzugang & Qualität",   "p2"], ["Integration in Prozesse","p2"],
+  ["Nutzungsregeln",               "p3"], ["Berechtigungen & Security","p3"], ["Regulatorik",           "p3"],
+  ["Befähigung",                   "p4"], ["Akzeptanz & Kommunikation","p4"], ["Wissenssicherung",      "p4"]
+];
+const PILLAR = { p1:"#3D4585", p2:"#4E58A8", p3:"#52A5B0", p4:"#52D0B0" };
+
+/* ── Aufbau der Zeilen ────────────────────────────────────────── */
+const barsEl = document.getElementById("bars");
+DIMS.forEach(function(d, i){
+  const first = i === 0 || DIMS[i-1][1] !== d[1];
+  barsEl.insertAdjacentHTML("beforeend",
+    '<div class="row' + (first && i ? ' pillar-start' : '') + '">' +
+      '<div class="rlab"><span class="dot" style="background:' + PILLAR[d[1]] + '"></span>' + d[0] + '</div>' +
+      '<div class="bar" id="b' + i + '">' +
+        ['l1','l2','l3','l4','na'].map(function(c){
+          return '<div class="seg ' + c + '" style="width:0"></div>'; }).join('') +
+        '<div class="avg" style="left:0"></div>' +
+      '</div>' +
+      '<div class="rval" id="v' + i + '">–</div>' +
+    '</div>');
+});
+
+/* ── Datenabruf über die Google Visualization API ──────────────── */
+function url(){
+  return "https://docs.google.com/spreadsheets/d/" + SHEET_ID +
+         "/gviz/tq?tqx=out:json&sheet=" + encodeURIComponent(SHEET_NAME) +
+         "&headers=1&_=" + Date.now();     // cache-buster, sonst friert die Anzeige ein
+}
+function parse(text){
+  const a = text.indexOf("{"), b = text.lastIndexOf("}");
+  const json = JSON.parse(text.slice(a, b + 1));
+  return (json.table.rows || []).map(function(r){
+    return (r.c || []).map(function(c){ return c ? c.v : null; });
+  });
+}
+
+let lastN = 0;
+function animate(el, to){
+  const from = Number(el.dataset.v || 0);
+  if (from === to) return;
+  el.dataset.v = to;
+  const t0 = performance.now(), dur = 650;
+  (function step(t){
+    const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 3);
+    el.textContent = Math.round(from + (to - from) * e);
+    if (k < 1) requestAnimationFrame(step);
+  })(t0);
+}
+
+function render(rows){
+  /* Erwartete Spalten je Zeile: Label | n1 | n2 | n3 | n4 | nUnklar | Ø */
+  let total = 0, naSum = 0, avgSum = 0, avgCount = 0;
+  const avgs = [];
+
+  DIMS.forEach(function(d, i){
+    const r = rows[i] || [];
+    const c = [1,2,3,4,5].map(function(k){ return Number(r[k]) || 0; });
+    const n = c.reduce(function(a,b){ return a+b; }, 0);
+    const avg = r[6] === null || r[6] === undefined || r[6] === "" ? null : Number(r[6]);
+    avgs.push(avg);
+    naSum += c[4];
+    if (n > total) total = n;
+    if (avg !== null) { avgSum += avg; avgCount++; }
+
+    const segs = document.querySelectorAll("#b" + i + " .seg");
+    c.forEach(function(v, k){
+      const pct = n ? (v / n * 100) : 0;
+      segs[k].style.width = pct + "%";
+      /* Zahl nur zeigen, wenn das Segment breit genug ist. Sonst
+         überlappen sich die Ziffern und niemand liest mehr etwas. */
+      segs[k].textContent = pct >= 7 ? v : "";
+    });
+    const marker = document.querySelector("#b" + i + " .avg");
+    marker.style.left = (avg === null ? 0 : (avg / 5 * 100)) + "%";
+    marker.style.opacity = avg === null ? 0 : 1;
+    document.getElementById("v" + i).textContent =
+      avg === null ? "–" : avg.toFixed(1).replace(".", ",");
+  });
+
+  document.getElementById("empty").classList.toggle("hide", total > 0);
+  animate(document.getElementById("kN"), total);
+  animate(document.getElementById("kNa"), naSum);
+  document.getElementById("kAvg").textContent =
+    avgCount ? (avgSum / avgCount).toFixed(1).replace(".", ",") : "–";
+
+  drawRadar(avgs);
+  lastN = total;
+}
+
+/* ── Radar ─────────────────────────────────────────────────────── */
+function drawRadar(avgs){
+  const svg = document.getElementById("radar");
+  const cx = 320, cy = 275, R = 195, N = DIMS.length;
+  const NS = "http://www.w3.org/2000/svg";
+  svg.innerHTML = "";
+  function add(tag, attrs, text){
+    const e = document.createElementNS(NS, tag);
+    for (const k in attrs) e.setAttribute(k, attrs[k]);
+    if (text !== undefined) e.textContent = text;
+    svg.appendChild(e); return e;
+  }
+  for (let g = 1; g <= 5; g++){
+    const pts = [];
+    for (let i = 0; i < N; i++){
+      const a = i * 2 * Math.PI / N - Math.PI / 2, r = R * g / 5;
+      pts.push((cx + r * Math.cos(a)) + "," + (cy + r * Math.sin(a)));
+    }
+    add("polygon", { points: pts.join(" "), fill: "none",
+                     stroke: "rgba(255,255,255," + (g === 5 ? .3 : .12) + ")", "stroke-width": 1 });
+  }
+  const pts = [];
+  for (let i = 0; i < N; i++){
+    const a = i * 2 * Math.PI / N - Math.PI / 2;
+    add("line", { x1: cx, y1: cy, x2: cx + R * Math.cos(a), y2: cy + R * Math.sin(a),
+                  stroke: "rgba(255,255,255,.1)", "stroke-width": 1 });
+    const v = avgs[i] === null || avgs[i] === undefined ? 0 : avgs[i];
+    const r = Math.max(0, Math.min(5, v)) / 5 * R;
+    pts.push((cx + r * Math.cos(a)) + "," + (cy + r * Math.sin(a)));
+    const lr = R + 34, lx = cx + lr * Math.cos(a), ly = cy + lr * Math.sin(a);
+    const t = add("text", { x: lx, y: ly, fill: "#8FA3B5", "font-size": 12, "font-weight": 700,
+      "text-anchor": Math.abs(Math.cos(a)) < .25 ? "middle" : (Math.cos(a) > 0 ? "start" : "end"),
+      "dominant-baseline": "middle" });
+    t.textContent = DIMS[i][0].split(" ")[0];
+  }
+  add("polygon", { points: pts.join(" "), fill: "rgba(82,208,176,.18)",
+                   stroke: "#52D0B0", "stroke-width": 2.5, "stroke-linejoin": "round" });
+  pts.forEach(function(p){
+    const xy = p.split(",");
+    add("circle", { cx: xy[0], cy: xy[1], r: 4, fill: "#52D0B0" });
+  });
+}
+
+/* ── Abruf-Schleife ────────────────────────────────────────────── */
+const status = document.getElementById("status");
+let fails = 0;
+async function tick(){
+  try{
+    const res = await fetch(url());
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    render(parse(await res.text()));
+    fails = 0;
+    status.className = "status";
+    status.innerHTML = '<span class="pulse"></span>aktualisiert ' +
+      new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+  }catch(e){
+    fails++;
+    status.className = "status err";
+    /* Die letzte gute Anzeige bleibt stehen. Auf einer Bühne ist ein
+       leicht veralteter Wert immer besser als ein leerer Bildschirm. */
+    status.textContent = "keine Verbindung (" + fails + ") · letzter Stand bleibt sichtbar";
+  }
+}
+tick(); setInterval(tick, REFRESH_MS);
+
+/* ── Ansicht wechseln ──────────────────────────────────────────── */
+/* Leertaste oder Pfeiltasten: Verteilung ⇄ Radar. Ein Presenter-Klicker
+   sendet Pfeiltasten, funktioniert also ohne Umbau. */
+let radarOn = false;
+function toggle(force){
+  radarOn = force === undefined ? !radarOn : force;
+  document.getElementById("radarView").classList.toggle("on", radarOn);
+  document.getElementById("bars").classList.toggle("off", radarOn);
+  document.getElementById("sub").textContent = radarOn
+    ? "AI Readiness Check · Profil des Raums"
+    : "AI Readiness Check · Live-Auswertung";
+}
+addEventListener("keydown", function(e){
+  if ([" ", "ArrowRight", "ArrowLeft", "PageDown", "PageUp"].includes(e.key)){ e.preventDefault(); toggle(); }
+  if (e.key === "f") document.documentElement.requestFullscreen?.();
+});
+addEventListener("click", function(){ toggle(); });
+</script>
+</body>
+</html>
