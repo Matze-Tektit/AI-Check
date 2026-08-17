@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -28,40 +29,69 @@ body::before{ /* one soft light source, no gradients competing with the data */
 .wrap{position:relative;height:100%;display:flex;flex-direction:column;padding:2.6vh 3vw}
 
 /* ── Header ────────────────────────────────────────────────────── */
-header{display:flex;align-items:flex-end;justify-content:space-between;gap:3vw;flex:0 0 auto}
-.brand{font-size:1.05vw;font-weight:800;letter-spacing:.42em;color:var(--mint)}
-h1{font-size:2.5vw;font-weight:800;line-height:1.1;margin-top:.4vh}
-h1 small{display:block;font-size:1.05vw;font-weight:600;color:var(--muted);letter-spacing:.02em;margin-top:.6vh}
+header{display:flex;align-items:center;justify-content:space-between;gap:3vw;flex:0 0 auto}
+.brandbox{display:flex;align-items:center;gap:1.3vw}
+.logo{height:4.6vh;width:auto;display:block}
+.logo-fallback{font-size:1.6vw;font-weight:800;letter-spacing:.34em;color:#fff}
+.eyebrow{font-size:1vw;font-weight:800;letter-spacing:.28em;text-transform:uppercase;color:var(--mint)}
+.eyebrow b{color:var(--ink)}
+h1{font-size:2.9vw;font-weight:800;line-height:1.1;margin-top:.4vh}
+h1 small{display:block;font-size:1.2vw;font-weight:600;color:var(--muted);letter-spacing:.02em;margin-top:.6vh}
 .kpis{display:flex;gap:2.6vw;text-align:right}
-.kpi-num{font-size:5vw;font-weight:800;line-height:.92;letter-spacing:-.02em}
-.kpi-lab{font-size:.82vw;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:.7vh}
+.kpi-num{font-size:5.8vw;font-weight:800;line-height:.92;letter-spacing:-.02em}
+.kpi-lab{font-size:.98vw;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:.7vh}
 .kpi.teal .kpi-num{color:var(--mint)}
 .kpi.na .kpi-num{color:#9AA7B8}
 
 /* ── Distribution rows ─────────────────────────────────────────── */
-main{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:.55vh;margin:2vh 0 1vh}
-.row{display:grid;grid-template-columns:19vw 1fr 5.2vw;align-items:center;gap:1.1vw}
-.row.pillar-start{margin-top:1.15vh}
-.rlab{display:flex;align-items:center;gap:.55vw;font-size:1.02vw;font-weight:600;justify-content:flex-end;text-align:right}
-.rlab .dot{width:.5vw;height:.5vw;border-radius:50%;flex:0 0 auto}
-.bar{position:relative;height:3.5vh;display:flex;border-radius:2px;overflow:hidden;background:rgba(255,255,255,.055)}
+.viewhead{flex:0 0 auto;display:flex;align-items:baseline;gap:1.4vw;margin:2.4vh 0 1.2vh}
+.pillar-no{font-size:1.05vw;font-weight:800;letter-spacing:.2em;color:var(--muted);white-space:nowrap}
+.viewtitle{font-size:3.2vw;font-weight:800;line-height:1;letter-spacing:-.02em;white-space:nowrap}
+.viewrule{flex:1 1 auto;height:4px;border-radius:2px;opacity:.8}
+.viewhead.hidden{display:none}
+
+/* Säulen-Ansicht: drei Zeilen, dafür dreimal so groß. */
+main{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:3.2vh;margin:0}
+main.hidden{display:none}
+.row{display:grid;grid-template-columns:26vw 1fr 7vw;align-items:center;gap:1.6vw}
+.rlab{font-size:1.9vw;font-weight:700;text-align:right;line-height:1.15;justify-content:flex-end}
+.bar{height:9.5vh}
+.seg{font-size:2.1vw}
+.rval{font-size:2.7vw;letter-spacing:-.02em}
+.avg{top:-1vh;bottom:-1vh;width:3px;box-shadow:0 0 0 3px rgba(5,31,46,.7)}
+
+/* Übersicht: alle zwölf, kompakt, mit Säulenbändern. */
+main.compact{gap:.5vh}
+main.compact .row{grid-template-columns:21vw 1fr 5.4vw;gap:1.1vw}
+main.compact .rlab{font-size:1.15vw;font-weight:600}
+main.compact .bar{height:3.7vh}
+main.compact .seg{font-size:1vw}
+main.compact .rval{font-size:1.5vw}
+main.compact .avg{top:-.5vh;bottom:-.5vh;width:2px;box-shadow:0 0 0 2px rgba(5,31,46,.65)}
+.pillarband{display:grid;grid-template-columns:21vw 1fr;gap:1.1vw;align-items:center;margin:1.2vh 0 .3vh}
+.pillarband span{font-size:.95vw;font-weight:800;letter-spacing:.16em;text-transform:uppercase;text-align:right}
+.pillarband i{height:2px;border-radius:1px;display:block;opacity:.5}
+.bar{position:relative;display:flex;border-radius:3px;overflow:hidden;background:rgba(255,255,255,.06)}
+.avg{position:absolute;background:#fff;transition:left .75s cubic-bezier(.22,.9,.3,1)}
 .seg{height:100%;display:flex;align-items:center;justify-content:center;
-     font-size:.88vw;font-weight:800;color:#fff;
+     font-weight:800;color:#fff;
      transition:width .7s cubic-bezier(.22,.9,.3,1);white-space:nowrap;overflow:hidden}
 .seg.l1{background:var(--l1)} .seg.l2{background:var(--l2)}
 .seg.l3{background:var(--l3)} .seg.l4{background:var(--l4)}
 .seg.na{background:repeating-linear-gradient(135deg,var(--na),var(--na) 5px,#4b5464 5px,#4b5464 10px)}
-.avg{position:absolute;top:-.55vh;bottom:-.55vh;width:2px;background:#fff;box-shadow:0 0 0 2px rgba(5,31,46,.65);
-     transition:left .7s cubic-bezier(.22,.9,.3,1)}
-.rval{font-size:1.35vw;font-weight:800;text-align:right}
 
 /* ── Footer ────────────────────────────────────────────────────── */
 footer{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:2vw;
        border-top:1px solid rgba(255,255,255,.1);padding-top:1.4vh}
-.legend{display:flex;gap:1.5vw;font-size:.86vw;font-weight:600}
+.legend{display:flex;gap:1.9vw;font-size:1.05vw;font-weight:600}
 .legend span{display:flex;align-items:center;gap:.42vw;color:var(--muted)}
-.legend i{width:1vw;height:1vw;border-radius:2px;display:block}
-.status{font-size:.8vw;color:var(--muted);letter-spacing:.04em}
+.legend i{width:1.3vw;height:1.3vw;border-radius:3px;display:block}
+.legend i.hatch{background:repeating-linear-gradient(135deg,var(--na),var(--na) 4px,#586477 4px,#586477 8px)}
+.right{display:flex;align-items:center;gap:1.6vw}
+.dots{display:flex;gap:.5vw}
+.dots b{width:.8vw;height:.8vw;border-radius:50%;background:rgba(255,255,255,.22);display:block;transition:background .3s}
+.dots b.on{background:var(--mint)}
+.status{font-size:.9vw;color:var(--muted);letter-spacing:.04em}
 .status.err{color:#E08A84}
 .pulse{display:inline-block;width:.55vw;height:.55vw;border-radius:50%;background:var(--mint);margin-right:.45vw;
        animation:p 2.4s ease-in-out infinite}
@@ -87,10 +117,10 @@ main.off{display:none}
 
 <div class="wrap">
   <header>
-    <div>
-      <div class="brand">TEKTIT</div>
-      <h1>Wie KI-ready ist dieser Raum?
-        <small id="sub">AI Readiness Check · Live-Auswertung</small></h1>
+    <div class="brandbox">
+      <img src="TEKTIT_Cons-Logo_color-white.png" alt="Tektit Consulting" class="logo"
+           onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'logo-fallback',textContent:'TEKTIT'}))">
+      <div class="eyebrow">AI Readiness Check &middot; <b>Live</b></div>
     </div>
     <div class="kpis">
       <div class="kpi"><div class="kpi-num" id="kN">0</div><div class="kpi-lab">Teilnehmende</div></div>
@@ -98,6 +128,12 @@ main.off{display:none}
       <div class="kpi na"><div class="kpi-num" id="kNa">0</div><div class="kpi-lab">mal „unklar“</div></div>
     </div>
   </header>
+
+  <div class="viewhead" id="viewhead">
+    <div class="pillar-no" id="pillarNo"></div>
+    <div class="viewtitle" id="viewtitle"></div>
+    <div class="viewrule" id="viewrule"></div>
+  </div>
 
   <main id="bars"></main>
 
@@ -117,9 +153,12 @@ main.off{display:none}
       <span><i style="background:var(--l2)"></i>teilweise</span>
       <span><i style="background:var(--l3)"></i>meistens</span>
       <span><i style="background:var(--l4)"></i>ja</span>
-      <span><i style="background:#5B6577"></i>unklar</span>
+      <span><i class="hatch"></i>unklar</span>
     </div>
-    <div class="status" id="status"><span class="pulse"></span>verbinde…</div>
+    <div class="right">
+      <div class="dots" id="dots"></div>
+      <div class="status" id="status"><span class="pulse"></span>verbinde…</div>
+    </div>
   </footer>
 </div>
 
@@ -138,30 +177,90 @@ const SHEET_ID   = "1Nw-NQojNlWbC4h_RuJ0dIBQk2l5EV8Ae3R9qS-aJfCo";
 const SHEET_NAME = "Live_Display";
 const REFRESH_MS = 8000;
 
-/* Reihenfolge muss der Tabelle und dem Tool entsprechen. */
+/* Reihenfolge wie in Live_Display, Zeile 2 bis 13. Der zweite Wert ist
+   der Index der Säule. */
 const DIMS = [
-  ["Mandat & Verantwortung",       "p1"], ["Priorisierung & Fokus",    "p1"], ["Wirkung & Portfolio",   "p1"],
-  ["Zugang & Arbeitsumgebung",     "p2"], ["Datenzugang & Qualität",   "p2"], ["Integration in Prozesse","p2"],
-  ["Nutzungsregeln",               "p3"], ["Berechtigungen & Security","p3"], ["Regulatorik",           "p3"],
-  ["Befähigung",                   "p4"], ["Akzeptanz & Kommunikation","p4"], ["Wissenssicherung",      "p4"]
+  ["Mandat & Verantwortung",0],["Priorisierung & Fokus",0],["Wirkung & Portfolio",0],
+  ["Zugang & Arbeitsumgebung",1],["Datenzugang & Qualität",1],["Integration in Prozesse",1],
+  ["Nutzungsregeln",2],["Berechtigungen & Security",2],["Regulatorik",2],
+  ["Befähigung",3],["Akzeptanz & Kommunikation",3],["Wissenssicherung",3]
 ];
-const PILLAR = { p1:"#3D4585", p2:"#4E58A8", p3:"#52A5B0", p4:"#52D0B0" };
+const PILLARS = [
+  { name:"Führung & Wertbeitrag", color:"#3D4585" },
+  { name:"Technologie & Daten",   color:"#4E58A8" },
+  { name:"Regeln & Risiko",       color:"#52A5B0" },
+  { name:"Menschen & Kultur",     color:"#52D0B0" }
+];
+/* Sechs Ansichten: vier Säulen einzeln, dann alle zwölf, dann das Radar.
+   Das ist zugleich die Dramaturgie für die Bühne. */
+const VIEWS = [{t:"pillar",i:0},{t:"pillar",i:1},{t:"pillar",i:2},{t:"pillar",i:3},{t:"all"},{t:"radar"}];
+let DATA = null, view = 0;
 
-/* ── Aufbau der Zeilen ────────────────────────────────────────── */
-const barsEl = document.getElementById("bars");
-DIMS.forEach(function(d, i){
-  const first = i === 0 || DIMS[i-1][1] !== d[1];
-  barsEl.insertAdjacentHTML("beforeend",
-    '<div class="row' + (first && i ? ' pillar-start' : '') + '">' +
-      '<div class="rlab"><span class="dot" style="background:' + PILLAR[d[1]] + '"></span>' + d[0] + '</div>' +
-      '<div class="bar" id="b' + i + '">' +
-        ['l1','l2','l3','l4','na'].map(function(c){
-          return '<div class="seg ' + c + '" style="width:0"></div>'; }).join('') +
-        '<div class="avg" style="left:0"></div>' +
-      '</div>' +
-      '<div class="rval" id="v' + i + '">–</div>' +
-    '</div>');
-});
+document.getElementById("dots").innerHTML = VIEWS.map(function(){ return "<b></b>"; }).join("");
+
+function rowHtml(i){
+  return '<div class="row" data-i="' + i + '">' +
+    '<div class="rlab">' + DIMS[i][0] + '</div>' +
+    '<div class="bar">' +
+      ['l1','l2','l3','l4','na'].map(function(c){
+        return '<div class="seg ' + c + '" style="width:0"></div>'; }).join('') +
+      '<div class="avg" style="left:0"></div>' +
+    '</div><div class="rval">–</div></div>';
+}
+
+function buildView(){
+  const v = VIEWS[view], main = document.getElementById("bars");
+  document.getElementById("radarView").classList.toggle("on", v.t === "radar");
+  main.classList.toggle("hidden", v.t === "radar");
+  document.getElementById("viewhead").classList.toggle("hidden", v.t === "radar");
+  main.classList.toggle("compact", v.t === "all");
+
+  if (v.t === "pillar"){
+    const p = PILLARS[v.i];
+    document.getElementById("pillarNo").textContent = "SÄULE " + (v.i + 1) + " VON 4";
+    document.getElementById("viewtitle").textContent = p.name;
+    document.getElementById("viewrule").style.background = p.color;
+    main.innerHTML = DIMS.map(function(d, i){ return d[1] === v.i ? rowHtml(i) : ""; }).join("");
+  } else if (v.t === "all"){
+    document.getElementById("pillarNo").textContent = "ALLE ZWÖLF";
+    document.getElementById("viewtitle").textContent = "Das Bild des Raums";
+    document.getElementById("viewrule").style.background =
+      "linear-gradient(90deg,#3D4585,#4E58A8,#52A5B0,#52D0B0)";
+    /* Säulennamen als Bänder zwischen den Gruppen. Ohne sie sind zwölf
+       Zeilen eine Liste, mit ihnen ein Modell. */
+    let html = "";
+    DIMS.forEach(function(d, i){
+      if (i === 0 || DIMS[i-1][1] !== d[1]){
+        html += '<div class="pillarband"><span style="color:' + PILLARS[d[1]].color + '">' +
+                PILLARS[d[1]].name + '</span><i style="background:' + PILLARS[d[1]].color + '"></i></div>';
+      }
+      html += rowHtml(i);
+    });
+    main.innerHTML = html;
+  }
+  [...document.querySelectorAll("#dots b")].forEach(function(b, i){ b.classList.toggle("on", i === view); });
+  if (DATA) paint();
+}
+
+function paint(){
+  document.querySelectorAll(".row").forEach(function(row){
+    const i = Number(row.dataset.i), r = DATA.rows[i] || [];
+    const c = [1,2,3,4,5].map(function(k){ return Number(r[k]) || 0; });
+    const n = c.reduce(function(a,b){ return a+b; }, 0);
+    const avg = (r[6] === null || r[6] === undefined || r[6] === "") ? null : Number(r[6]);
+    const segs = row.querySelectorAll(".seg");
+    c.forEach(function(v, k){
+      const pct = n ? v / n * 100 : 0;
+      segs[k].style.width = pct + "%";
+      segs[k].textContent = pct >= 9 ? v : "";
+    });
+    const m = row.querySelector(".avg");
+    m.style.left = (avg === null ? 0 : avg / 5 * 100) + "%";
+    m.style.opacity = avg === null ? 0 : 1;
+    row.querySelector(".rval").textContent = avg === null ? "–" : avg.toFixed(1).replace(".", ",");
+  });
+  if (VIEWS[view].t === "radar") drawRadar(DATA.avgs);
+}
 
 /* ── Datenabruf über die Google Visualization API ──────────────── */
 function url(){
@@ -190,44 +289,26 @@ function animate(el, to){
   })(t0);
 }
 
-function render(rows){
-  /* Erwartete Spalten je Zeile: Label | n1 | n2 | n3 | n4 | nUnklar | Ø */
-  let total = 0, naSum = 0, avgSum = 0, avgCount = 0;
+function ingest(rows){
+  /* Spalten je Zeile: Label | nein | teilweise | meistens | ja | unklar | Ø */
+  let total = 0, naSum = 0, aSum = 0, aCount = 0;
   const avgs = [];
-
   DIMS.forEach(function(d, i){
     const r = rows[i] || [];
     const c = [1,2,3,4,5].map(function(k){ return Number(r[k]) || 0; });
     const n = c.reduce(function(a,b){ return a+b; }, 0);
-    const avg = r[6] === null || r[6] === undefined || r[6] === "" ? null : Number(r[6]);
-    avgs.push(avg);
-    naSum += c[4];
+    const avg = (r[6] === null || r[6] === undefined || r[6] === "") ? null : Number(r[6]);
+    avgs.push(avg); naSum += c[4];
     if (n > total) total = n;
-    if (avg !== null) { avgSum += avg; avgCount++; }
-
-    const segs = document.querySelectorAll("#b" + i + " .seg");
-    c.forEach(function(v, k){
-      const pct = n ? (v / n * 100) : 0;
-      segs[k].style.width = pct + "%";
-      /* Zahl nur zeigen, wenn das Segment breit genug ist. Sonst
-         überlappen sich die Ziffern und niemand liest mehr etwas. */
-      segs[k].textContent = pct >= 7 ? v : "";
-    });
-    const marker = document.querySelector("#b" + i + " .avg");
-    marker.style.left = (avg === null ? 0 : (avg / 5 * 100)) + "%";
-    marker.style.opacity = avg === null ? 0 : 1;
-    document.getElementById("v" + i).textContent =
-      avg === null ? "–" : avg.toFixed(1).replace(".", ",");
+    if (avg !== null){ aSum += avg; aCount++; }
   });
-
+  DATA = { rows: rows, avgs: avgs, total: total };
   document.getElementById("empty").classList.toggle("hide", total > 0);
   animate(document.getElementById("kN"), total);
   animate(document.getElementById("kNa"), naSum);
   document.getElementById("kAvg").textContent =
-    avgCount ? (avgSum / avgCount).toFixed(1).replace(".", ",") : "–";
-
-  drawRadar(avgs);
-  lastN = total;
+    aCount ? (aSum / aCount).toFixed(1).replace(".", ",") : "–";
+  paint();
 }
 
 /* ── Radar ─────────────────────────────────────────────────────── */
@@ -260,7 +341,7 @@ function drawRadar(avgs){
     const r = Math.max(0, Math.min(5, v)) / 5 * R;
     pts.push((cx + r * Math.cos(a)) + "," + (cy + r * Math.sin(a)));
     const lr = R + 34, lx = cx + lr * Math.cos(a), ly = cy + lr * Math.sin(a);
-    const t = add("text", { x: lx, y: ly, fill: "#8FA3B5", "font-size": 12, "font-weight": 700,
+    const t = add("text", { x: lx, y: ly, fill: PILLARS[DIMS[i][1]].color, "font-size": 18, "font-weight": 800,
       "text-anchor": Math.abs(Math.cos(a)) < .25 ? "middle" : (Math.cos(a) > 0 ? "start" : "end"),
       "dominant-baseline": "middle" });
     t.textContent = DIMS[i][0].split(" ")[0];
@@ -280,7 +361,7 @@ async function tick(){
   try{
     const res = await fetch(url());
     if (!res.ok) throw new Error("HTTP " + res.status);
-    render(parse(await res.text()));
+    ingest(parse(await res.text()));
     fails = 0;
     status.className = "status";
     status.innerHTML = '<span class="pulse"></span>aktualisiert ' +
@@ -295,23 +376,19 @@ async function tick(){
 }
 tick(); setInterval(tick, REFRESH_MS);
 
-/* ── Ansicht wechseln ──────────────────────────────────────────── */
-/* Leertaste oder Pfeiltasten: Verteilung ⇄ Radar. Ein Presenter-Klicker
-   sendet Pfeiltasten, funktioniert also ohne Umbau. */
-let radarOn = false;
-function toggle(force){
-  radarOn = force === undefined ? !radarOn : force;
-  document.getElementById("radarView").classList.toggle("on", radarOn);
-  document.getElementById("bars").classList.toggle("off", radarOn);
-  document.getElementById("sub").textContent = radarOn
-    ? "AI Readiness Check · Profil des Raums"
-    : "AI Readiness Check · Live-Auswertung";
-}
+/* Pfeiltasten, Leertaste oder Klick blättern durch die sechs Ansichten;
+   ein Presenter-Klicker sendet Pfeiltasten und funktioniert ohne Umbau.
+   Die Zifferntasten springen direkt, f schaltet Vollbild. */
+function go(d){ view = (view + d + VIEWS.length) % VIEWS.length; buildView(); }
 addEventListener("keydown", function(e){
-  if ([" ", "ArrowRight", "ArrowLeft", "PageDown", "PageUp"].includes(e.key)){ e.preventDefault(); toggle(); }
-  if (e.key === "f") document.documentElement.requestFullscreen?.();
+  if (["ArrowRight"," ","PageDown","n"].includes(e.key)){ e.preventDefault(); go(1); }
+  else if (["ArrowLeft","PageUp","p"].includes(e.key)){ e.preventDefault(); go(-1); }
+  else if (e.key >= "1" && e.key <= "6"){ view = Number(e.key) - 1; buildView(); }
+  else if (e.key === "f"){ document.documentElement.requestFullscreen && document.documentElement.requestFullscreen(); }
 });
-addEventListener("click", function(){ toggle(); });
+addEventListener("click", function(){ go(1); });
+
+buildView();
 </script>
 </body>
 </html>
