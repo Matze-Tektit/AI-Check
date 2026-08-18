@@ -1636,7 +1636,7 @@
           de:"Ein fester Platz in der F\u00fchrungsagenda unterscheidet eine echte Transformation von einem Nebenprojekt. Gelegentliche Aufmerksamkeit, wenn etwas ansteht, z\u00e4hlt nicht."
          }},
         {t:{
-          en:"One named person is responsible for AI and can decide.",
+          en:"There is a clear decision-maker for how we use AI.",
           de:"Bei uns ist klar, wer \u00fcber den KI-Einsatz entscheidet."
          }, w: 2, desc:{
           en:"One person or a committee, either works. What counts is a final say with budget behind it. Responsibility without the authority to decide produces a figurehead, and shared responsibility without a final say splinters AI into parallel initiatives that nobody brings back together.",
@@ -2070,7 +2070,7 @@
       acc2: { en: "<strong>2. How to answer:</strong> Rate each statement from 1 to 4. <strong>1</strong> not in place, <strong>2</strong> started in some areas, <strong>3</strong> established but not consistently, <strong>4</strong> established across the board and reviewed. Tap the same value again to clear it.", de: "<strong>2. Wie du antwortest:</strong> Bewerte jede Aussage von 1 bis 4. <strong>1</strong> nicht vorhanden, <strong>2</strong> in einzelnen Bereichen angefangen, <strong>3</strong> etabliert, aber nicht durchgängig, <strong>4</strong> durchgängig etabliert und überprüft. Ein zweiter Tipp auf denselben Wert löscht ihn wieder." },
       acc3: { en: "<strong>3. If you cannot answer:</strong> Use the <strong>?</strong> button. It is not a bad score and it does not count against you; it is excluded from the score and reported separately. What leadership cannot answer about its own company is a finding in its own right, and often the most useful one.", de: "<strong>3. Wenn du nicht antworten kannst:</strong> Nutz den <strong>?</strong>-Button. Das ist keine schlechte Bewertung und zählt nicht gegen dich; es fließt nicht in den Score ein und wird separat ausgewiesen. Was die Führung über das eigene Unternehmen nicht beantworten kann, ist ein eigener Befund, und oft der nützlichste." },
       acc4: { en: "<strong>4. How the score is calculated:</strong> Each dimension gets a maturity score from 0.0 to 5.0. Foundational statements count for more than secondary ones, and dimensions carry different strategic weight. Anything you skip or mark as “cannot assess” is left out of the score entirely, so a partial run still gives you an honest picture.", de: "<strong>4. Wie der Score entsteht:</strong> Jede Dimension bekommt einen Reifegrad von 0,0 bis 5,0. Grundlegende Aussagen zählen mehr als nachgelagerte, und die Dimensionen haben unterschiedliches strategisches Gewicht. Was du überspringst oder als „kann ich nicht beurteilen“ markierst, fließt gar nicht in den Score ein. So bekommst du auch dann ein ehrliches Bild, wenn du nur einen Teil der Dimensionen bewertest." },
-      acc5: { en: "<strong>5. How to read the focus areas:</strong> They are not simply your lowest scores. We combine the size of each gap with how much that area determines whether AI works at all, so you tackle the constraint with the most leverage first.", de: "<strong>5. Was am Ende herauskommt:</strong> Deine drei <strong>Fokusfelder</strong>, also die Dimensionen, die du zuerst angehen solltest. Das sind nicht einfach deine schlechtesten Werte: Wir verbinden die Größe der Lücke mit der Bedeutung des Bereichs dafür, ob KI überhaupt funktioniert. So gehst du zuerst den Engpass mit der größten Wirkung an." },
+      acc5: { en: "<strong>5. What you end up with:</strong> Your three <strong>focus areas</strong>, meaning the dimensions to tackle first. They are not simply your lowest scores: we combine the size of each gap with how much that area determines whether AI works at all, so you tackle the constraint with the most leverage first.", de: "<strong>5. Was am Ende herauskommt:</strong> Deine drei <strong>Fokusfelder</strong>, also die Dimensionen, die du zuerst angehen solltest. Das sind nicht einfach deine schlechtesten Werte: Wir verbinden die Größe der Lücke mit der Bedeutung des Bereichs dafür, ob KI überhaupt funktioniert. So gehst du zuerst den Engpass mit der größten Wirkung an." },
       archH3: { en: "Select your organization's primary business profile:", de: "Wähle das Profil, das am besten zu deinem Unternehmen passt:" },
       archP: { en: "The wording of some statements adapts to your business model. Everything else stays identical, so results remain comparable.", de: "Der Wortlaut einzelner Aussagen passt sich deinem Geschäftsmodell an. Alles andere bleibt identisch, damit die Ergebnisse vergleichbar bleiben." },
       archDigital: { en: "🌐 Pure Digital / SaaS / Tech Products", de: "🌐 Digital / SaaS / Tech-Produkte" },
@@ -3459,8 +3459,13 @@
 
       drawRadarChart(scores);
 
-      const sorted = scored.slice().sort(function(a, b) { return b.leverage - a.leverage; });
-      const top3 = sorted.slice(0, 3);
+      /* Nur Dimensionen mit echtem Spielraum sind Kandidaten. slice(0, 3) hat
+         vorher immer auf drei aufgefuellt, auch wenn nur eine Dimension Luft
+         hatte: bei Score 5,0 ist der Hebel null, die Dimension landete
+         trotzdem als Fokusfeld in der Liste. */
+      const candidates = scored.filter(function(r) { return r.score < 5; })
+        .sort(function(a, b) { return b.leverage - a.leverage; });
+      const top3 = candidates.slice(0, 3);
 
       const focusCard = document.getElementById("focusCard");
       const focusDescEl = focusCard.querySelector(".focus-desc");
@@ -3473,7 +3478,7 @@
       const STRONG = 4.5;
       const allStrong = scored.length === scores.length && scored.every(function(r){ return r.score >= STRONG; });
 
-      if (allStrong) {
+      if (allStrong || !top3.length) {
         document.getElementById("focusHeading").textContent = t("congratsH");
         if (focusDescEl) focusDescEl.style.display = "none";
         if (focusNoteEl) focusNoteEl.style.display = "none";
