@@ -972,12 +972,33 @@
       gap: 20px;
       margin-bottom: 40px;
     }
+    /* Saeulenname als Band ueber der jeweiligen Dreiergruppe. Ohne ihn sind
+       zwoelf Karten eine Liste, mit ihm ein Modell mit vier Saeulen. */
+    .res-pillar {
+      grid-column: 1 / -1;
+      border-top: 2px solid;
+      padding-top: 8px;
+      margin-bottom: -8px;
+    }
+    .res-pillar:first-child { margin-top: 0; }
+    .res-pillar span {
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
     .res-card {
       background: #ffffff !important;
       padding: 20px 0 0;         /* flush with the rule above it */
       border: none !important;
       border-top: 2px solid var(--tk-dark) !important;
+      display: flex;
+      flex-direction: column;
     }
+    /* Der Balken sitzt am Kartenfuss statt direkt unter dem Titel. Damit
+       liegen Balken und Fusszeile einer Reihe auf einer Linie, egal ob
+       ein Titel eine, zwei oder drei Zeilen braucht. */
+    .rc-bar-wrap { margin-top: auto !important; }
     .rc-head {
       display: flex;
       align-items: flex-start;
@@ -1616,10 +1637,10 @@
          }},
         {t:{
           en:"One named person is responsible for AI and can decide.",
-          de:"Eine namentlich benannte Person ist f\u00fcr KI verantwortlich und kann entscheiden."
+          de:"Bei uns ist klar, wer \u00fcber den KI-Einsatz entscheidet."
          }, w: 2, desc:{
-          en:"Responsibility without the authority to decide produces a figurehead. Without both in one person, AI splinters into parallel initiatives that nobody brings back together.",
-          de:"Verantwortung ohne Entscheidungsbefugnis erzeugt eine Galionsfigur. Ohne beides in einer Person zerf\u00e4llt das Thema in parallele Initiativen, die niemand zusammenf\u00fchrt."
+          en:"One person or a committee, either works. What counts is a final say with budget behind it. Responsibility without the authority to decide produces a figurehead, and shared responsibility without a final say splinters AI into parallel initiatives that nobody brings back together.",
+          de:"Eine Person oder ein Gremium, beides geht. Es z\u00e4hlt eine letzte Instanz mit Budget dahinter. Verantwortung ohne Entscheidungsbefugnis erzeugt eine Galionsfigur, und geteilte Verantwortung ohne Letztentscheidung zerf\u00e4llt in parallele Initiativen, die niemand zusammenf\u00fchrt."
          }},
         {t:{
           en:"AI has its own budget.",
@@ -1903,8 +1924,8 @@
           en:"Our people know our rules for using AI.",
           de:"Unsere Mitarbeitenden kennen unsere Regeln f\u00fcr den KI-Einsatz."
          }, w: 2, desc:{
-          en:"Knowing them means being able to state them in one sentence. A policy nobody can paraphrase is not a policy; it is a document that protects nobody.",
-          de:"Kennen hei\u00dft: in einem Satz wiedergeben k\u00f6nnen. Eine Richtlinie, die niemand in eigenen Worten wiedergeben kann, ist keine Richtlinie, sondern ein Dokument, das niemanden sch\u00fctzt."
+          en:"Knowing them means being able to state them in one sentence. A policy nobody can paraphrase protects nobody.",
+          de:"Kennen hei\u00dft: in einem Satz wiedergeben k\u00f6nnen. Eine Richtlinie, die niemand in eigenen Worten wiedergeben kann, sch\u00fctzt niemanden."
          }},
         {t:{
           en:"The rules say concretely which data may go into which system.",
@@ -2018,11 +2039,11 @@
     /* ── UI strings. Product name and band names stay English in both languages. ── */
     const UI = {
       headTitle: { en: "Tektit AI Readiness Check", de: "Tektit AI Readiness Check" },
-      scale1: { en: "no — we do not have this", de: "nein — gibt es bei uns nicht" },
-      scale2: { en: "partly — in some areas", de: "teilweise — in einzelnen Bereichen" },
-      scale3: { en: "mostly — nearly everywhere, not binding", de: "meistens — fast überall, aber nicht verbindlich" },
-      scale4: { en: "yes — everywhere and binding", de: "ja — überall und verbindlich" },
-      scaleNa: { en: "unclear — I cannot assess this", de: "unklar — kann ich nicht beurteilen" },
+      scale1: { en: "no: we do not have this", de: "nein: gibt es bei uns nicht" },
+      scale2: { en: "partly: in some areas", de: "teilweise: in einzelnen Bereichen" },
+      scale3: { en: "mostly: nearly everywhere, not binding", de: "meistens: fast überall, aber nicht verbindlich" },
+      scale4: { en: "yes: everywhere and binding", de: "ja: überall und verbindlich" },
+      scaleNa: { en: "unclear: I cannot assess this", de: "unklar: kann ich nicht beurteilen" },
       scale1Short: { en: "no", de: "nein" },
       scale2Short: { en: "partly", de: "teilweise" },
       scale3Short: { en: "mostly", de: "meistens" },
@@ -2049,7 +2070,7 @@
       acc2: { en: "<strong>2. How to answer:</strong> Rate each statement from 1 to 4. <strong>1</strong> not in place, <strong>2</strong> started in some areas, <strong>3</strong> established but not consistently, <strong>4</strong> established across the board and reviewed. Tap the same value again to clear it.", de: "<strong>2. Wie du antwortest:</strong> Bewerte jede Aussage von 1 bis 4. <strong>1</strong> nicht vorhanden, <strong>2</strong> in einzelnen Bereichen angefangen, <strong>3</strong> etabliert, aber nicht durchgängig, <strong>4</strong> durchgängig etabliert und überprüft. Ein zweiter Tipp auf denselben Wert löscht ihn wieder." },
       acc3: { en: "<strong>3. If you cannot answer:</strong> Use the <strong>?</strong> button. It is not a bad score and it does not count against you; it is excluded from the score and reported separately. What leadership cannot answer about its own company is a finding in its own right, and often the most useful one.", de: "<strong>3. Wenn du nicht antworten kannst:</strong> Nutz den <strong>?</strong>-Button. Das ist keine schlechte Bewertung und zählt nicht gegen dich; es fließt nicht in den Score ein und wird separat ausgewiesen. Was die Führung über das eigene Unternehmen nicht beantworten kann, ist ein eigener Befund, und oft der nützlichste." },
       acc4: { en: "<strong>4. How the score is calculated:</strong> Each dimension gets a maturity score from 0.0 to 5.0. Foundational statements count for more than secondary ones, and dimensions carry different strategic weight. Anything you skip or mark as “cannot assess” is left out of the score entirely, so a partial run still gives you an honest picture.", de: "<strong>4. Wie der Score entsteht:</strong> Jede Dimension bekommt einen Reifegrad von 0,0 bis 5,0. Grundlegende Aussagen zählen mehr als nachgelagerte, und die Dimensionen haben unterschiedliches strategisches Gewicht. Was du überspringst oder als „kann ich nicht beurteilen“ markierst, fließt gar nicht in den Score ein. So bekommst du auch dann ein ehrliches Bild, wenn du nur einen Teil der Dimensionen bewertest." },
-      acc5: { en: "<strong>5. How to read the focus areas:</strong> They are not simply your lowest scores. We combine the size of each gap with how much that area determines whether AI works at all, so you tackle the constraint with the most leverage first.", de: "<strong>5. Was am Ende herauskommt:</strong> Deine drei <strong>Fokusfelder</strong> — die Dimensionen, die du zuerst angehen solltest. Das sind nicht einfach deine schlechtesten Werte: Wir verbinden die Größe der Lücke mit der Bedeutung des Bereichs dafür, ob KI überhaupt funktioniert. So gehst du zuerst den Engpass mit der größten Wirkung an." },
+      acc5: { en: "<strong>5. How to read the focus areas:</strong> They are not simply your lowest scores. We combine the size of each gap with how much that area determines whether AI works at all, so you tackle the constraint with the most leverage first.", de: "<strong>5. Was am Ende herauskommt:</strong> Deine drei <strong>Fokusfelder</strong>, also die Dimensionen, die du zuerst angehen solltest. Das sind nicht einfach deine schlechtesten Werte: Wir verbinden die Größe der Lücke mit der Bedeutung des Bereichs dafür, ob KI überhaupt funktioniert. So gehst du zuerst den Engpass mit der größten Wirkung an." },
       archH3: { en: "Select your organization's primary business profile:", de: "Wähle das Profil, das am besten zu deinem Unternehmen passt:" },
       archP: { en: "The wording of some statements adapts to your business model. Everything else stays identical, so results remain comparable.", de: "Der Wortlaut einzelner Aussagen passt sich deinem Geschäftsmodell an. Alles andere bleibt identisch, damit die Ergebnisse vergleichbar bleiben." },
       archDigital: { en: "🌐 Pure Digital / SaaS / Tech Products", de: "🌐 Digital / SaaS / Tech-Produkte" },
@@ -2078,7 +2099,7 @@
       srName: { en: "Your name", de: "Dein Name" },
       srCompany: { en: "Company Name", de: "Unternehmen" },
       srEmail: { en: "Your email address", de: "Deine E-Mail-Adresse" },
-      gateConsent: { en: "By submitting this form you are giving consent to be contacted by Tektit Consulting GmbH and to have your answers processed to generate and send your report. Your scores are additionally stored in pseudonymised form \u2014 without your name, email address or company \u2014 so that we can build a comparison benchmark. You can withdraw your consent at any time. See our <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Data Privacy</a> notice.", de: "Mit dem Absenden bist du damit einverstanden, dass die Tektit Consulting GmbH dich kontaktiert und deine Antworten verarbeitet, um deinen Report zu erstellen und zu versenden. Deine Ergebniswerte werden zusätzlich pseudonymisiert gespeichert — ohne Namen, E-Mail-Adresse und Firma — damit wir eine Vergleichsbasis aufbauen können. Du kannst dein Einverständnis jederzeit zurückziehen. Siehe unsere <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzhinweise</a>." },
+      gateConsent: { en: "By submitting this form you are giving consent to be contacted by Tektit Consulting GmbH and to have your answers processed to generate and send your report. Your scores are additionally stored in pseudonymised form so that we can build a comparison benchmark. Your name, email address and company are not part of that record. You can withdraw your consent at any time. See our <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Data Privacy</a> notice.", de: "Mit dem Absenden bist du damit einverstanden, dass die Tektit Consulting GmbH dich kontaktiert und deine Antworten verarbeitet, um deinen Report zu erstellen und zu versenden. Deine Ergebniswerte werden zusätzlich pseudonymisiert gespeichert, damit wir eine Vergleichsbasis aufbauen können. Name, E-Mail-Adresse und Firma sind darin nicht enthalten. Du kannst dein Einverständnis jederzeit zurückziehen. Siehe unsere <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzhinweise</a>." },
       unlockBtn: { en: "Show My Results 📊", de: "Ergebnisse anzeigen 📊" },
       errEmail: { en: "Please enter a valid work email address so we can send you your report.", de: "Bitte gib eine gültige geschäftliche E-Mail-Adresse ein, damit wir dir den Report schicken können." },
       errCompany: { en: "Please enter your company name.", de: "Bitte gib den Namen deines Unternehmens ein." },
@@ -2127,7 +2148,7 @@
       shortGenBtn: { en: "Show my result", de: "Mein Ergebnis zeigen" },
       shortSubtitle: { en: "AI Readiness Check · Short version, 12 statements", de: "AI Readiness Check · Kurzversion, 12 Aussagen" },
       shortCapH3: { en: "Want this by email?", de: "Willst du das per Mail?" },
-      shortCapP: { en: "We will send you your result together with the benchmark of everyone in this room, plus the link to the full check with all 36 statements. Optional — your result is already on screen either way.", de: "Wir schicken dir dein Ergebnis zusammen mit dem Benchmark aller im Raum, dazu den Link zur Vollversion mit allen 36 Aussagen. Freiwillig — dein Ergebnis steht ohnehin schon auf dem Bildschirm." },
+      shortCapP: { en: "We will send you your result together with the benchmark of everyone in this room, plus the link to the full check with all 36 statements. Optional. Your result is already on screen either way.", de: "Wir schicken dir dein Ergebnis zusammen mit dem Benchmark aller im Raum, dazu den Link zur Vollversion mit allen 36 Aussagen. Freiwillig. Dein Ergebnis steht ohnehin schon auf dem Bildschirm." },
       shortCapBtn: { en: "Send it to me", de: "Schick es mir" },
       shortCapConsent: { en: "I agree that Tektit Consulting GmbH may contact me and process my answers to send me my result, the room benchmark and the link to the full check. See our data privacy notice.", de: "Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und meine Antworten verarbeitet, um mir mein Ergebnis, den Raum-Benchmark und den Link zur Vollversion zu schicken. Siehe unsere Datenschutzhinweise." },
       shortCapDone: { en: "Done. You will hear from us shortly after the session.", de: "Erledigt. Du hörst kurz nach der Session von uns." },
@@ -2137,7 +2158,8 @@
       roleFunctional: { en: "Functional lead (IT, HR, Legal, …)", de: "Fachverantwortung (IT, HR, Recht, …)" },
       roleStaff: { en: "Staff / project role", de: "Stab / Projektrolle" },
       errRole: { en: "Please select your role.", de: "Bitte wähl deine Rolle aus." },
-      weakestPillar: { en: "Your constraint sits in {pillar} ({score} of 5.0). Work above that level in the other pillars will not hold until this one moves.", de: "Dein Engpass liegt in {pillar} ({score} von 5,0). Was du in den anderen Säulen darüber aufbaust, trägt erst, wenn diese Säule nachzieht." },
+      weakestPillarSame: { en: "Your weakest pillar is {pillar}, at {score} of 5.0. Your first focus area sits there too, so that is where to start.", de: "Deine schwächste Säule ist {pillar} mit {score} von 5,0. Dein erstes Fokusfeld liegt ebenfalls dort, also fängst du hier an." },
+      weakestPillarDiff: { en: "Your weakest pillar is {pillar}, at {score} of 5.0. The largest single lever is {dim}, which is why your focus areas start there: one dimension can matter more than the average of a whole pillar.", de: "Deine schwächste Säule ist {pillar} mit {score} von 5,0. Den größten Einzelhebel hat {dim}, deshalb beginnen deine Fokusfelder dort: Eine einzelne Dimension kann mehr wiegen als der Durchschnitt einer ganzen Säule." },
       cantAssessNote1: { en: "You marked one statement as “cannot assess”. That is a finding, not a gap in the data: it shows where leadership currently has no visibility into its own organisation.", de: "Du hast eine Aussage als „kann ich nicht beurteilen“ markiert. Das ist ein Befund und keine Datenlücke: Er zeigt, wo die Führung derzeit keinen Einblick in die eigene Organisation hat." },
       cantAssessNote: { en: "You marked {n} statements as “cannot assess”. That is a finding, not a gap in the data: it shows where leadership currently has no visibility into its own organisation.", de: "Du hast {n} Aussagen als „kann ich nicht beurteilen“ markiert. Das ist ein Befund und keine Datenlücke: Es zeigt, wo die Führung derzeit keinen Einblick in die eigene Organisation hat." }
     };
@@ -3374,12 +3396,25 @@
         pillarNow[c] = inC.length ? weightedOverall(inC) : null;
       });
       const weakest = weakestPillar(pillarNow);
+      // Die Saeule des staerksten Fokusfelds. Beide Aussagen muessen sich
+      // aufeinander beziehen, sonst liest der Report widersprüchlich.
+      const topLever = scored.slice().sort(function(a, b) { return b.leverage - a.leverage; })[0];
       const diagEl = document.getElementById("diagLines");
       if (diagEl) {
         let html = "";
         if (weakest && scored.length >= 2) {
+          const sameArea = topLever && topLever.cluster === weakest;
           html += '<p class="diag-line">' +
-            t("weakestPillar", { pillar: clusterLabel(weakest), score: num(pillarNow[weakest], 1) }) +
+            (sameArea
+              ? t("weakestPillarSame", {
+                  pillar: clusterLabel(weakest),
+                  score: num(pillarNow[weakest], 1)
+                })
+              : t("weakestPillarDiff", {
+                  pillar: clusterLabel(weakest),
+                  score: num(pillarNow[weakest], 1),
+                  dim: topLever ? topLever.name : ""
+                })) +
             '</p>';
         }
         const na = totalNaAnswers();
@@ -3392,7 +3427,17 @@
 
       const cards = document.getElementById("resCards");
       let cardsHtml = "";
-      scores.forEach(function(r) {
+      // Nach Saeulen gruppiert und in der Reihenfolge des Fragebogens.
+      const ordered = [];
+      CLUSTERS.forEach(function(c) {
+        const inC = scores.filter(function(d){ return d.cluster === c; });
+        if (inC.length) ordered.push({ cluster: c, dims: inC });
+      });
+      ordered.forEach(function(group) {
+        cardsHtml += '<div class="res-pillar" style="border-color:' + pillarColor(group.cluster) +
+                     '"><span style="color:' + pillarText(group.cluster) + '">' +
+                     clusterLabel(group.cluster) + '</span></div>';
+        group.dims.forEach(function(r) {
         if (!r.assessed) {
           cardsHtml += `<div class="res-card res-card-skipped" style="border-top-color:#cbd5e0 !important;">
             <div class="rc-head"><span class="rc-name">${r.icon} ${r.name}</span><span class="rc-badge" style="color:#a0aec0 !important;">–</span></div>
@@ -3408,6 +3453,7 @@
           <div class="rc-bar-wrap"><div class="rc-bar" style="width:${pct}%; background:${pc} !important;"></div></div>
           <div class="rc-detail">${t("elementsEstablished", { c: r.checked, t: r.total })}</div>
           </div>`;
+        });
       });
       cards.innerHTML = cardsHtml;
 
