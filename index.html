@@ -1549,7 +1549,7 @@
           <p class="assessment-basis" id="assessmentBasis"></p>
           <div id="diagLines"></div>
 
-          <div class="res-cards" id="resCards"></div>
+          
           
           <div class="section-card" id="radarCard">
             <h3 data-i18n="radarH3"></h3>
@@ -1592,6 +1592,8 @@
               <span style="font-size: 0.72rem; color: #8fa0ae; margin-top: 4px; display: block; line-height: 1.4;" data-i18n="disclaimer"></span>
             </div>
           </div>
+
+          <div class="res-cards" id="resCards"></div>
         </div>
       </div>
 
@@ -1771,11 +1773,11 @@
           de:"Bedenken, die nicht ge\u00e4u\u00dfert werden d\u00fcrfen, verschwinden nicht. Sie werden zu stiller Nichtnutzung, und die ist deutlich schwerer zu beheben als ein offener Einwand."
          }},
         {t:{
-          en:"We know how many of our people actually use AI.",
-          de:"Wir wissen, wie viele unserer Mitarbeitenden KI tats\u00e4chlich nutzen."
+          en:"We know how many of our people use AI regularly in their work.",
+          de:"Wir wissen, wie viele unserer Mitarbeitenden KI regelm\u00e4\u00dfig in ihrer Arbeit nutzen."
          }, w: 1, desc:{
-          en:"Licences bought is not usage. The gap between the two is the single most common reason AI shows no effect.",
-          de:"Gekaufte Lizenzen sind keine Nutzung. Die L\u00fccke zwischen beidem ist der h\u00e4ufigste Grund, warum KI keine Wirkung zeigt."
+          en:"Licences bought is not usage, and neither is one login a month. The gap between a licence and regular use is the single most common reason AI shows no effect.",
+          de:"Gekaufte Lizenzen sind keine Nutzung, und ein Login im Monat auch nicht. Die L\u00fccke zwischen Lizenz und regelm\u00e4\u00dfigem Einsatz ist der h\u00e4ufigste Grund, warum KI keine Wirkung zeigt."
          }}
       ]},
       {id:"learning", name:{
@@ -1783,23 +1785,23 @@
         de:"Wissenssicherung"
        }, icon:"📚", cluster:"People & Culture", strategicWeight: 1.0, elements:[
         {t:{
-          en:"There is one place where prompts, templates and experience come together.",
-          de:"Es gibt einen festen Ort, an dem Prompts, Vorlagen und Erfahrungen zusammenlaufen."
-         }, w: 1, desc:{
-          en:"A shared library is the cheapest productivity gain in this whole topic, and the one most often skipped.",
-          de:"Eine gemeinsame Sammlung ist der g\u00fcnstigste Produktivit\u00e4tsgewinn im ganzen Thema und der, der am h\u00e4ufigsten \u00fcbersprungen wird."
+          en:"Findings from our AI experiments are documented in one shared place.",
+          de:"Erkenntnisse aus unseren KI-Versuchen sind an einem festen Ort dokumentiert."
+         }, w: 2, desc:{
+          en:"Prompts, templates, what worked and what did not, all in the same place. Learning that lives only in the head of whoever ran the experiment leaves the company when they do.",
+          de:"Prompts, Vorlagen, was funktioniert hat und was nicht, alles am selben Ort. Wissen, das nur im Kopf der Person steckt, die den Versuch gemacht hat, verl\u00e4sst das Unternehmen mit ihr."
          }},
         {t:{
-          en:"Findings from AI experiments are written down.",
-          de:"Erkenntnisse aus KI-Versuchen werden festgehalten."
-         }, w: 2, desc:{
-          en:"Written down well enough that somebody else can build on them. Learning that lives only in the head of whoever ran the experiment leaves the company when they do.",
-          de:"So festgehalten, dass jemand anders damit weiterarbeiten kann. Wissen, das nur im Kopf der Person steckt, die den Versuch gemacht hat, verl\u00e4sst das Unternehmen mit ihr."
+          en:"Our people use that collection when they take on something new.",
+          de:"Unsere Mitarbeitenden greifen bei neuen Aufgaben auf diese Sammlung zur\u00fcck."
+         }, w: 1.5, desc:{
+          en:"A library nobody opens is as useless as a licence nobody uses. Documenting is the cheap part; the value only appears when the second person saves the time the first one spent.",
+          de:"Eine Sammlung, die niemand \u00f6ffnet, ist so nutzlos wie eine Lizenz, die niemand nutzt. Dokumentieren ist der g\u00fcnstige Teil. Der Nutzen entsteht erst, wenn die zweite Person die Zeit spart, die die erste investiert hat."
          }},
         {t:{
           en:"What works in one area gets passed on to other areas.",
           de:"Was in einem Bereich funktioniert, geben wir an andere Bereiche weiter."
-         }, w: 1.5, desc:{
+         }, w: 1, desc:{
           en:"Without transfer, every department pays the same tuition fee for the same lesson.",
           de:"Ohne Weitergabe zahlt jede Abteilung dasselbe Lehrgeld f\u00fcr dieselbe Lektion."
          }}
@@ -1898,20 +1900,20 @@
          }},
         {t:{
           en:{
-            digital:"It is defined who reviews AI output before it reaches customers.",
-            services:"It is defined who reviews AI output before it reaches clients.",
-            mittelstand:"It is defined who reviews AI output before it affects customers or production.",
-            logistics:"It is defined who reviews AI output before it affects customers or operations."
+            digital:"AI output is checked against defined criteria before it reaches customers.",
+            services:"AI output is checked against defined criteria before it reaches clients.",
+            mittelstand:"AI output is checked against defined criteria before it affects customers or production.",
+            logistics:"AI output is checked against defined criteria before it affects customers or operations."
            },
           de:{
-            digital:"Es ist geregelt, wer KI-Ergebnisse pr\u00fcft, bevor sie zu Kunden gehen.",
-            services:"Es ist geregelt, wer KI-Ergebnisse pr\u00fcft, bevor sie zu Kunden gehen.",
-            mittelstand:"Es ist geregelt, wer KI-Ergebnisse pr\u00fcft, bevor sie Kunden oder Produktion betreffen.",
-            logistics:"Es ist geregelt, wer KI-Ergebnisse pr\u00fcft, bevor sie Kunden oder den Betrieb betreffen."
+            digital:"KI-Ergebnisse werden nach festen Kriterien gepr\u00fcft, bevor sie zu Kunden gehen.",
+            services:"KI-Ergebnisse werden nach festen Kriterien gepr\u00fcft, bevor sie zu Kunden gehen.",
+            mittelstand:"KI-Ergebnisse werden nach festen Kriterien gepr\u00fcft, bevor sie Kunden oder Produktion betreffen.",
+            logistics:"KI-Ergebnisse werden nach festen Kriterien gepr\u00fcft, bevor sie Kunden oder den Betrieb betreffen."
            }
          }, w: 1, desc:{
-          en:"A named reviewer is what lets you use AI on things that matter. Without one you are limited to the harmless cases.",
-          de:"Eine benannte Pr\u00fcfinstanz erlaubt dir, KI dort einzusetzen, wo es z\u00e4hlt. Ohne sie bleibst du auf die harmlosen F\u00e4lle beschr\u00e4nkt."
+          en:"Criteria are what make a review repeatable: what has to be right, what may never go out, and what a reviewer has to see. Without them the review depends on who happens to be looking, and you stay limited to the harmless cases.",
+          de:"Kriterien machen eine Pr\u00fcfung wiederholbar: was stimmen muss, was nie hinausgehen darf, worauf zu achten ist. Ohne sie h\u00e4ngt die Pr\u00fcfung daran, wer gerade hinsieht, und du bleibst auf die harmlosen F\u00e4lle beschr\u00e4nkt."
          }}
       ]},
 
@@ -1921,11 +1923,11 @@
         de:"Nutzungsregeln"
        }, icon:"📋", cluster:"Rules & Risk", strategicWeight: 1.3, elements:[
         {t:{
-          en:"Our people know our rules for using AI.",
-          de:"Unsere Mitarbeitenden kennen unsere Regeln f\u00fcr den KI-Einsatz."
+          en:"Our rules for using AI are simple enough that our people apply them.",
+          de:"Unsere Regeln f\u00fcr den KI-Einsatz sind einfach genug, dass unsere Mitarbeitenden sie anwenden."
          }, w: 2, desc:{
-          en:"Knowing them means being able to state them in one sentence. A policy nobody can paraphrase protects nobody.",
-          de:"Kennen hei\u00dft: in einem Satz wiedergeben k\u00f6nnen. Eine Richtlinie, die niemand in eigenen Worten wiedergeben kann, sch\u00fctzt niemanden."
+          en:"Simple means: statable in one sentence. Completeness and usability pull against each other here, and the short rule that gets followed beats the complete one nobody reads.",
+          de:"Einfach hei\u00dft: in einem Satz wiedergebbar. Vollst\u00e4ndigkeit und Anwendbarkeit stehen hier gegeneinander, und im Zweifel gewinnt die kurze Regel, die gilt, gegen die vollst\u00e4ndige, die niemand liest."
          }},
         {t:{
           en:"The rules say concretely which data may go into which system.",
@@ -2012,7 +2014,7 @@
       impact: { en: "Pick the AI use case that is already running and measure it properly once: hours before, hours after, over two weeks. One defensible number opens more doors internally than ten pilots.", de: "Nimm den KI-Einsatz, der schon läuft, und miss ihn einmal richtig: Stunden vorher, Stunden nachher, über zwei Wochen. Eine belastbare Zahl öffnet intern mehr Türen als zehn Pilotprojekte." },
       enablement: { en: "Replace the next information session with a working session on real tasks people brought with them. Then ask each business unit to name two people others can turn to.", de: "Ersetz die nächste Infoveranstaltung durch eine Arbeitssitzung an echten Aufgaben, die die Leute selbst mitbringen. Lass danach jeden Fachbereich zwei Personen benennen, an die sich andere wenden können." },
       adoption: { en: "Say out loud what AI means for roles here, including what you do not yet know. Then check actual usage of the tools you pay for. The gap between licences and use is usually the real finding.", de: "Sag offen, was KI für Rollen bei Euch bedeutet, auch das, was du noch nicht weißt. Prüf danach die tatsächliche Nutzung der Werkzeuge, für die du zahlst. Die Lücke zwischen Lizenz und Nutzung ist meist der eigentliche Befund." },
-      learning: { en: "Set up one shared place for prompts, templates and findings, and make it somebody's job to keep it tidy. A folder that is maintained beats a platform that is not.", de: "Richte einen gemeinsamen Ort für Prompts, Vorlagen und Erkenntnisse ein und mach das Pflegen zur Aufgabe einer Person. Ein gepflegter Ordner schlägt eine ungepflegte Plattform." },
+      learning: { en: "Set up one shared place for prompts, templates and findings, and make it somebody's job to keep it tidy. Then build looking into it into an existing routine, for example as a standing item in a team meeting. A maintained folder somebody opens beats any platform nobody opens.", de: "Richte einen gemeinsamen Ort für Prompts, Vorlagen und Erkenntnisse ein und mach das Pflegen zur Aufgabe einer Person. Dann bau den Griff darauf in eine bestehende Routine ein, etwa als festen Punkt im Team-Meeting. Ein gepflegter Ordner, in den jemand hineinsieht, schlägt jede Plattform, in die niemand hineinsieht." },
       access: { en: "Give people one approved AI environment that is genuinely good, and make it easier to reach than the free alternative. Nothing else in this list reduces shadow usage as fast.", de: "Gib den Leuten eine freigegebene KI-Umgebung, die wirklich gut ist, und mach sie leichter erreichbar als die kostenlose Alternative. Nichts anderes auf dieser Liste senkt die Schattennutzung so schnell." },
       data: { en: "Pick the one use case you care about most and follow its data backwards: where does it sit, who owns it, can a system read it without a manual step. Fix that path before you buy anything.", de: "Nimm den Anwendungsfall, der dir am wichtigsten ist, und verfolg seine Daten zurück: Wo liegen sie, wer verantwortet sie, kann ein System sie ohne manuellen Schritt lesen. Räum diesen Weg frei, bevor du etwas kaufst." },
       integration: { en: "Move AI into the tool where the work already happens, even if the first version is cruder than a standalone app. Then define the path from experiment to production with IT and the business unit in the same room.", de: "Hol KI in das Werkzeug, in dem die Arbeit ohnehin passiert, auch wenn die erste Version gröber ist als eine eigene Anwendung. Definiere danach den Weg vom Versuch zum Betrieb mit IT und Fachbereich im selben Raum." },
@@ -2027,7 +2029,7 @@
       impact: { en: "Internal efficiency lowers cost. Only the customer side changes your position.", de: "Interne Effizienz senkt Kosten. Erst die Kundenseite verändert deine Position." },
       enablement: { en: "Awareness is not ability. Ability comes from practising on your own work.", de: "Informiert sein ist nicht können. Können kommt vom Üben an der eigenen Arbeit." },
       adoption: { en: "What is not said openly gets filled in with the worst assumption.", de: "Was nicht offen gesagt wird, füllen die Leute mit der schlechtesten Annahme." },
-      learning: { en: "Learning that lives in one head leaves with that head.", de: "Wissen, das in einem Kopf lebt, geht mit diesem Kopf." },
+      learning: { en: "Documenting is the cheap part. The value appears when somebody looks it up.", de: "Dokumentieren ist der günstige Teil. Der Nutzen entsteht erst beim Nachschlagen." },
       access: { en: "Without a sanctioned place to work, people find an unsanctioned one.", de: "Ohne erlaubten Ort zum Arbeiten finden die Leute einen unerlaubten." },
       data: { en: "Most AI projects fail on data access, not on the model.", de: "Die meisten KI-Vorhaben scheitern am Datenzugang, nicht am Modell." },
       integration: { en: "Every switch between systems costs adoption.", de: "Jeder Wechsel zwischen Systemen kostet Akzeptanz." },
@@ -2726,15 +2728,15 @@
           
           const pc = pillarColor(dim.cluster);
           card.style.borderLeft = `3px solid ${pc}`;
-          card.innerHTML = `
+          const headHtml = SHORT ? "" : `
             <div class="dim-head">
               <div class="dim-title">
                 <div class="dim-icon" style="background:${pc}1f;">${dim.icon}</div>
                 <span class="dim-name">${dim.name}</span>
               </div>
               <div class="dim-badge" id="db-${dim.id}">0 / ${dim.elements.length}</div>
-            </div>
-            <div class="elements">${elsHtml}</div>`;
+            </div>`;
+          card.innerHTML = headHtml + `<div class="elements">${elsHtml}</div>`;
           pane.appendChild(card);
         });
 
@@ -2835,9 +2837,9 @@
       const checked = answeredCount(dimId);
       const total = DIMS.find(d => d.id === dimId).elements.length;
       const badge = document.getElementById(`db-${dimId}`);
-      if (!badge) return;
-
-      badge.textContent = `${checked} / ${total}`;
+      // In der Kurzform gibt es keinen Dimensionskopf und damit kein Badge.
+      // Die Antwortdarstellung darunter muss trotzdem aktualisiert werden.
+      if (badge) badge.textContent = `${checked} / ${total}`;
 
       // Reflect the stored answers back onto the buttons.
       const a = ansArr(dimId);
@@ -2855,12 +2857,10 @@
         });
       });
 
-      if (checked === total) {
-        badge.className = "dim-badge completed";
-      } else if (checked > 0) {
-        badge.className = "dim-badge active";
-      } else {
-        badge.className = "dim-badge";
+      if (badge) {
+        badge.className = checked === total ? "dim-badge completed"
+                        : checked > 0 ? "dim-badge active"
+                        : "dim-badge";
       }
     }
 
