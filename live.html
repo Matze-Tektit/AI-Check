@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tektit · AI Readiness Check live</title>
+<style>
+/* ═══════════════════════════════════════════════════════════════════
+   Teilnehmenden-Ansicht für die presenter-gesteuerte Session.
+   Eine Frage pro Bildschirm, Daumen-erreichbare Schaltflächen, kein
+   Scrollen. Bewusst eine eigene Datei: der bestehende Kurzcheck bleibt
+   damit als Rückfallebene unberührt.
+   ═══════════════════════════════════════════════════════════════════ */
+:root{
+  --dark:#051F2E; --indigo:#3D4585; --blue:#4E58A8; --teal:#52A5B0; --mint:#52D0B0;
+  --l1:#C0392B; --l2:#E08A2E; --l3:#3E93AD; --l4:#3BC490; --na:#66738A;
+  --ink:#F2F6FA; --muted:#93A7BA;
+}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{
+  background:var(--dark);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
+  display:flex;flex-direction:column;
+  padding:env(safe-area-inset-top) 20px calc(env(safe-area-inset-bottom) + 16px);
+  overflow:hidden;
+}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;
+  background:radial-gradient(120% 80% at 15% -10%,rgba(78,88,168,.4),transparent 60%)}
+
+header{flex:0 0 auto;padding:18px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{font-size:.72rem;font-weight:800;letter-spacing:.34em;color:var(--mint)}
+.counter{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.06em}
+
+main{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;position:relative;z-index:1}
+.pillar{font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
+.q{font-size:1.5rem;font-weight:700;line-height:1.32}
+@media(min-height:700px){.q{font-size:1.75rem}}
+
+.opts{display:flex;flex-direction:column;gap:9px}
+.opt{
+  display:flex;align-items:center;gap:14px;width:100%;
+  padding:15px 18px;border-radius:10px;border:1.5px solid rgba(255,255,255,.16);
+  background:rgba(255,255,255,.05);color:var(--ink);
+  font-family:inherit;font-size:1rem;font-weight:600;text-align:left;cursor:pointer;
+  transition:background .15s,border-color .15s,transform .08s;
+}
+.opt:active{transform:scale(.985)}
+.opt .k{
+  flex:0 0 auto;width:30px;height:30px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.9rem;font-weight:800;color:#fff;
+}
+.opt .lbl small{display:block;font-size:.74rem;font-weight:500;color:var(--muted);margin-top:2px}
+.opt[data-v="1"] .k{background:var(--l1)} .opt[data-v="2"] .k{background:var(--l2)}
+.opt[data-v="3"] .k{background:var(--l3)} .opt[data-v="4"] .k{background:var(--l4)}
+.opt[data-v="na"] .k{background:var(--na)}
+.opt.sel{background:rgba(82,208,176,.16);border-color:var(--mint)}
+.opt.sel .lbl{color:#fff}
+
+footer{flex:0 0 auto;padding-top:14px;font-size:.74rem;color:var(--muted);text-align:center;min-height:34px}
+.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mint);margin-right:6px;
+     animation:p 2.2s ease-in-out infinite;vertical-align:middle}
+@keyframes p{0%,100%{opacity:.25}50%{opacity:1}}
+.err{color:#E8938C}
+
+/* ── Zwischenzustände ─────────────────────────────────────────────── */
+.panel{display:none;flex-direction:column;justify-content:center;gap:16px;flex:1 1 auto;text-align:center;position:relative;z-index:1}
+.panel.on{display:flex}
+main.off{display:none}
+.panel h1{font-size:1.7rem;font-weight:800;line-height:1.25}
+.panel p{font-size:1rem;line-height:1.6;color:var(--muted)}
+.big{font-size:4rem;font-weight:800;letter-spacing:-.02em;color:var(--mint);line-height:1}
+.sub{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+
+.field{display:flex;flex-direction:column;gap:10px;margin-top:6px;text-align:left}
+.field input{
+  padding:15px 16px;border-radius:9px;border:1.5px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.06);color:var(--ink);font-family:inherit;font-size:1rem;
+}
+.field input::placeholder{color:#7d8ea1}
+.field input:focus{outline:none;border-color:var(--mint)}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:.78rem;line-height:1.45;color:var(--muted);text-align:left}
+.consent input{margin-top:2px;flex:0 0 auto;width:18px;height:18px}
+.btn{
+  padding:16px;border-radius:9px;border:none;background:var(--mint);color:var(--dark);
+  font-family:inherit;font-size:1rem;font-weight:800;cursor:pointer;
+}
+.btn[disabled]{opacity:.45}
+.done{font-size:.95rem;font-weight:700;color:var(--mint)}
+.mini{font-size:.7rem;line-height:1.5;color:#6f8195;margin-top:14px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">TEKTIT</div>
+  <div class="counter" id="counter"></div>
+</header>
+
+<main id="qView">
+  <div class="pillar" id="pillar"></div>
+  <div class="q" id="qText"></div>
+  <div class="opts" id="opts"></div>
+</main>
+
+<div class="panel" id="waitView">
+  <h1 id="waitH">Gleich geht es los</h1>
+  <p id="waitP">Lass diese Seite offen. Die erste Frage erscheint hier, sobald wir vorne starten.</p>
+</div>
+
+<div class="panel" id="holdView">
+  <div class="done" id="holdDone">Antwort gespeichert</div>
+  <p id="holdP">Wir sprechen kurz über das Ergebnis. Die nächste Frage kommt gleich.</p>
+</div>
+
+<div class="panel" id="endView">
+  <div>
+    <div class="big" id="endScore">–</div>
+    <div class="sub" id="endLabel">Dein Reifegrad</div>
+  </div>
+  <p id="endP"></p>
+  <div class="field" id="endForm">
+    <input type="email" id="email" placeholder="deine@firma.de" autocomplete="email" inputmode="email">
+    <label class="consent">
+      <input type="checkbox" id="consent">
+      <span id="consentText"></span>
+    </label>
+    <button class="btn" id="send">Schick es mir</button>
+  </div>
+  <div class="done" id="endDone" style="display:none">Erledigt. Du hörst in der nächsten Stunde von uns.</div>
+  <p class="mini" id="disclaimer"></p>
+</div>
+
+<footer id="status"></footer>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   KONFIGURATION
+   ═══════════════════════════════════════════════════════════════════ */
+const WORKER = "https://tektit-live.DEIN-SUBDOMAIN.workers.dev";
+const POLL_MS = 2000;
+
+const LANG = /[?&]lang=en/.test(location.search) ? "en" : "de";
+
+/* Reihenfolge muss der des Workers und des Tools entsprechen. */
+const DIMS = [
+ {p:0, de:"Bei uns ist klar, wer über den KI-Einsatz entscheidet.",
+       en:"There is a clear decision-maker for how we use AI."},
+ {p:0, de:"Wir wissen, an welchen Stellen unserer Arbeit KI den größten Hebel hat.",
+       en:"We know where AI has the greatest leverage in our work."},
+ {p:0, de:"KI steckt für unsere Kunden sichtbar in mindestens einem Produkt oder Feature.",
+       en:"Our customers can see AI in at least one of our products."},
+ {p:1, de:"Es gibt eine freigegebene KI-Umgebung für interne Informationen.",
+       en:"There is an approved AI environment for internal information."},
+ {p:1, de:"Die für KI relevanten Datenquellen sind technisch erreichbar.",
+       en:"The data sources that matter for AI are technically reachable."},
+ {p:1, de:"KI sitzt in den Werkzeugen, in denen unsere Arbeit ohnehin passiert.",
+       en:"AI sits inside the tools where our work already happens."},
+ {p:2, de:"Unsere Regeln für den KI-Einsatz sind einfach genug, dass unsere Mitarbeitenden sie anwenden.",
+       en:"Our rules for using AI are simple enough that our people apply them."},
+ {p:2, de:"Wir wissen, auf welche Dokumente eine KI in unseren Systemen zugreifen kann.",
+       en:"We know which documents an AI can reach in our systems."},
+ {p:2, de:"Wir wissen, welche Pflichten aus dem EU AI Act für uns gelten.",
+       en:"We know which obligations of the EU AI Act apply to us."},
+ {p:3, de:"Unsere Mitarbeitenden können KI in ihrer täglichen Arbeit einsetzen.",
+       en:"Our people can use AI in their daily work."},
+ {p:3, de:"Wir haben offen angesprochen, was KI für die Arbeitsplätze bei uns bedeutet.",
+       en:"We have openly addressed what AI means for jobs here."},
+ {p:3, de:"Erkenntnisse aus unseren KI-Versuchen sind an einem festen Ort dokumentiert.",
+       en:"Findings from our AI experiments are documented in one shared place."}
+];
+const PILLARS = [
+ {de:"Führung & Wertbeitrag", en:"AI Leadership & Value",  c:"#3D4585"},
+ {de:"Technologie & Daten",   en:"Technology & Data",      c:"#4E58A8"},
+ {de:"Regeln & Risiko",       en:"Rules & Risk",           c:"#52A5B0"},
+ {de:"Menschen & Kultur",     en:"People & Culture",       c:"#52D0B0"}
+];
+const OPTS = [
+ {v:"1",  k:"1", de:["nein","gibt es bei uns nicht"],            en:["no","we do not have this"]},
+ {v:"2",  k:"2", de:["teilweise","in einzelnen Bereichen"],      en:["partly","in some areas"]},
+ {v:"3",  k:"3", de:["meistens","fast überall, nicht verbindlich"], en:["mostly","nearly everywhere, not binding"]},
+ {v:"4",  k:"4", de:["ja","überall und verbindlich"],            en:["yes","everywhere and binding"]},
+ {v:"na", k:"?", de:["unklar","kann ich nicht beurteilen"],      en:["unclear","I cannot assess this"]}
+];
+const T = {
+ counter:  {de:"Frage {n} von {t}", en:"Question {n} of {t}"},
+ waitH:    {de:"Gleich geht es los", en:"Starting shortly"},
+ waitP:    {de:"Lass diese Seite offen. Die erste Frage erscheint hier, sobald wir vorne starten.",
+            en:"Keep this page open. The first question appears here once we start."},
+ holdDone: {de:"Antwort gespeichert", en:"Answer saved"},
+ holdP:    {de:"Wir sprechen kurz über das Ergebnis. Die nächste Frage kommt gleich.",
+            en:"We are discussing the result. The next question follows shortly."},
+ endLabel: {de:"Dein Reifegrad", en:"Your readiness score"},
+ endP:     {de:"Das ist dein Wert über die zwölf Aussagen. Wenn du willst, schicken wir dir den vollständigen Report mit dem Vergleich zum ganzen Raum und deinen Fokusfeldern.",
+            en:"That is your score across the twelve statements. If you like, we will send you the full report with the comparison to the whole room and your focus areas."},
+ consent:  {de:"Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und meine Antworten verarbeitet, um mir meinen Report, den Raum-Benchmark und den Link zur Vollversion zu schicken. Siehe unsere Datenschutzhinweise.",
+            en:"I agree that Tektit Consulting GmbH may contact me and process my answers to send me my report, the room benchmark and the link to the full check. See our data privacy notice."},
+ send:     {de:"Schick es mir", en:"Send it to me"},
+ endDone:  {de:"Erledigt. Du hörst in der nächsten Stunde von uns.", en:"Done. You will hear from us within the hour."},
+ errMail:  {de:"Bitte gib eine gültige E-Mail-Adresse ein.", en:"Please enter a valid email address."},
+ errCons:  {de:"Bitte bestätige die Einwilligung.", en:"Please confirm your consent."},
+ saved:    {de:"gespeichert", en:"saved"},
+ offline:  {de:"keine Verbindung, wird erneut versucht", en:"no connection, retrying"},
+ disc:     {de:"Selbsteinschätzung auf Basis deiner eigenen Angaben. Keine Konformitätsbewertung nach EU AI Act und keine Rechtsberatung.",
+            en:"Self-assessment based on your own answers. Not a conformity assessment under the EU AI Act and not legal advice."}
+};
+const t = (k, v) => { let s = T[k][LANG]; for (const x in (v||{})) s = s.replace("{"+x+"}", v[x]); return s; };
+
+/* Teilnehmerkennung: zufällig, bleibt im Gerät. Keine Anmeldung, kein
+   Cookie, keine Zuordnung zu einer Person, solange keine Adresse folgt. */
+const KEY = "tektit_live_pid";
+let PID = localStorage.getItem(KEY);
+if (!PID) {
+  PID = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()).slice(0, 36);
+  localStorage.setItem(KEY, PID);
+}
+
+const ANS = JSON.parse(localStorage.getItem("tektit_live_ans") || "{}");
+const saveAns = () => localStorage.setItem("tektit_live_ans", JSON.stringify(ANS));
+
+const $ = id => document.getElementById(id);
+let current = null, phase = "waiting", answeredThis = false;
+
+/* ── Ansicht aufbauen ─────────────────────────────────────────────── */
+function renderQuestion(i) {
+  const d = DIMS[i], p = PILLARS[d.p];
+  $("pillar").textContent = p[LANG];
+  $("pillar").style.color = p.c;
+  $("qText").textContent = d[LANG];
+  $("counter").textContent = t("counter", { n: i + 1, t: DIMS.length });
+  $("opts").innerHTML = OPTS.map(function (o) {
+    return '<button class="opt' + (ANS[i] === o.v ? ' sel' : '') + '" data-v="' + o.v + '">' +
+             '<span class="k">' + o.k + '</span>' +
+             '<span class="lbl">' + o[LANG][0] + '<small>' + o[LANG][1] + '</small></span>' +
+           '</button>';
+  }).join("");
+  answeredThis = ANS[i] !== undefined;
+  show(answeredThis ? "hold" : "q");
+}
+
+function show(which) {
+  $("qView").classList.toggle("off", which !== "q");
+  $("waitView").classList.toggle("on", which === "wait");
+  $("holdView").classList.toggle("on", which === "hold");
+  $("endView").classList.toggle("on", which === "end");
+  $("counter").style.visibility = (which === "q" || which === "hold") ? "" : "hidden";
+}
+
+$("opts").addEventListener("click", function (e) {
+  const b = e.target.closest(".opt");
+  if (!b || current === null) return;
+  const v = b.dataset.v;
+  ANS[current] = v; saveAns();
+  [...document.querySelectorAll(".opt")].forEach(function (x) { x.classList.toggle("sel", x === b); });
+  send(current, v);
+  setTimeout(function () { show("hold"); }, 220);
+});
+
+/* ── Übertragung mit Warteschlange ────────────────────────────────── */
+/* Ein Fehlschlag darf keine Antwort verlieren. Nicht bestätigte Antworten
+   bleiben im Gerät und gehen beim nächsten Takt erneut hinaus. */
+const QKEY = "tektit_live_queue";
+const readQ  = () => JSON.parse(localStorage.getItem(QKEY) || "[]");
+const writeQ = q => localStorage.setItem(QKEY, JSON.stringify(q));
+
+function send(dimIndex, level) {
+  const q = readQ().filter(function (x) { return x.dimIndex !== dimIndex; });
+  q.push({ dimIndex: dimIndex, level: level });
+  writeQ(q);
+  flush();
+}
+
+let flushing = false;
+async function flush() {
+  if (flushing) return;
+  flushing = true;
+  try {
+    let q = readQ();
+    while (q.length) {
+      const item = q[0];
+      const res = await fetch(WORKER + "/answer", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ participant: PID, dimIndex: item.dimIndex, level: item.level })
+      });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      q = readQ().filter(function (x) { return x.dimIndex !== item.dimIndex; });
+      writeQ(q);
+    }
+    setStatus(t("saved"));
+  } catch (e) {
+    setStatus(t("offline"), true);
+  } finally { flushing = false; }
+}
+
+function setStatus(text, err) {
+  $("status").className = err ? "err" : "";
+  $("status").innerHTML = err ? text : '<span class="dot"></span>' + text;
+}
+
+/* ── Zustand vom Worker abholen ───────────────────────────────────── */
+async function poll() {
+  try {
+    const r = await fetch(WORKER + "/state?_=" + Date.now());
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const s = await r.json();
+    phase = s.phase;
+    if (readQ().length) flush();
+
+    if (s.phase === "waiting") { current = null; show("wait"); }
+    else if (s.phase === "done") { current = null; renderEnd(); }
+    else if (s.currentQuestion !== current) { current = s.currentQuestion; renderQuestion(current); }
+    if ($("status").className !== "") setStatus(t("saved"));
+  } catch (e) {
+    /* Der Bildschirm bleibt stehen. Wer schon geantwortet hat, verliert
+       nichts; die Warteschlange versucht es beim nächsten Takt erneut. */
+    setStatus(t("offline"), true);
+  }
+}
+
+/* ── Abschluss ────────────────────────────────────────────────────── */
+function renderEnd() {
+  const vals = Object.keys(ANS).filter(function (k) { return ANS[k] !== "na"; })
+                     .map(function (k) { return (Number(ANS[k]) - 1) / 3 * 5; });
+  const avg = vals.length ? vals.reduce(function (a, b) { return a + b; }, 0) / vals.length : null;
+  $("endScore").textContent = avg === null ? "–"
+    : (LANG === "de" ? avg.toFixed(1).replace(".", ",") : avg.toFixed(1));
+  show("end");
+}
+
+$("send").addEventListener("click", async function () {
+  const mail = $("email");
+  if (!mail.value.trim() || !mail.checkValidity()) { alert(t("errMail")); mail.focus(); return; }
+  if (!$("consent").checked) { alert(t("errCons")); return; }
+  this.disabled = true;
+  try {
+    const r = await fetch(WORKER + "/finish", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        participant: PID, email: mail.value.trim(), consent: true,
+        consentText: $("consentText").textContent.trim(), lang: LANG
+      })
+    });
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    $("endForm").style.display = "none";
+    $("endDone").style.display = "";
+  } catch (e) {
+    this.disabled = false;
+    setStatus(t("offline"), true);
+  }
+});
+
+/* ── Start ────────────────────────────────────────────────────────── */
+["waitH","waitP","holdDone","holdP","endLabel","endP","send","endDone"].forEach(function (k) {
+  const el = $(k); if (el) el.textContent = t(k === "send" ? "send" : k);
+});
+$("consentText").textContent = t("consent");
+$("disclaimer").textContent = t("disc");
+document.documentElement.lang = LANG;
+show("wait");
+poll();
+setInterval(poll, POLL_MS);
+</script>
+</body>
+</html>
