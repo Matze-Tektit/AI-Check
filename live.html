@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="de">
 <head>
@@ -29,6 +30,7 @@ body::before{content:"";position:fixed;inset:0;pointer-events:none;
   background:radial-gradient(120% 80% at 15% -10%,rgba(78,88,168,.4),transparent 60%)}
 
 header{flex:0 0 auto;padding:18px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+.logo{height:26px;width:auto;display:block}
 .brand{font-size:.72rem;font-weight:800;letter-spacing:.34em;color:var(--mint)}
 .counter{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.06em}
 
@@ -81,6 +83,7 @@ main.off{display:none}
 .field input::placeholder{color:#7d8ea1}
 .field input:focus{outline:none;border-color:var(--mint)}
 .consent{display:flex;gap:10px;align-items:flex-start;font-size:.78rem;line-height:1.45;color:var(--muted);text-align:left}
+.consent a{color:var(--mint)}
 .consent input{margin-top:2px;flex:0 0 auto;width:18px;height:18px}
 .btn{
   padding:16px;border-radius:9px;border:none;background:var(--mint);color:var(--dark);
@@ -94,7 +97,8 @@ main.off{display:none}
 <body>
 
 <header>
-  <div class="brand">TEKTIT</div>
+  <img src="TEKTIT_Cons-Logo_color-white.png" alt="Tektit Consulting" class="logo"
+       onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'brand',textContent:'TEKTIT'}))">
   <div class="counter" id="counter"></div>
 </header>
 
@@ -121,6 +125,8 @@ main.off{display:none}
   </div>
   <p id="endP"></p>
   <div class="field" id="endForm">
+    <input type="text" id="pname" placeholder="Name" autocomplete="name">
+    <input type="text" id="company" placeholder="Unternehmen" autocomplete="organization">
     <input type="email" id="email" placeholder="deine@firma.de" autocomplete="email" inputmode="email">
     <label class="consent">
       <input type="checkbox" id="consent">
@@ -138,7 +144,7 @@ main.off{display:none}
 /* ═══════════════════════════════════════════════════════════════════
    KONFIGURATION
    ═══════════════════════════════════════════════════════════════════ */
-const WORKER = "https://broken-tree-2400.matthias-paratsch.workers.dev";
+const WORKER = "https://tektit-live.DEIN-SUBDOMAIN.workers.dev";
 const POLL_MS = 2000;
 
 const LANG = /[?&]lang=en/.test(location.search) ? "en" : "de";
@@ -194,8 +200,8 @@ const T = {
  endLabel: {de:"Dein Reifegrad", en:"Your readiness score"},
  endP:     {de:"Das ist dein Wert über die zwölf Aussagen. Wenn du willst, schicken wir dir den vollständigen Report mit dem Vergleich zum ganzen Raum und deinen Fokusfeldern.",
             en:"That is your score across the twelve statements. If you like, we will send you the full report with the comparison to the whole room and your focus areas."},
- consent:  {de:"Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und meine Antworten verarbeitet, um mir meinen Report, den Raum-Benchmark und den Link zur Vollversion zu schicken. Siehe unsere Datenschutzhinweise.",
-            en:"I agree that Tektit Consulting GmbH may contact me and process my answers to send me my report, the room benchmark and the link to the full check. See our data privacy notice."},
+ consent:  {de:'Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und meine Antworten verarbeitet, um mir meinen Report, den Raum-Benchmark und den Link zur Vollversion zu schicken. Siehe unsere <a href="https://de.tektitconsulting.com/datenschutz" target="_blank" rel="noopener">Datenschutzhinweise</a>.',
+            en:'I agree that Tektit Consulting GmbH may contact me and process my answers to send me my report, the room benchmark and the link to the full check. See our <a href="https://de.tektitconsulting.com/datenschutz" target="_blank" rel="noopener">data privacy notice</a>.'},
  send:     {de:"Schick es mir", en:"Send it to me"},
  endDone:  {de:"Erledigt. Du hörst in der nächsten Stunde von uns.", en:"Done. You will hear from us within the hour."},
  errMail:  {de:"Bitte gib eine gültige E-Mail-Adresse ein.", en:"Please enter a valid email address."},
@@ -338,6 +344,7 @@ $("send").addEventListener("click", async function () {
       method: "POST", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
         participant: PID, email: mail.value.trim(), consent: true,
+        name: $("pname").value.trim(), company: $("company").value.trim(),
         consentText: $("consentText").textContent.trim(), lang: LANG
       })
     });
@@ -354,7 +361,7 @@ $("send").addEventListener("click", async function () {
 ["waitH","waitP","holdDone","holdP","endLabel","endP","send","endDone"].forEach(function (k) {
   const el = $(k); if (el) el.textContent = t(k === "send" ? "send" : k);
 });
-$("consentText").textContent = t("consent");
+$("consentText").innerHTML = t("consent");
 $("disclaimer").textContent = t("disc");
 document.documentElement.lang = LANG;
 show("wait");
