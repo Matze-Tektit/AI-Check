@@ -4,18 +4,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#051F2E">
 <title>Tektit · AI Readiness Check live</title>
 <style>
 /* ═══════════════════════════════════════════════════════════════════
-   Teilnehmenden-Ansicht für die presenter-gesteuerte Session.
-   Eine Frage pro Bildschirm, Daumen-erreichbare Schaltflächen, kein
-   Scrollen. Bewusst eine eigene Datei: der bestehende Kurzcheck bleibt
-   damit als Rückfallebene unberührt.
+   Teilnehmenden-Ansicht, Handy zuerst.
+
+   Eine Frage pro Bildschirm, Schaltflaechen im Daumenbereich, kein
+   Scrollen waehrend der Befragung. Die drei Fragen einer Saeule laufen
+   als kleiner Durchlauf: drei Fragen mit je fuenf Optionen auf einem
+   Bildschirm waeren fuenfzehn Tap-Ziele, und in einer Groesse, die auf
+   einem Handy funktioniert, muesste man dafuer scrollen.
+
+   Nur deutsch. Die englischen Textbausteine der Vorfassung sind
+   entfernt, weil sie doppelt gepflegt werden muessten.
    ═══════════════════════════════════════════════════════════════════ */
 :root{
   --dark:#051F2E; --indigo:#3D4585; --blue:#4E58A8; --teal:#52A5B0; --mint:#52D0B0;
   --l1:#C0392B; --l2:#E08A2E; --l3:#3E93AD; --l4:#3BC490; --na:#66738A;
-  --ink:#F2F6FA; --muted:#93A7BA;
+  --ink:#F2F6FA; --muted:#93A7BA; --dim:#7C8FA3;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
@@ -24,20 +31,39 @@ body{
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
   display:flex;flex-direction:column;
   padding:env(safe-area-inset-top) 20px calc(env(safe-area-inset-bottom) + 16px);
-  overflow:hidden;
+  overflow:hidden;font-variant-numeric:tabular-nums;
 }
 body::before{content:"";position:fixed;inset:0;pointer-events:none;
   background:radial-gradient(120% 80% at 15% -10%,rgba(78,88,168,.4),transparent 60%)}
+body.scroll{overflow:auto}
 
-header{flex:0 0 auto;padding:18px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:12px}
+header{flex:0 0 auto;padding:18px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+       position:relative;z-index:2}
 .logo{height:26px;width:auto;display:block}
 .brand{font-size:.72rem;font-weight:800;letter-spacing:.34em;color:var(--mint)}
-.counter{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.06em}
+.counter{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-align:right}
 
-main{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:20px;position:relative;z-index:1}
+main{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:18px;
+     position:relative;z-index:1;min-height:0}
+section{display:none;flex-direction:column;gap:18px}
+section.on{display:flex}
+h1{font-size:1.5rem;font-weight:800;line-height:1.24}
+h2{font-size:1.02rem;font-weight:700;line-height:1.35}
+p.lead{font-size:.92rem;line-height:1.5;color:var(--muted)}
+.small{font-size:.76rem;line-height:1.5;color:var(--dim)}
+
+/* Fortschritt innerhalb der Saeule */
 .pillar{font-size:.68rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase}
-.q{font-size:1.5rem;font-weight:700;line-height:1.32}
-@media(min-height:700px){.q{font-size:1.75rem}}
+.dots{display:flex;gap:7px;align-items:center;margin-top:8px}
+.dots b{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.22);display:block}
+.dots b.on{background:var(--mint)}
+.dots b.done{background:rgba(82,208,176,.55)}
+.dots span{font-size:.72rem;font-weight:700;color:var(--muted);margin-left:6px}
+
+.q{font-size:1.45rem;font-weight:700;line-height:1.32}
+@media(min-height:700px){.q{font-size:1.68rem}}
+.hint{font-size:.82rem;line-height:1.45;color:var(--muted);
+      border-left:2px solid rgba(82,208,176,.5);padding-left:10px}
 
 .opts{display:flex;flex-direction:column;gap:9px}
 .opt{
@@ -48,236 +74,291 @@ main{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap
   transition:background .15s,border-color .15s,transform .08s;
 }
 .opt:active{transform:scale(.985)}
-.opt .k{
-  flex:0 0 auto;width:30px;height:30px;border-radius:7px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:.9rem;font-weight:800;color:#fff;
-}
+.opt .k{flex:0 0 auto;width:30px;height:30px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:800;color:#fff}
 .opt .lbl small{display:block;font-size:.74rem;font-weight:500;color:var(--muted);margin-top:2px}
 .opt[data-v="1"] .k{background:var(--l1)} .opt[data-v="2"] .k{background:var(--l2)}
 .opt[data-v="3"] .k{background:var(--l3)} .opt[data-v="4"] .k{background:var(--l4)}
 .opt[data-v="na"] .k{background:var(--na)}
 .opt.sel{background:rgba(82,208,176,.16);border-color:var(--mint)}
 .opt.sel .lbl{color:#fff}
+.opt.plain{font-weight:600}
+.opt.plain.sel .k{background:var(--mint);color:#04342C}
+.opt .k.tick{background:rgba(255,255,255,.12)}
 
-footer{flex:0 0 auto;padding-top:14px;font-size:.74rem;color:var(--muted);text-align:center;min-height:34px}
-.dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mint);margin-right:6px;
-     animation:p 2.2s ease-in-out infinite;vertical-align:middle}
-@keyframes p{0%,100%{opacity:.25}50%{opacity:1}}
-.err{color:#E8938C}
+.btn{display:block;width:100%;padding:15px 18px;border-radius:10px;border:0;
+     background:var(--mint);color:#04342C;font-family:inherit;font-size:1rem;font-weight:800;cursor:pointer}
+.btn:disabled{opacity:.45}
+.btn.ghost{background:transparent;border:1.5px solid rgba(255,255,255,.2);color:var(--ink);font-weight:700}
+.linkbtn{background:none;border:0;color:var(--muted);font-family:inherit;font-size:.88rem;
+         font-weight:700;text-decoration:underline;cursor:pointer;padding:6px 0}
+.row{display:flex;gap:10px}
+.row .btn{flex:1 1 auto}
+.back{background:none;border:0;color:var(--muted);font-family:inherit;font-size:.82rem;
+       font-weight:700;cursor:pointer;padding:4px 0;text-align:left}
 
-/* ── Zwischenzustände ─────────────────────────────────────────────── */
-.panel{display:none;flex-direction:column;justify-content:center;gap:16px;flex:1 1 auto;text-align:center;position:relative;z-index:1}
-.panel.on{display:flex}
-main.off{display:none}
-.panel h1{font-size:1.7rem;font-weight:800;line-height:1.25}
-.panel p{font-size:1rem;line-height:1.6;color:var(--muted)}
-.big{font-size:4rem;font-weight:800;letter-spacing:-.02em;color:var(--mint);line-height:1}
-.sub{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
-
-.field{display:flex;flex-direction:column;gap:10px;margin-top:6px;text-align:left}
-.field input{
-  padding:15px 16px;border-radius:9px;border:1.5px solid rgba(255,255,255,.2);
-  background:rgba(255,255,255,.06);color:var(--ink);font-family:inherit;font-size:1rem;
-}
-.field input::placeholder{color:#7d8ea1}
-.field input:focus{outline:none;border-color:var(--mint)}
-.consent{display:flex;gap:10px;align-items:flex-start;font-size:.78rem;line-height:1.45;color:var(--muted);text-align:left}
+input[type=email]{width:100%;padding:14px 16px;border-radius:10px;font-family:inherit;font-size:1rem;
+  border:1.5px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--ink)}
+input[type=email]::placeholder{color:#6F8195}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:.78rem;line-height:1.45;color:var(--muted)}
 .consent a{color:var(--mint)}
 .consent input{margin-top:2px;flex:0 0 auto;width:18px;height:18px}
-.btn{
-  padding:16px;border-radius:9px;border:none;background:var(--mint);color:var(--dark);
-  font-family:inherit;font-size:1rem;font-weight:800;cursor:pointer;
-}
-.btn[disabled]{opacity:.45}
-.done{font-size:.95rem;font-weight:700;color:var(--mint)}
-.mini{font-size:.7rem;line-height:1.5;color:#6f8195;margin-top:14px}
+.err{font-size:.82rem;font-weight:700;color:#F0A9A3}
+
+.wait{display:flex;align-items:center;gap:10px;font-size:.86rem;font-weight:700;color:var(--mint)}
+.pulse{width:9px;height:9px;border-radius:50%;background:var(--mint);animation:p 2.2s ease-in-out infinite}
+@keyframes p{0%,100%{opacity:.25}50%{opacity:1}}
+.facts{display:flex;flex-direction:column;gap:7px}
+.facts div{display:flex;gap:10px;font-size:.88rem;color:var(--muted)}
+.facts b{color:var(--ink);font-weight:700;flex:0 0 auto;min-width:74px}
+
+/* Ergebnis */
+.score{display:flex;align-items:baseline;gap:8px}
+.score b{font-size:3.4rem;font-weight:800;color:var(--mint);line-height:1;letter-spacing:-.02em}
+.score span{font-size:1rem;font-weight:700;color:var(--muted)}
+.band{font-size:1rem;font-weight:800}
+#radar{width:100%;height:auto;display:block}
+.key{display:flex;gap:16px;justify-content:center;font-size:.8rem;font-weight:700}
+.key i{display:inline-block;width:20px;height:0;border-top:3px solid var(--mint);
+       vertical-align:middle;margin-right:6px}
+.key i.room{border-top:3px dashed #C6D3DE}
+.gaps{display:flex;flex-direction:column;gap:8px}
+.gap{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:.88rem}
+.gap s{text-decoration:none;font-weight:800;white-space:nowrap}
+.gap s.up{color:var(--mint)}.gap s.down{color:#F0A9A3}
+.card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
+      border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+
+footer{flex:0 0 auto;padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+       position:relative;z-index:2}
+.status{font-size:.7rem;color:var(--dim)}
+.status.err{color:#F0A9A3}
+.disc{font-size:.64rem;line-height:1.4;color:#5E7385;max-width:62%}
 </style>
 </head>
 <body>
 
 <header>
-  <img src="TEKTIT_Cons-Logo_color-white.png" alt="Tektit Consulting" class="logo"
+  <img src="" alt="Tektit Consulting" class="logo" id="logo"
        onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'brand',textContent:'TEKTIT'}))">
   <div class="counter" id="counter"></div>
 </header>
 
-<main id="qView">
-  <div class="pillar" id="pillar"></div>
-  <div class="q" id="qText"></div>
-  <div class="opts" id="opts"></div>
+<main>
+
+  <!-- 1. Start: Rolle, dann Adresse. Die Rolle kostet einen Tap, deshalb
+       steht sie zuerst; die Adresse ist überspringbar. -->
+  <section id="vIntro">
+    <div>
+      <h1 id="introH">Gleich geht es los</h1>
+      <p class="lead" id="introP">Zwei kurze Angaben, dann warten wir gemeinsam auf die Bühne.</p>
+    </div>
+    <div>
+      <h2>Was beschreibt deine Rolle?</h2>
+      <div class="opts" id="roleOpts" style="margin-top:10px"></div>
+    </div>
+    <div id="mailBlock">
+      <h2>Wohin soll dein Report?</h2>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
+        <input type="email" id="email" inputmode="email" autocomplete="email"
+               autocapitalize="off" spellcheck="false" placeholder="du@firma.de">
+        <label class="consent"><input type="checkbox" id="consent"><span id="consentText"></span></label>
+      </div>
+    </div>
+    <div class="err" id="introErr" hidden></div>
+    <div>
+      <button class="btn" id="introGo" disabled>Weiter</button>
+      <div style="text-align:center"><button class="linkbtn" id="skipMail">Ohne Adresse weiter</button></div>
+    </div>
+  </section>
+
+  <!-- 2. Wartescreen. Sagt, was passiert, statt nur zu warten. -->
+  <section id="vReady">
+    <div class="wait"><span class="pulse"></span><span id="readyState">Du bist dabei</span></div>
+    <h1 id="readyH">Gleich geht es los</h1>
+    <div class="facts">
+      <div><b>Ablauf</b><span>Zwölf Aussagen in vier Blöcken. Die Fragen erscheinen hier, sobald sie vorne aufgerufen werden.</span></div>
+      <div><b>Dauer</b><span>Etwa fünfzehn Minuten.</span></div>
+      <div><b>Am Ende</b><span>Du siehst deinen Reifegrad und den Vergleich mit dem Raum.</span></div>
+    </div>
+    <p class="small">Lass diese Seite offen und sperr das Handy möglichst nicht, sonst musst du sie neu laden.</p>
+    <div id="readyEdit"></div>
+  </section>
+
+  <!-- 3. Eine Frage pro Bildschirm. -->
+  <section id="vQ">
+    <div>
+      <div class="pillar" id="qPillar"></div>
+      <div class="dots" id="qDots"></div>
+    </div>
+    <div class="q" id="qText"></div>
+    <div class="hint" id="qHint" hidden></div>
+    <div class="opts" id="qOpts"></div>
+    <button class="back" id="qBack" hidden>← vorige Frage in diesem Block</button>
+  </section>
+
+  <!-- 4. Block fertig, warten auf die Bühne. -->
+  <section id="vHold">
+    <div class="wait"><span class="pulse"></span><span>Block abgeschlossen</span></div>
+    <h1 id="holdH">Danke, das war der Block</h1>
+    <p class="lead" id="holdP">Vorne wird jetzt das Ergebnis besprochen. Die nächsten Fragen erscheinen hier automatisch.</p>
+    <div class="facts" id="holdFacts"></div>
+  </section>
+
+  <!-- 5. Ergebnis mit eigenem Profil gegen den Raum. -->
+  <section id="vEnd">
+    <div>
+      <p class="small" style="letter-spacing:.14em;font-weight:800;text-transform:uppercase">Dein Reifegrad</p>
+      <div class="score"><b id="endScore">–</b><span>von 5</span></div>
+      <div class="band" id="endBand"></div>
+      <p class="small" id="endBase"></p>
+    </div>
+    <div>
+      <svg id="radar" viewBox="0 0 340 300" aria-label="Dein Profil im Vergleich zum Raum"></svg>
+      <div class="key"><span><i></i>du</span><span><i class="room"></i>Raum</span></div>
+    </div>
+    <div>
+      <p class="small" style="letter-spacing:.14em;font-weight:800;text-transform:uppercase;margin-bottom:8px">
+        Die größten Unterschiede zum Raum</p>
+      <div class="gaps" id="endGaps"></div>
+    </div>
+    <div class="card" id="endMail">
+      <div>
+        <h2>Report per E-Mail</h2>
+        <p class="small" id="endMailP">Wir schicken dir dein Ergebnis mit dem Vergleich zum Raum und deinen Fokusfeldern.</p>
+      </div>
+      <input type="email" id="email2" inputmode="email" autocomplete="email"
+             autocapitalize="off" spellcheck="false" placeholder="du@firma.de">
+      <label class="consent"><input type="checkbox" id="consent2"><span id="consentText2"></span></label>
+      <div class="err" id="endErr" hidden></div>
+      <button class="btn" id="endGo">Schick es mir</button>
+    </div>
+    <div class="card" id="endThanks" hidden>
+      <h2 id="thanksH">Erledigt</h2>
+      <p class="small" id="thanksP"></p>
+    </div>
+  </section>
+
 </main>
 
-<div class="panel" id="waitView">
-  <h1 id="waitH">Gleich geht es los</h1>
-  <p id="waitP">Lass diese Seite offen. Die erste Frage erscheint hier, sobald wir vorne starten.</p>
-</div>
-
-<div class="panel" id="holdView">
-  <div class="done" id="holdDone">Antwort gespeichert</div>
-  <p id="holdP">Wir sprechen kurz über das Ergebnis. Die nächste Frage kommt gleich.</p>
-</div>
-
-<div class="panel" id="endView">
-  <div>
-    <div class="big" id="endScore">–</div>
-    <div class="sub" id="endLabel">Dein Reifegrad</div>
-  </div>
-  <p id="endP"></p>
-  <div class="field" id="endForm">
-    <input type="text" id="pname" placeholder="Name" autocomplete="name">
-    <input type="text" id="company" placeholder="Unternehmen" autocomplete="organization">
-    <input type="email" id="email" placeholder="deine@firma.de" autocomplete="email" inputmode="email">
-    <label class="consent">
-      <input type="checkbox" id="consent">
-      <span id="consentText"></span>
-    </label>
-    <button class="btn" id="send">Schick es mir</button>
-  </div>
-  <div class="done" id="endDone" style="display:none">Erledigt. Du hörst in der nächsten Stunde von uns.</div>
-  <p class="mini" id="disclaimer"></p>
-</div>
-
-<footer id="status"></footer>
+<footer>
+  <div class="disc">Selbsteinschätzung auf Basis deiner eigenen Angaben. Keine Konformitätsbewertung
+    nach EU AI Act und keine Rechtsberatung.</div>
+  <div class="status" id="status"></div>
+</footer>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════
    KONFIGURATION
    ═══════════════════════════════════════════════════════════════════ */
-const WORKER = "https://broken-tree-2400.matthias-paratsch.workers.dev";
+const WORKER  = "https://broken-tree-2400.matthias-paratsch.workers.dev";
 const POLL_MS = 2000;
+const LOGO    = "https://ai-check.tektitconsulting.com/TEKTIT_Cons-Logo_color-white.png";
+const FULL_CHECK = "https://ai-check.tektitconsulting.com/";
 
-const LANG = /[?&]lang=en/.test(location.search) ? "en" : "de";
-
-/* Reihenfolge muss der des Workers und des Tools entsprechen. */
+/* Reihenfolge muss der des Workers entsprechen. */
 const DIMS = [
- {p:0, de:"Bei uns ist klar, wer über den KI-Einsatz entscheidet.",
-       en:"There is a clear decision-maker for how we use AI."},
- {p:0, de:"Wir wissen, an welchen Stellen unserer Arbeit KI den größten Hebel hat.",
-       en:"We know where AI has the greatest leverage in our work."},
- {p:0, de:"KI steckt für unsere Kunden sichtbar in mindestens einem Produkt oder Feature.",
-       en:"Our customers can see AI in at least one of our products."},
- {p:1, de:"Es gibt eine freigegebene KI-Umgebung für interne Informationen.",
-       en:"There is an approved AI environment for internal information."},
- {p:1, de:"Die für KI relevanten Datenquellen sind technisch erreichbar.",
-       en:"The data sources that matter for AI are technically reachable."},
- {p:1, de:"KI sitzt in den Werkzeugen, in denen unsere Arbeit ohnehin passiert.",
-       en:"AI sits inside the tools where our work already happens."},
- {p:2, de:"Unsere Regeln für den KI-Einsatz sind einfach genug, dass unsere Mitarbeitenden sie anwenden.",
-       en:"Our rules for using AI are simple enough that our people apply them."},
- {p:2, de:"Wir wissen, auf welche Dokumente eine KI in unseren Systemen zugreifen kann.",
-       en:"We know which documents an AI can reach in our systems."},
- {p:2, de:"Wir wissen, welche Pflichten aus dem EU AI Act für uns gelten.",
-       en:"We know which obligations of the EU AI Act apply to us."},
- {p:3, de:"Unsere Mitarbeitenden können KI in ihrer täglichen Arbeit einsetzen.",
-       en:"Our people can use AI in their daily work."},
- {p:3, de:"Wir haben offen angesprochen, was KI für die Arbeitsplätze bei uns bedeutet.",
-       en:"We have openly addressed what AI means for jobs here."},
- {p:3, de:"Erkenntnisse aus unseren KI-Versuchen sind an einem festen Ort dokumentiert.",
-       en:"Findings from our AI experiments are documented in one shared place."}
+  { p: 0, q: "Bei uns ist klar, wer über den KI-Einsatz entscheidet." },
+  { p: 0, q: "Wir wissen, an welchen Stellen unserer Arbeit KI den größten Hebel hat." },
+  { p: 0, q: "KI steckt für unsere Kunden sichtbar in mindestens einem Produkt oder Feature." },
+  { p: 1, q: "Es gibt eine freigegebene KI-Umgebung für interne Informationen." },
+  { p: 1, q: "Unsere wichtigen Datenquellen sind so angebunden, dass eine KI sie lesen kann.",
+           h: "Gemeint ist technisch für die KI erreichbar, nicht nur für Menschen auffindbar." },
+  { p: 1, q: "KI ist in die Werkzeuge integriert, in denen unsere Arbeit ohnehin passiert.",
+           h: "Also in Outlook, Teams, CRM oder ERP, nicht als separates Chatfenster daneben." },
+  { p: 2, q: "Unsere Regeln für den KI-Einsatz sind einfach genug, dass unsere Mitarbeitenden sie anwenden." },
+  { p: 2, q: "Wir wissen, auf welche Dokumente eine KI in unseren Systemen zugreifen kann." },
+  { p: 2, q: "Wir wissen, welche Pflichten aus dem EU AI Act für uns gelten." },
+  { p: 3, q: "Unsere Mitarbeitenden können KI in ihrer täglichen Arbeit einsetzen." },
+  { p: 3, q: "Wir haben offen angesprochen, was KI für die Arbeitsplätze bei uns bedeutet." },
+  { p: 3, q: "Erkenntnisse aus unseren KI-Versuchen sind an einem festen Ort dokumentiert." }
+];
+const DIMNAMES = [
+  "Mandat & Verantwortung", "Priorisierung & Fokus", "Wirkung & Portfolio",
+  "Zugang & Arbeitsumgebung", "Datenzugang & Qualität", "Integration in Prozesse",
+  "Nutzungsregeln", "Berechtigungen & Security", "Regulatorik",
+  "Befähigung", "Akzeptanz & Kommunikation", "Wissenssicherung"
 ];
 const PILLARS = [
- {de:"Führung & Wertbeitrag", en:"AI Leadership & Value",  c:"#3D4585"},
- {de:"Technologie & Daten",   en:"Technology & Data",      c:"#4E58A8"},
- {de:"Regeln & Risiko",       en:"Rules & Risk",           c:"#52A5B0"},
- {de:"Menschen & Kultur",     en:"People & Culture",       c:"#52D0B0"}
+  { n: "Führung & Wertbeitrag", c: "#3D4585" },
+  { n: "Technologie & Daten",   c: "#4E58A8" },
+  { n: "Regeln & Risiko",       c: "#52A5B0" },
+  { n: "Menschen & Kultur",     c: "#52D0B0" }
 ];
 const OPTS = [
- {v:"1",  k:"1", de:["nein","gibt es bei uns nicht"],            en:["no","we do not have this"]},
- {v:"2",  k:"2", de:["teilweise","in einzelnen Bereichen"],      en:["partly","in some areas"]},
- {v:"3",  k:"3", de:["meistens","fast überall, nicht verbindlich"], en:["mostly","nearly everywhere, not binding"]},
- {v:"4",  k:"4", de:["ja","überall und verbindlich"],            en:["yes","everywhere and binding"]},
- {v:"na", k:"?", de:["unklar","kann ich nicht beurteilen"],      en:["unclear","I cannot assess this"]}
+  { v: "1",  k: "1", l: "nein",      s: "gibt es bei uns nicht" },
+  { v: "2",  k: "2", l: "teilweise", s: "in einzelnen Bereichen" },
+  { v: "3",  k: "3", l: "meistens",  s: "fast überall, nicht verbindlich" },
+  { v: "4",  k: "4", l: "ja",        s: "überall und verbindlich" },
+  { v: "na", k: "?", l: "unklar",    s: "kann ich nicht beurteilen" }
 ];
-const T = {
- counter:  {de:"Frage {n} von {t}", en:"Question {n} of {t}"},
- waitH:    {de:"Gleich geht es los", en:"Starting shortly"},
- waitP:    {de:"Lass diese Seite offen. Die erste Frage erscheint hier, sobald wir vorne starten.",
-            en:"Keep this page open. The first question appears here once we start."},
- holdDone: {de:"Antwort gespeichert", en:"Answer saved"},
- holdP:    {de:"Wir sprechen kurz über das Ergebnis. Die nächste Frage kommt gleich.",
-            en:"We are discussing the result. The next question follows shortly."},
- endLabel: {de:"Dein Reifegrad", en:"Your readiness score"},
- endP:     {de:"Das ist dein Wert über die zwölf Aussagen. Wenn du willst, schicken wir dir den vollständigen Report mit dem Vergleich zum ganzen Raum und deinen Fokusfeldern.",
-            en:"That is your score across the twelve statements. If you like, we will send you the full report with the comparison to the whole room and your focus areas."},
- consent:  {de:'Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und meine Antworten verarbeitet, um mir meinen Report, den Raum-Benchmark und den Link zur Vollversion zu schicken. Siehe unsere <a href="https://de.tektitconsulting.com/datenschutz" target="_blank" rel="noopener">Datenschutzhinweise</a>.',
-            en:'I agree that Tektit Consulting GmbH may contact me and process my answers to send me my report, the room benchmark and the link to the full check. See our <a href="https://de.tektitconsulting.com/datenschutz" target="_blank" rel="noopener">data privacy notice</a>.'},
- send:     {de:"Schick es mir", en:"Send it to me"},
- endDone:  {de:"Erledigt. Du hörst in der nächsten Stunde von uns.", en:"Done. You will hear from us within the hour."},
- errMail:  {de:"Bitte gib eine gültige E-Mail-Adresse ein.", en:"Please enter a valid email address."},
- errCons:  {de:"Bitte bestätige die Einwilligung.", en:"Please confirm your consent."},
- saved:    {de:"gespeichert", en:"saved"},
- offline:  {de:"keine Verbindung, wird erneut versucht", en:"no connection, retrying"},
- disc:     {de:"Selbsteinschätzung auf Basis deiner eigenen Angaben. Keine Konformitätsbewertung nach EU AI Act und keine Rechtsberatung.",
-            en:"Self-assessment based on your own answers. Not a conformity assessment under the EU AI Act and not legal advice."}
-};
-const t = (k, v) => { let s = T[k][LANG]; for (const x in (v||{})) s = s.replace("{"+x+"}", v[x]); return s; };
-
-/* Teilnehmerkennung: zufällig, bleibt im Gerät. Keine Anmeldung, kein
-   Cookie, keine Zuordnung zu einer Person, solange keine Adresse folgt. */
-const KEY = "tektit_live_pid";
-let PID = localStorage.getItem(KEY);
-if (!PID) {
-  PID = (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()).slice(0, 36);
-  localStorage.setItem(KEY, PID);
-}
-
-const ANS = JSON.parse(localStorage.getItem("tektit_live_ans") || "{}");
-const saveAns = () => localStorage.setItem("tektit_live_ans", JSON.stringify(ANS));
+const ROLES = [
+  ["gf",      "Geschäftsführung / Vorstand"],
+  ["bereich", "Bereichsleitung"],
+  ["fach",    "Fachverantwortung (IT, HR, Recht, ...)"],
+  ["stab",    "Stab / Projektrolle"],
+  ["consult", "Consultant"]
+];
+const CONSENT = 'Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und meine ' +
+  'Antworten verarbeitet, um mir meinen Report, den Raum-Benchmark und den Link zur Vollversion zu schicken. ' +
+  'Siehe unsere <a href="https://de.tektitconsulting.com/datenschutz" target="_blank" rel="noopener">Datenschutzhinweise</a>.';
+/* Absichtlich ohne feste Frist: eine unterschrittene Zusage ist der
+   einzige Weg, an dieser Stelle Vertrauen zu verlieren. */
+const REPORT_LINE = "Wir schicken dir den Report per E-Mail an {mail}, im Verlauf des Tages.";
+const BANDS = [[1.8, "Foundation Stage"], [3.2, "Working Baseline"], [99, "Scale-Ready"]];
+const band = v => (BANDS.find(b => v < b[0]) || BANDS[2])[1];
 
 const $ = id => document.getElementById(id);
-let current = null, phase = "waiting", answeredThis = false;
+const de1 = v => v === null || v === undefined ? "–" : Number(v).toFixed(1).replace(".", ",");
+const PILLAR_DIMS = p => [p * 3, p * 3 + 1, p * 3 + 2];
+const levelToScore = l => Math.round(((l - 1) / 3) * 5 * 100) / 100;
 
-/* ── Ansicht aufbauen ─────────────────────────────────────────────── */
-function renderQuestion(i) {
-  const d = DIMS[i], p = PILLARS[d.p];
-  $("pillar").textContent = p[LANG];
-  $("pillar").style.color = p.c;
-  $("qText").textContent = d[LANG];
-  $("counter").textContent = t("counter", { n: i + 1, t: DIMS.length });
-  $("opts").innerHTML = OPTS.map(function (o) {
-    return '<button class="opt' + (ANS[i] === o.v ? ' sel' : '') + '" data-v="' + o.v + '">' +
-             '<span class="k">' + o.k + '</span>' +
-             '<span class="lbl">' + o[LANG][0] + '<small>' + o[LANG][1] + '</small></span>' +
-           '</button>';
-  }).join("");
-  answeredThis = ANS[i] !== undefined;
-  show(answeredThis ? "hold" : "q");
+/* ── Kennung und lokaler Stand ────────────────────────────────────
+   Zufaellige Kennung, bleibt im Geraet. Keine Anmeldung. Die Antworten
+   liegen zusaetzlich lokal, damit ein Neuladen mitten in der Session
+   nichts kostet. */
+const KEY = "tektit_live_pid", AKEY = "tektit_live_ans",
+      QKEY = "tektit_live_queue", PKEY = "tektit_live_prof";
+let PID = localStorage.getItem(KEY);
+if (!PID) {
+  PID = "p_" + Math.random().toString(36).slice(2, 10) + Date.now().toString(36).slice(-4);
+  localStorage.setItem(KEY, PID);
 }
+const readJ = (k, d) => { try { return JSON.parse(localStorage.getItem(k)) || d; } catch (e) { return d; } };
+const ANS  = readJ(AKEY, {});
+const PROF = readJ(PKEY, {});
+const saveAns  = () => localStorage.setItem(AKEY, JSON.stringify(ANS));
+const saveProf = () => localStorage.setItem(PKEY, JSON.stringify(PROF));
 
-function show(which) {
-  $("qView").classList.toggle("off", which !== "q");
-  $("waitView").classList.toggle("on", which === "wait");
-  $("holdView").classList.toggle("on", which === "hold");
-  $("endView").classList.toggle("on", which === "end");
-  $("counter").style.visibility = (which === "q" || which === "hold") ? "" : "hidden";
-}
+let S = null;          /* letzter Zustand vom Worker */
+let view = "vIntro";
+let qi = null;         /* Index der angezeigten Frage innerhalb der Saeule */
+let lockedPillars = {};/* Saeulen, die der Worker als abgeschlossen meldet */
 
-$("opts").addEventListener("click", function (e) {
-  const b = e.target.closest(".opt");
-  if (!b || current === null) return;
-  const v = b.dataset.v;
-  ANS[current] = v; saveAns();
-  [...document.querySelectorAll(".opt")].forEach(function (x) { x.classList.toggle("sel", x === b); });
-  send(current, v);
-  setTimeout(function () { show("hold"); }, 220);
-});
+/* ── Aufbau ───────────────────────────────────────────────────────── */
+$("logo").src = LOGO;
+$("consentText").innerHTML = CONSENT;
+$("consentText2").innerHTML = CONSENT;
+$("roleOpts").innerHTML = ROLES.map(r =>
+  '<button type="button" class="opt plain" data-r="' + r[0] + '">' +
+    '<span class="k tick">✓</span><span class="lbl">' + r[1] + '</span></button>').join("");
+$("qOpts").innerHTML = OPTS.map(o =>
+  '<button type="button" class="opt" data-v="' + o.v + '">' +
+    '<span class="k">' + o.k + '</span>' +
+    '<span class="lbl">' + o.l + '<small>' + o.s + '</small></span></button>').join("");
 
-/* ── Übertragung mit Warteschlange ────────────────────────────────── */
-/* Ein Fehlschlag darf keine Antwort verlieren. Nicht bestätigte Antworten
-   bleiben im Gerät und gehen beim nächsten Takt erneut hinaus. */
-const QKEY = "tektit_live_queue";
-const readQ  = () => JSON.parse(localStorage.getItem(QKEY) || "[]");
+/* ── Warteschlange fuer wackliges WLAN ───────────────────────────── */
+const readQ = () => readJ(QKEY, []);
 const writeQ = q => localStorage.setItem(QKEY, JSON.stringify(q));
+let flushing = false;
 
-function send(dimIndex, level) {
-  const q = readQ().filter(function (x) { return x.dimIndex !== dimIndex; });
+function enqueue(dimIndex, level) {
+  const q = readQ().filter(x => x.dimIndex !== dimIndex);
   q.push({ dimIndex: dimIndex, level: level });
   writeQ(q);
   flush();
 }
 
-let flushing = false;
 async function flush() {
   if (flushing) return;
   flushing = true;
@@ -287,86 +368,389 @@ async function flush() {
       const item = q[0];
       const res = await fetch(WORKER + "/answer", {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ participant: PID, dimIndex: item.dimIndex, level: item.level })
+        body: JSON.stringify({ participant: PID, dimIndex: item.dimIndex, level: item.level }),
       });
+      if (res.status === 409) {
+        /* Der Worker hat die Saeule geschlossen: entweder ist vorne
+           weitergeschaltet oder die drei Antworten stehen schon. Der
+           Eintrag wird verworfen, sonst haengt die Schlange fuer immer. */
+        const body = await res.json().catch(() => ({}));
+        if (body.reason === "pillar_locked") lockedPillars[Math.floor(item.dimIndex / 3)] = true;
+        q = readQ().filter(x => x.dimIndex !== item.dimIndex);
+        writeQ(q);
+        continue;
+      }
       if (!res.ok) throw new Error("HTTP " + res.status);
-      q = readQ().filter(function (x) { return x.dimIndex !== item.dimIndex; });
+      const body = await res.json().catch(() => ({}));
+      if (body.locked) lockedPillars[body.pillar] = true;
+      q = readQ().filter(x => x.dimIndex !== item.dimIndex);
       writeQ(q);
     }
-    setStatus(t("saved"));
+    setStatus(readQ().length ? "" : "gespeichert");
   } catch (e) {
-    setStatus(t("offline"), true);
-  } finally { flushing = false; }
+    setStatus("keine Verbindung, wird erneut versucht", true);
+  } finally {
+    flushing = false;
+  }
 }
 
-function setStatus(text, err) {
-  $("status").className = err ? "err" : "";
-  $("status").innerHTML = err ? text : '<span class="dot"></span>' + text;
+function setStatus(msg, err) {
+  $("status").className = "status" + (err ? " err" : "");
+  $("status").textContent = msg;
 }
 
-/* ── Zustand vom Worker abholen ───────────────────────────────────── */
-async function poll() {
+/* ── Profil senden ────────────────────────────────────────────────── */
+async function sendProfile(payload) {
+  const res = await fetch(WORKER + "/profile", {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(Object.assign({ participant: PID, lang: "de" }, payload)),
+  });
+  if (!res.ok) {
+    const b = await res.json().catch(() => ({}));
+    throw new Error(b.error || ("HTTP " + res.status));
+  }
+  return true;
+}
+
+/* ── Ansicht bestimmen ────────────────────────────────────────────
+   Der Worker haelt den Schritt, das Handy leitet daraus ab, was zu tun
+   ist. Nur die Rolle blockiert den Einstieg, die Adresse nie. */
+function decide() {
+  if (!S) return "vIntro";
+  const ph = S.phase;
+  if (!PROF.role) return "vIntro";
+  if (ph === "waiting" || ph === "role") return "vReady";
+  if (ph === "radar" || ph === "done") return "vEnd";
+  const p = S.pillar;
+  if (p === null || p === undefined) return "vReady";
+  const dims = PILLAR_DIMS(p);
+  const answered = dims.filter(i => ANS[i] !== undefined).length;
+  if (lockedPillars[p] || answered >= 3) return "vHold";
+  return "vQ";
+}
+
+function show(v) {
+  view = v;
+  ["vIntro", "vReady", "vQ", "vHold", "vEnd"].forEach(id =>
+    $(id).classList.toggle("on", id === v));
+  document.body.classList.toggle("scroll", v === "vEnd" || v === "vIntro");
+  if (v === "vQ") paintQ();
+  if (v === "vHold") paintHold();
+  if (v === "vEnd") paintEnd();
+  if (v === "vReady") paintReady();
+  if (v === "vIntro") paintIntro();
+  paintCounter();
+}
+
+function paintCounter() {
+  if (!S || view === "vIntro") { $("counter").textContent = ""; return; }
+  if (view === "vEnd") { $("counter").textContent = "Ergebnis"; return; }
+  const done = Object.keys(ANS).length;
+  $("counter").textContent = done + " von 12 beantwortet";
+}
+
+/* ── Start ────────────────────────────────────────────────────────── */
+function paintIntro() {
+  const running = S && ["ask", "review"].includes(S.phase);
+  $("introH").textContent = running ? "Willkommen, es läuft schon" : "Gleich geht es los";
+  $("introP").textContent = running
+    ? "Sag kurz, welche Rolle du hast, dann bist du bei der laufenden Frage dabei."
+    : "Zwei kurze Angaben, dann warten wir gemeinsam auf die Bühne.";
+  $("introGo").textContent = running ? "Weiter zur Frage" : "Weiter";
+  const mailDone = !!PROF.mail;
+  $("mailBlock").hidden = mailDone;
+  $("skipMail").hidden = mailDone;
+  $("introGo").disabled = !document.querySelector("#roleOpts .opt.sel");
+}
+
+$("roleOpts").addEventListener("click", e => {
+  const b = e.target.closest(".opt");
+  if (!b) return;
+  document.querySelectorAll("#roleOpts .opt").forEach(x => x.classList.remove("sel"));
+  b.classList.add("sel");
+  $("introGo").disabled = false;
+});
+
+function validMail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+
+async function submitIntro(withMail) {
+  const sel = document.querySelector("#roleOpts .opt.sel");
+  if (!sel) return;
+  const payload = { role: sel.dataset.r };
+  $("introErr").hidden = true;
+
+  if (withMail && !PROF.mail) {
+    const m = $("email").value.trim();
+    if (m) {
+      if (!validMail(m)) return showIntroErr("Bitte gib eine gültige E-Mail-Adresse ein.");
+      if (!$("consent").checked) return showIntroErr("Bitte bestätige die Einwilligung.");
+      payload.email = m; payload.consent = true; payload.consentText = $("consentText").textContent;
+    }
+  }
+  $("introGo").disabled = true;
+  try {
+    await sendProfile(payload);
+    PROF.role = payload.role;
+    if (payload.email) PROF.mail = payload.email;
+    saveProf();
+    show(decide());
+  } catch (e) {
+    showIntroErr("Konnte nicht gespeichert werden: " + e.message);
+  } finally {
+    $("introGo").disabled = false;
+  }
+}
+function showIntroErr(msg) { $("introErr").textContent = msg; $("introErr").hidden = false; }
+$("introGo").addEventListener("click", () => submitIntro(true));
+$("skipMail").addEventListener("click", () => submitIntro(false));
+
+/* ── Warten ───────────────────────────────────────────────────────── */
+function paintReady() {
+  const role = (ROLES.find(r => r[0] === PROF.role) || [])[1] || "";
+  $("readyState").textContent = "Du bist dabei" + (role ? " · " + role : "");
+  $("readyH").textContent = S && S.phase === "role"
+    ? "Vorne läuft gerade das Bild des Raums" : "Gleich geht es los";
+  $("readyEdit").innerHTML = PROF.mail
+    ? '<p class="small">Report geht an ' + PROF.mail + '.</p>'
+    : '<p class="small">Deine Adresse fragen wir am Ende noch einmal, dann bekommst du den Report.</p>';
+}
+
+/* ── Frage ────────────────────────────────────────────────────────── */
+function paintQ() {
+  const p = S.pillar, dims = PILLAR_DIMS(p);
+  /* Standardmaessig die erste noch offene Frage des Blocks. Nur wenn qi
+     leer ist oder auf einen anderen Block zeigt: sonst wuerde ein
+     bewusstes Zurueckspringen auf eine beantwortete Frage sofort wieder
+     nach vorne korrigiert. */
+  if (qi === null || Math.floor(qi / 3) !== p) {
+    const open = dims.find(i => ANS[i] === undefined);
+    qi = open === undefined ? dims[0] : open;
+  }
+  const k = qi - p * 3;
+  $("qPillar").textContent = "Block " + (p + 1) + " von 4 · " + PILLARS[p].n;
+  $("qPillar").style.color = PILLARS[p].c;
+  $("qDots").innerHTML = dims.map((i, n) =>
+    '<b class="' + (n === k ? "on" : (ANS[i] !== undefined ? "done" : "")) + '"></b>').join("") +
+    '<span>Frage ' + (k + 1) + ' von 3</span>';
+  $("qText").textContent = DIMS[qi].q;
+  const h = DIMS[qi].h;
+  $("qHint").hidden = !h;
+  if (h) $("qHint").textContent = h;
+  document.querySelectorAll("#qOpts .opt").forEach(b =>
+    b.classList.toggle("sel", ANS[qi] === b.dataset.v));
+  /* Zurueck nur innerhalb des Blocks und nur, solange er offen ist. */
+  const prev = dims.filter(i => i < qi && ANS[i] !== undefined);
+  $("qBack").hidden = !prev.length;
+}
+
+$("qOpts").addEventListener("click", e => {
+  const b = e.target.closest(".opt");
+  if (!b || view !== "vQ" || qi === null) return;
+  const p = Math.floor(qi / 3);
+  if (lockedPillars[p]) { show("vHold"); return; }
+  ANS[qi] = b.dataset.v;
+  saveAns();
+  enqueue(qi, b.dataset.v);
+  document.querySelectorAll("#qOpts .opt").forEach(x => x.classList.remove("sel"));
+  b.classList.add("sel");
+  /* Kurz stehen lassen, damit die Auswahl sichtbar quittiert wird. */
+  setTimeout(() => {
+    const answered = PILLAR_DIMS(p).filter(i => ANS[i] !== undefined).length;
+    if (answered >= 3) { lockedPillars[p] = true; qi = null; show("vHold"); }
+    else { qi = null; show("vQ"); }
+  }, 260);
+});
+
+$("qBack").addEventListener("click", () => {
+  const p = Math.floor(qi / 3);
+  const prev = PILLAR_DIMS(p).filter(i => i < qi);
+  if (!prev.length || lockedPillars[p]) return;
+  qi = prev[prev.length - 1];
+  paintQ();
+});
+
+/* ── Block fertig ─────────────────────────────────────────────────── */
+function paintHold() {
+  const p = S.pillar;
+  const own = PILLAR_DIMS(p).map(i => ANS[i]).filter(v => v !== undefined && v !== "na")
+    .map(v => levelToScore(Number(v)));
+  const na = PILLAR_DIMS(p).filter(i => ANS[i] === "na").length;
+  $("holdH").textContent = "Danke, das war Block " + (p + 1);
+  $("holdFacts").innerHTML =
+    '<div><b>Dein Wert</b><span>' + (own.length
+      ? de1(own.reduce((a, b) => a + b, 0) / own.length) + " von 5 in diesem Block"
+      : "kein Wert, du hast alles als unklar markiert") + '</span></div>' +
+    (na ? '<div><b>Unklar</b><span>' + na + ' mal. Das zählt nicht in den Durchschnitt, ' +
+          'ist aber selbst ein Befund.</span></div>' : '') +
+    '<div><b>Weiter</b><span>' + (p < 3 ? "Noch " + (3 - p) + " Block" + (p < 2 ? "s" : "") +
+      ", dann kommt dein Gesamtbild." : "Das war der letzte Block.") + '</span></div>';
+}
+
+/* ── Ergebnis ─────────────────────────────────────────────────────── */
+function ownScores() {
+  return DIMS.map((_, i) => {
+    const v = ANS[i];
+    if (v === undefined || v === "na") return null;
+    return levelToScore(Number(v));
+  });
+}
+
+function paintEnd() {
+  const own = ownScores();
+  const vals = own.filter(v => v !== null);
+  const avg = vals.length ? vals.reduce((a, b) => a + b, 0) / vals.length : null;
+  $("endScore").textContent = de1(avg);
+  $("endBand").textContent = avg === null ? "" : band(avg);
+  const room = S && S.overall !== null && S.overall !== undefined ? S.overall : null;
+  $("endBase").textContent =
+    (vals.length ? "Aus " + vals.length + " von 12 Aussagen." : "Noch keine bewertbare Antwort.") +
+    (room !== null ? " Der Raum liegt bei " + de1(room) + "." : "");
+
+  drawRadar(own, (S && S.avgs) || []);
+  paintGaps(own, (S && S.avgs) || []);
+
+  const done = !!PROF.mail;
+  $("endMail").hidden = done;
+  $("endThanks").hidden = !done;
+  if (done) {
+    $("thanksH").textContent = "Erledigt";
+    $("thanksP").innerHTML = REPORT_LINE.replace("{mail}", PROF.mail) +
+      ' Wenn du in der Zwischenzeit tiefer einsteigen willst: ' +
+      '<a href="' + FULL_CHECK + '" style="color:var(--mint)">die ausführliche Version</a>.';
+  }
+}
+
+function paintGaps(own, room) {
+  const rows = DIMS.map((_, i) => {
+    if (own[i] === null || room[i] === null || room[i] === undefined) return null;
+    return { i: i, d: own[i] - room[i] };
+  }).filter(Boolean).sort((a, b) => Math.abs(b.d) - Math.abs(a.d)).slice(0, 3);
+  if (!rows.length) {
+    $("endGaps").innerHTML = '<p class="small">Noch kein Vergleich möglich.</p>';
+    return;
+  }
+  $("endGaps").innerHTML = rows.map(r =>
+    '<div class="gap"><span>' + DIMNAMES[r.i] + '</span><s class="' + (r.d > 0 ? "up" : "down") + '">' +
+    (r.d > 0 ? "+" : "") + de1(r.d) + '</s></div>').join("");
+}
+
+/* Gleiche Darstellung wie auf der Leinwand, zusaetzlich das eigene
+   Profil. Achsentexte passen auf einem Handy nicht, deshalb stehen die
+   vier Saeulennamen in den Ecken: jede Saeule belegt genau ein Viertel
+   des Kreises. */
+function drawRadar(own, room) {
+  const svg = $("radar"), NS = "http://www.w3.org/2000/svg";
+  const cx = 170, cy = 150, R = 95, N = 12;
+  svg.innerHTML = "";
+  const add = (tag, at) => {
+    const e = document.createElementNS(NS, tag);
+    for (const k in at) e.setAttribute(k, at[k]);
+    svg.appendChild(e); return e;
+  };
+  /* Innenradius, weil "nein" auf der Skala eine Null ist: ohne ihn faellt
+     das Profil bei jeder Nein-Antwort in den Mittelpunkt. */
+  const R0 = R * 0.14;
+  const pt = (i, v) => {
+    const a = i * 2 * Math.PI / N - Math.PI / 2;
+    const r = R0 + Math.max(0, Math.min(5, v)) / 5 * (R - R0);
+    return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
+  };
+  for (let g = 0; g <= 5; g++) {
+    const p = [];
+    for (let i = 0; i < N; i++) p.push(pt(i, g).join(","));
+    add("polygon", { points: p.join(" "), fill: "none",
+      stroke: "rgba(255,255,255," + (g === 5 ? .28 : .1) + ")", "stroke-width": 1 });
+  }
+  for (let i = 0; i < N; i++) {
+    const e = pt(i, 5);
+    add("line", { x1: cx, y1: cy, x2: e[0], y2: e[1], stroke: "rgba(255,255,255,.09)", "stroke-width": 1 });
+  }
+  /* Der Raum als gestrichelte Linie, das eigene Profil gefuellt darueber.
+     Dimensionen ohne Wert werden uebersprungen, nicht als Null gezeigt. */
+  const poly = (vals, at) => {
+    const p = [];
+    vals.forEach((v, i) => { if (v !== null && v !== undefined) p.push(pt(i, v).join(",")); });
+    if (p.length >= 3) add("polygon", Object.assign({ points: p.join(" ") }, at));
+    return p;
+  };
+  poly(room, { fill: "none", stroke: "#C6D3DE", "stroke-width": 2, "stroke-dasharray": "5 4",
+    "stroke-linejoin": "round" });
+  poly(own, { fill: "rgba(82,208,176,.22)", stroke: "#52D0B0", "stroke-width": 2.5,
+    "stroke-linejoin": "round" });
+  own.forEach((v, i) => {
+    if (v === null || v === undefined) return;
+    const c = pt(i, v);
+    add("circle", { cx: c[0], cy: c[1], r: 3.4, fill: PILLARS[Math.floor(i / 3)].c,
+      stroke: "#52D0B0", "stroke-width": 1.4 });
+  });
+  /* Jede Saeule belegt ein Viertel: 0 oben rechts, 1 unten rechts,
+     2 unten links, 3 oben links. */
+  const corners = [
+    { p: 0, x: 334, y: 16,  a: "end" },
+    { p: 1, x: 334, y: 268, a: "end" },
+    { p: 2, x: 6,   y: 268, a: "start" },
+    { p: 3, x: 6,   y: 16,  a: "start" }
+  ];
+  corners.forEach(c => {
+    const parts = PILLARS[c.p].n.split(" & ");
+    const lines = parts.length === 2 ? [parts[0] + " &", parts[1]] : [PILLARS[c.p].n];
+    const t = add("text", { x: c.x, y: c.y, fill: PILLARS[c.p].c, "font-size": 11.5,
+      "font-weight": 800, "text-anchor": c.a });
+    lines.forEach((s, k) => {
+      const ts = document.createElementNS(NS, "tspan");
+      ts.setAttribute("x", c.x); if (k) ts.setAttribute("dy", 14);
+      ts.textContent = s; t.appendChild(ts);
+    });
+  });
+}
+
+/* ── Adresse am Ende ──────────────────────────────────────────────── */
+$("endGo").addEventListener("click", async () => {
+  const m = $("email2").value.trim();
+  $("endErr").hidden = true;
+  if (!validMail(m)) { $("endErr").textContent = "Bitte gib eine gültige E-Mail-Adresse ein."; $("endErr").hidden = false; return; }
+  if (!$("consent2").checked) { $("endErr").textContent = "Bitte bestätige die Einwilligung."; $("endErr").hidden = false; return; }
+  $("endGo").disabled = true;
+  try {
+    await sendProfile({ email: m, consent: true, consentText: $("consentText2").textContent });
+    PROF.mail = m; saveProf();
+    paintEnd();
+  } catch (e) {
+    $("endErr").textContent = "Konnte nicht gespeichert werden: " + e.message;
+    $("endErr").hidden = false;
+  } finally {
+    $("endGo").disabled = false;
+  }
+});
+
+/* ── Abruf-Schleife ───────────────────────────────────────────────── */
+async function tick() {
   try {
     const r = await fetch(WORKER + "/state?_=" + Date.now());
     if (!r.ok) throw new Error("HTTP " + r.status);
-    const s = await r.json();
-    phase = s.phase;
+    S = await r.json();
     if (readQ().length) flush();
-
-    if (s.phase === "waiting") { current = null; show("wait"); }
-    else if (s.phase === "done") { current = null; renderEnd(); }
-    else if (s.currentQuestion !== current) { current = s.currentQuestion; renderQuestion(current); }
-    if ($("status").className !== "") setStatus(t("saved"));
+    const want = decide();
+    /* Waehrend jemand tippt, nicht unter den Fingern wegschalten. */
+    const typing = document.activeElement && document.activeElement.tagName === "INPUT";
+    if (want !== view && !(typing && want === "vIntro")) show(want);
+    else if (view === "vEnd") paintEnd();
+    else if (view === "vQ") paintQ();
+    else if (view === "vReady") paintReady();
+    /* Bei erfolgreichem Abruf die Fehlermeldung wieder wegnehmen. Steht
+       noch etwas in der Warteschlange, behaelt flush() das Sagen. */
+    if (!readQ().length) setStatus("");
   } catch (e) {
-    /* Der Bildschirm bleibt stehen. Wer schon geantwortet hat, verliert
-       nichts; die Warteschlange versucht es beim nächsten Takt erneut. */
-    setStatus(t("offline"), true);
+    setStatus("keine Verbindung, wird erneut versucht", true);
   }
 }
 
-/* ── Abschluss ────────────────────────────────────────────────────── */
-function renderEnd() {
-  const vals = Object.keys(ANS).filter(function (k) { return ANS[k] !== "na"; })
-                     .map(function (k) { return (Number(ANS[k]) - 1) / 3 * 5; });
-  const avg = vals.length ? vals.reduce(function (a, b) { return a + b; }, 0) / vals.length : null;
-  $("endScore").textContent = avg === null ? "–"
-    : (LANG === "de" ? avg.toFixed(1).replace(".", ",") : avg.toFixed(1));
-  show("end");
-}
-
-$("send").addEventListener("click", async function () {
-  const mail = $("email");
-  if (!mail.value.trim() || !mail.checkValidity()) { alert(t("errMail")); mail.focus(); return; }
-  if (!$("consent").checked) { alert(t("errCons")); return; }
-  this.disabled = true;
-  try {
-    const r = await fetch(WORKER + "/finish", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        participant: PID, email: mail.value.trim(), consent: true,
-        name: $("pname").value.trim(), company: $("company").value.trim(),
-        consentText: $("consentText").textContent.trim(), lang: LANG
-      })
-    });
-    if (!r.ok) throw new Error("HTTP " + r.status);
-    $("endForm").style.display = "none";
-    $("endDone").style.display = "";
-  } catch (e) {
-    this.disabled = false;
-    setStatus(t("offline"), true);
-  }
-});
-
-/* ── Start ────────────────────────────────────────────────────────── */
-["waitH","waitP","holdDone","holdP","endLabel","endP","send","endDone"].forEach(function (k) {
-  const el = $(k); if (el) el.textContent = t(k === "send" ? "send" : k);
-});
-$("consentText").innerHTML = t("consent");
-$("disclaimer").textContent = t("disc");
-document.documentElement.lang = LANG;
-show("wait");
-poll();
-setInterval(poll, POLL_MS);
+show("vIntro");
+tick();
+setInterval(tick, POLL_MS);
+/* Nach dem Sperren des Handys sofort nachziehen, statt bis zum naechsten
+   Intervall zu warten. */
+document.addEventListener("visibilitychange", () => { if (!document.hidden) tick(); });
 </script>
 </body>
 </html>
