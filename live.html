@@ -35,18 +35,26 @@ body{
 }
 body::before{content:"";position:fixed;inset:0;pointer-events:none;
   background:radial-gradient(120% 80% at 15% -10%,rgba(78,88,168,.4),transparent 60%)}
-body.scroll{overflow:auto}
 
-header{flex:0 0 auto;padding:18px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+header{flex:0 0 auto;padding:16px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;
        position:relative;z-index:2}
-.logo{height:26px;width:auto;display:block}
-.brand{font-size:.72rem;font-weight:800;letter-spacing:.34em;color:var(--mint)}
-.counter{font-size:.72rem;font-weight:700;color:var(--muted);letter-spacing:.06em;text-align:right}
+.logo{height:24px;width:auto;display:block;flex:0 0 auto;max-width:52%}
+.brand{font-size:.7rem;font-weight:800;letter-spacing:.3em;color:var(--mint);flex:0 0 auto}
+/* Der Zaehler muss schrumpfen duerfen, sonst schiebt er sich auf kleinen
+   Geraeten unter das Logo. */
+.counter{font-size:.7rem;font-weight:700;color:var(--muted);letter-spacing:.04em;
+         text-align:right;flex:0 1 auto;min-width:0}
 
-main{flex:1 1 auto;display:flex;flex-direction:column;justify-content:center;gap:18px;
-     position:relative;z-index:1;min-height:0}
+/* Der Inhalt scrollt in sich, nicht die Seite. Vorher war main ein
+   schrumpfbares Flex-Element: passte der Inhalt nicht, wurde die Box
+   kleiner als ihr Inhalt und der Text lief ueber die Fusszeile. */
+main{flex:1 1 auto;display:flex;flex-direction:column;overflow-y:auto;
+     -webkit-overflow-scrolling:touch;position:relative;z-index:1;min-height:0}
 section{display:none;flex-direction:column;gap:18px}
-section.on{display:flex}
+/* Automatische Aussenabstaende zentrieren, wenn Platz ist, und schneiden
+   nichts ab, wenn keiner ist. Mit justify-content:center waere der obere
+   Rand beim Ueberlaufen nicht mehr erreichbar. */
+section.on{display:flex;margin:auto 0;padding:2px 0}
 h1{font-size:1.5rem;font-weight:800;line-height:1.24}
 h2{font-size:1.02rem;font-weight:700;line-height:1.35}
 p.lead{font-size:.92rem;line-height:1.5;color:var(--muted)}
@@ -74,17 +82,41 @@ p.lead{font-size:.92rem;line-height:1.5;color:var(--muted)}
   transition:background .15s,border-color .15s,transform .08s;
 }
 .opt:active{transform:scale(.985)}
-.opt .k{flex:0 0 auto;width:30px;height:30px;border-radius:7px;
-  display:flex;align-items:center;justify-content:center;font-size:.9rem;font-weight:800;color:#fff}
+.opt .k{flex:0 0 auto;width:26px;height:26px;border-radius:7px;
+  display:flex;align-items:center;justify-content:center;font-size:.85rem;font-weight:800;color:#fff;
+  border:1.5px solid transparent}
+.opt.sel .k::after{content:"✓";line-height:1}
 .opt .lbl small{display:block;font-size:.74rem;font-weight:500;color:var(--muted);margin-top:2px}
 .opt[data-v="1"] .k{background:var(--l1)} .opt[data-v="2"] .k{background:var(--l2)}
 .opt[data-v="3"] .k{background:var(--l3)} .opt[data-v="4"] .k{background:var(--l4)}
-.opt[data-v="na"] .k{background:var(--na)}
+.opt[data-v="na"] .k{background:repeating-linear-gradient(135deg,var(--na),var(--na) 3px,#4B5668 3px,#4B5668 6px)}
 .opt.sel{background:rgba(82,208,176,.16);border-color:var(--mint)}
 .opt.sel .lbl{color:#fff}
-.opt.plain{font-weight:600}
-.opt.plain.sel .k{background:var(--mint);color:#04342C}
-.opt .k.tick{background:rgba(255,255,255,.12)}
+.opt.plain .k{background:transparent;border-color:rgba(255,255,255,.28)}
+.opt.plain.sel .k{background:var(--mint);border-color:var(--mint);color:#04342C}
+
+/* Niedrige Bildschirme, also iPhone SE und alles darunter: die fuenf
+   Antwortknoepfe muessen ohne Scrollen sichtbar sein, sonst uebersieht
+   jemand "unklar" und antwortet lieber falsch. Deshalb kompakter statt
+   scrollbar. */
+@media(max-height:700px){
+  main{gap:12px}
+  section.on{gap:13px}
+  h1{font-size:1.34rem}
+  .q{font-size:1.24rem}
+  .opt{padding:11px 15px;gap:11px}
+  .opt .k{width:22px;height:22px;border-radius:6px;font-size:.75rem}
+  .opt .lbl small{font-size:.7rem;margin-top:1px}
+  .hint{font-size:.78rem}
+  .facts div{font-size:.84rem}
+  header{padding:12px 0 6px}
+  .logo{height:21px}
+}
+@media(max-height:600px){
+  .q{font-size:1.14rem}
+  .opt{padding:9px 14px}
+  .opt .lbl small{display:none}
+}
 
 .btn{display:block;width:100%;padding:15px 18px;border-radius:10px;border:0;
      background:var(--mint);color:#04342C;font-family:inherit;font-size:1rem;font-weight:800;cursor:pointer}
@@ -129,11 +161,13 @@ input[type=email]::placeholder{color:#6F8195}
 .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
       border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
 
-footer{flex:0 0 auto;padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:10px;
-       position:relative;z-index:2}
-.status{font-size:.7rem;color:var(--dim)}
+footer{flex:0 0 auto;padding-top:10px;display:flex;align-items:flex-end;justify-content:space-between;
+       gap:12px;position:relative;z-index:2}
+.status{font-size:.7rem;color:var(--dim);flex:0 0 auto;text-align:right}
 .status.err{color:#F0A9A3}
-.disc{font-size:.64rem;line-height:1.4;color:#5E7385;max-width:62%}
+.disc{font-size:.64rem;line-height:1.4;color:#5E7385;display:none}
+body.legal .disc{display:block}
+body.legal footer{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;margin-top:8px}
 </style>
 </head>
 <body>
@@ -146,30 +180,48 @@ footer{flex:0 0 auto;padding-top:10px;display:flex;align-items:center;justify-co
 
 <main>
 
-  <!-- 1. Start: Rolle, dann Adresse. Die Rolle kostet einen Tap, deshalb
-       steht sie zuerst; die Adresse ist überspringbar. -->
+  <!-- 0. Bis der erste Zustand da ist. Ohne diesen Zwischenschritt blitzt
+       beim Neuladen der Startbildschirm auf und es sieht aus, als waeren
+       die Antworten verloren. -->
+  <section id="vLoad" class="on">
+    <div class="wait"><span class="pulse"></span><span id="loadState">wird geladen</span></div>
+    <p class="lead" id="loadP">Einen Moment, wir holen den Stand der Session.</p>
+  </section>
+
+  <!-- 1. Rolle. Ein eigener Bildschirm, damit der Weiter-Knopf ohne
+       Scrollen erreichbar ist. -->
   <section id="vIntro">
     <div>
       <h1 id="introH">Gleich geht es los</h1>
-      <p class="lead" id="introP">Zwei kurze Angaben, dann warten wir gemeinsam auf die Bühne.</p>
+      <p class="lead" id="introP">Eine Angabe, dann bist du dabei.</p>
     </div>
     <div>
       <h2>Was beschreibt deine Rolle?</h2>
       <div class="opts" id="roleOpts" style="margin-top:10px"></div>
     </div>
-    <div id="mailBlock">
-      <h2>Wohin soll dein Report?</h2>
-      <div style="display:flex;flex-direction:column;gap:10px;margin-top:10px">
-        <input type="email" id="email" inputmode="email" autocomplete="email"
-               autocapitalize="off" spellcheck="false" placeholder="du@firma.de">
-        <label class="consent"><input type="checkbox" id="consent"><span id="consentText"></span></label>
-      </div>
-    </div>
     <div class="err" id="introErr" hidden></div>
+    <button class="btn" id="introGo" disabled>Weiter</button>
+  </section>
+
+  <!-- 2. Adresse, überspringbar. Wer überspringt, wird nur am Ende noch
+       einmal gefragt. -->
+  <section id="vMail">
     <div>
-      <button class="btn" id="introGo" disabled>Weiter</button>
+      <h1>Wohin soll dein Report?</h1>
+      <p class="lead">Dein Ergebnis mit dem Vergleich zum Raum und deinen Fokusfeldern.
+        Du kannst das auch überspringen.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <input type="email" id="email" inputmode="email" autocomplete="email"
+             autocapitalize="off" spellcheck="false" placeholder="du@firma.de">
+      <label class="consent"><input type="checkbox" id="consent"><span id="consentText"></span></label>
+    </div>
+    <div class="err" id="mailErr" hidden></div>
+    <div>
+      <button class="btn" id="mailGo">Weiter</button>
       <div style="text-align:center"><button class="linkbtn" id="skipMail">Ohne Adresse weiter</button></div>
     </div>
+    <p class="small" id="roleEcho"></p>
   </section>
 
   <!-- 2. Wartescreen. Sagt, was passiert, statt nur zu warten. -->
@@ -212,6 +264,7 @@ footer{flex:0 0 auto;padding-top:10px;display:flex;align-items:center;justify-co
       <div class="score"><b id="endScore">–</b><span>von 5</span></div>
       <div class="band" id="endBand"></div>
       <p class="small" id="endBase"></p>
+      <p class="small" id="endMailHint" hidden></p>
     </div>
     <div>
       <svg id="radar" viewBox="0 0 340 300" aria-label="Dein Profil im Vergleich zum Raum"></svg>
@@ -253,7 +306,11 @@ footer{flex:0 0 auto;padding-top:10px;display:flex;align-items:center;justify-co
    ═══════════════════════════════════════════════════════════════════ */
 const WORKER  = "https://broken-tree-2400.matthias-paratsch.workers.dev";
 const POLL_MS = 2000;
-const LOGO    = "https://ai-check.tektitconsulting.com/TEKTIT_Cons-Logo_color-white.png";
+/* Leer lassen heisst: die Bilder liegen neben dieser Datei. Genau so hat
+   es in der Vorfassung funktioniert. Nur setzen, wenn die Dateien
+   tatsaechlich auf einem eigenen Host liegen, mit Schraegstrich am Ende. */
+const ASSETS  = "";
+const LOGO    = ASSETS + "TEKTIT_Cons-Logo_color-white.png";
 const FULL_CHECK = "https://ai-check.tektitconsulting.com/";
 
 /* Reihenfolge muss der des Workers entsprechen. */
@@ -285,12 +342,16 @@ const PILLARS = [
   { n: "Regeln & Risiko",       c: "#52A5B0" },
   { n: "Menschen & Kultur",     c: "#52D0B0" }
 ];
+/* Ohne Ziffern. Die Stufen 1 bis 4 sind Antwortpositionen und keine
+   Punkte; auf der Leinwand stehen sie ebenfalls nicht mehr. Der Farbchip
+   verbindet die Antwort mit dem Balken im Ergebnis, die Bedeutung tragen
+   die Woerter. */
 const OPTS = [
-  { v: "1",  k: "1", l: "nein",      s: "gibt es bei uns nicht" },
-  { v: "2",  k: "2", l: "teilweise", s: "in einzelnen Bereichen" },
-  { v: "3",  k: "3", l: "meistens",  s: "fast überall, nicht verbindlich" },
-  { v: "4",  k: "4", l: "ja",        s: "überall und verbindlich" },
-  { v: "na", k: "?", l: "unklar",    s: "kann ich nicht beurteilen" }
+  { v: "1",  l: "nein",      s: "gibt es bei uns nicht" },
+  { v: "2",  l: "teilweise", s: "in einzelnen Bereichen" },
+  { v: "3",  l: "meistens",  s: "fast überall, nicht verbindlich" },
+  { v: "4",  l: "ja",        s: "überall und verbindlich" },
+  { v: "na", l: "unklar",    s: "kann ich nicht beurteilen" }
 ];
 const ROLES = [
   ["gf",      "Geschäftsführung / Vorstand"],
@@ -331,7 +392,10 @@ const saveAns  = () => localStorage.setItem(AKEY, JSON.stringify(ANS));
 const saveProf = () => localStorage.setItem(PKEY, JSON.stringify(PROF));
 
 let S = null;          /* letzter Zustand vom Worker */
-let view = "vIntro";
+let view = "vLoad";
+let recovered = false; /* eigener Stand schon vom Worker zurueckgeholt? */
+let forceView = null;  /* von Hand gewaehlter Bildschirm, etwa Rolle aendern */
+let failed = 0;
 let qi = null;         /* Index der angezeigten Frage innerhalb der Saeule */
 let lockedPillars = {};/* Saeulen, die der Worker als abgeschlossen meldet */
 
@@ -341,10 +405,10 @@ $("consentText").innerHTML = CONSENT;
 $("consentText2").innerHTML = CONSENT;
 $("roleOpts").innerHTML = ROLES.map(r =>
   '<button type="button" class="opt plain" data-r="' + r[0] + '">' +
-    '<span class="k tick">✓</span><span class="lbl">' + r[1] + '</span></button>').join("");
+    '<span class="k" aria-hidden="true"></span><span class="lbl">' + r[1] + '</span></button>').join("");
 $("qOpts").innerHTML = OPTS.map(o =>
-  '<button type="button" class="opt" data-v="' + o.v + '">' +
-    '<span class="k">' + o.k + '</span>' +
+  '<button type="button" class="opt" data-v="' + o.v + '" aria-label="' + o.l + ', ' + o.s + '">' +
+    '<span class="k" aria-hidden="true"></span>' +
     '<span class="lbl">' + o.l + '<small>' + o.s + '</small></span></button>').join("");
 
 /* ── Warteschlange fuer wackliges WLAN ───────────────────────────── */
@@ -412,14 +476,51 @@ async function sendProfile(payload) {
   return true;
 }
 
+/* ── Eigenen Stand zurueckholen ───────────────────────────────────
+   Der localStorage ist der schnelle Weg, aber nicht der verlaessliche:
+   ein Neuladen im falschen Moment, ein zweiter Tab oder ein geleerter
+   Speicher wuerden das Ergebnis verlieren. Deshalb fragt die Seite ihren
+   eigenen Stand einmal beim Worker nach und fuellt nur die Luecken. */
+async function recover() {
+  if (recovered) return;
+  try {
+    const r = await fetch(WORKER + "/mine?participant=" + encodeURIComponent(PID) + "&_=" + Date.now());
+    if (!r.ok) throw new Error("HTTP " + r.status);
+    const m = await r.json();
+    let changed = false;
+    const pending = readQ().map(x => x.dimIndex);
+    Object.keys(m.answers || {}).forEach(k => {
+      const i = Number(k);
+      /* Was noch in der Warteschlange liegt, ist neuer als der Server. */
+      if (ANS[i] === undefined && pending.indexOf(i) === -1) { ANS[i] = m.answers[k]; changed = true; }
+    });
+    if (changed) saveAns();
+    if (m.role && !PROF.role) { PROF.role = m.role; saveProf(); }
+    if (m.hasEmail && !PROF.hasMail) { PROF.hasMail = true; saveProf(); }
+    recovered = true;
+  } catch (e) {
+    /* Nicht schlimm, beim naechsten Abruf noch einmal. */
+  }
+}
+
+const mailGiven = () => !!(PROF.mail || PROF.hasMail);
+
 /* ── Ansicht bestimmen ────────────────────────────────────────────
    Der Worker haelt den Schritt, das Handy leitet daraus ab, was zu tun
    ist. Nur die Rolle blockiert den Einstieg, die Adresse nie. */
 function decide() {
-  if (!S) return "vIntro";
+  if (!S) return "vLoad";
   const ph = S.phase;
+  /* Ein von Hand gewaehlter Bildschirm gilt, bis der Mensch etwas tut.
+     Sonst zieht der naechste Abruf ihn sofort wieder weg. */
+  if (forceView) return forceView;
   if (!PROF.role) return "vIntro";
-  if (ph === "waiting" || ph === "role") return "vReady";
+  const idle = ph === "waiting" || ph === "role";
+  /* Nach der Adresse wird nur gefragt, solange vorne noch nichts laeuft.
+     Wer mitten in der Session dazukommt, soll zur Frage und nicht zu
+     einem Formular. */
+  if (idle && !mailGiven() && !PROF.mailAsked) return "vMail";
+  if (idle) return "vReady";
   if (ph === "radar" || ph === "done") return "vEnd";
   const p = S.pillar;
   if (p === null || p === undefined) return "vReady";
@@ -431,22 +532,25 @@ function decide() {
 
 function show(v) {
   view = v;
-  ["vIntro", "vReady", "vQ", "vHold", "vEnd"].forEach(id =>
+  ["vLoad", "vIntro", "vMail", "vReady", "vQ", "vHold", "vEnd"].forEach(id =>
     $(id).classList.toggle("on", id === v));
-  document.body.classList.toggle("scroll", v === "vEnd" || v === "vIntro");
+  /* Der Rechtshinweis steht nur da, wo er hingehoert. */
+  document.body.classList.toggle("legal", v === "vMail" || v === "vEnd");
   if (v === "vQ") paintQ();
   if (v === "vHold") paintHold();
   if (v === "vEnd") paintEnd();
   if (v === "vReady") paintReady();
   if (v === "vIntro") paintIntro();
+  if (v === "vMail") paintMail();
   paintCounter();
 }
 
 function paintCounter() {
-  if (!S || view === "vIntro") { $("counter").textContent = ""; return; }
+  if (!S || view === "vIntro" || view === "vMail" || view === "vLoad") { $("counter").textContent = ""; return; }
   if (view === "vEnd") { $("counter").textContent = "Ergebnis"; return; }
-  const done = Object.keys(ANS).length;
-  $("counter").textContent = done + " von 12 beantwortet";
+  /* Bei null Antworten sagt der Zaehler nichts und kostet nur Platz. */
+  const n = Object.keys(ANS).length;
+  $("counter").textContent = n ? n + " von 12" : "";
 }
 
 /* ── Start ────────────────────────────────────────────────────────── */
@@ -455,12 +559,24 @@ function paintIntro() {
   $("introH").textContent = running ? "Willkommen, es läuft schon" : "Gleich geht es los";
   $("introP").textContent = running
     ? "Sag kurz, welche Rolle du hast, dann bist du bei der laufenden Frage dabei."
-    : "Zwei kurze Angaben, dann warten wir gemeinsam auf die Bühne.";
+    : "Eine Angabe, dann bist du dabei.";
   $("introGo").textContent = running ? "Weiter zur Frage" : "Weiter";
-  const mailDone = !!PROF.mail;
-  $("mailBlock").hidden = mailDone;
-  $("skipMail").hidden = mailDone;
+  /* Eine schon gegebene Rolle wieder markieren, sonst sieht es beim
+     Zurueckkommen aus wie eine leere Seite. */
+  if (PROF.role) {
+    document.querySelectorAll("#roleOpts .opt").forEach(b =>
+      b.classList.toggle("sel", b.dataset.r === PROF.role));
+  }
   $("introGo").disabled = !document.querySelector("#roleOpts .opt.sel");
+}
+
+function paintMail() {
+  const role = (ROLES.find(r => r[0] === PROF.role) || [])[1];
+  $("roleEcho").innerHTML = role
+    ? 'Rolle: ' + role + ' · <button type="button" class="linkbtn" id="changeRole">ändern</button>'
+    : "";
+  const cr = $("changeRole");
+  if (cr) cr.addEventListener("click", () => { forceView = "vIntro"; show("vIntro"); });
 }
 
 $("roleOpts").addEventListener("click", e => {
@@ -473,36 +589,56 @@ $("roleOpts").addEventListener("click", e => {
 
 function validMail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
 
-async function submitIntro(withMail) {
+const showErr = (id, msg) => { $(id).textContent = msg; $(id).hidden = false; };
+
+/* Schritt 1: nur die Rolle. Sie geht sofort raus, damit sich das
+   Rollenbild auf der Leinwand schon fuellt, waehrend die Leute noch
+   ihre Adresse eintragen. */
+$("introGo").addEventListener("click", async () => {
   const sel = document.querySelector("#roleOpts .opt.sel");
   if (!sel) return;
-  const payload = { role: sel.dataset.r };
   $("introErr").hidden = true;
-
-  if (withMail && !PROF.mail) {
-    const m = $("email").value.trim();
-    if (m) {
-      if (!validMail(m)) return showIntroErr("Bitte gib eine gültige E-Mail-Adresse ein.");
-      if (!$("consent").checked) return showIntroErr("Bitte bestätige die Einwilligung.");
-      payload.email = m; payload.consent = true; payload.consentText = $("consentText").textContent;
-    }
-  }
   $("introGo").disabled = true;
   try {
-    await sendProfile(payload);
-    PROF.role = payload.role;
-    if (payload.email) PROF.mail = payload.email;
-    saveProf();
+    await sendProfile({ role: sel.dataset.r });
+    PROF.role = sel.dataset.r; saveProf();
+    forceView = null;
     show(decide());
   } catch (e) {
-    showIntroErr("Konnte nicht gespeichert werden: " + e.message);
+    showErr("introErr", "Konnte nicht gespeichert werden: " + e.message);
   } finally {
     $("introGo").disabled = false;
   }
+});
+
+/* Schritt 2: die Adresse, freiwillig. */
+async function submitMail(withMail) {
+  $("mailErr").hidden = true;
+  const payload = {};
+  if (withMail) {
+    const m = $("email").value.trim();
+    if (!m) return showErr("mailErr", "Trag eine Adresse ein oder überspring den Schritt.");
+    if (!validMail(m)) return showErr("mailErr", "Bitte gib eine gültige E-Mail-Adresse ein.");
+    if (!$("consent").checked) return showErr("mailErr", "Bitte bestätige die Einwilligung.");
+    payload.email = m; payload.consent = true; payload.consentText = $("consentText").textContent;
+  }
+  $("mailGo").disabled = true;
+  try {
+    if (payload.email) {
+      await sendProfile(payload);
+      PROF.mail = payload.email; PROF.hasMail = true;
+    }
+    PROF.mailAsked = true; saveProf();
+    forceView = null;
+    show(decide());
+  } catch (e) {
+    showErr("mailErr", "Konnte nicht gespeichert werden: " + e.message);
+  } finally {
+    $("mailGo").disabled = false;
+  }
 }
-function showIntroErr(msg) { $("introErr").textContent = msg; $("introErr").hidden = false; }
-$("introGo").addEventListener("click", () => submitIntro(true));
-$("skipMail").addEventListener("click", () => submitIntro(false));
+$("mailGo").addEventListener("click", () => submitMail(true));
+$("skipMail").addEventListener("click", () => submitMail(false));
 
 /* ── Warten ───────────────────────────────────────────────────────── */
 function paintReady() {
@@ -510,8 +646,8 @@ function paintReady() {
   $("readyState").textContent = "Du bist dabei" + (role ? " · " + role : "");
   $("readyH").textContent = S && S.phase === "role"
     ? "Vorne läuft gerade das Bild des Raums" : "Gleich geht es los";
-  $("readyEdit").innerHTML = PROF.mail
-    ? '<p class="small">Report geht an ' + PROF.mail + '.</p>'
+  $("readyEdit").innerHTML = mailGiven()
+    ? '<p class="small">Report geht an ' + (PROF.mail || "deine Adresse") + '.</p>'
     : '<p class="small">Deine Adresse fragen wir am Ende noch einmal, dann bekommst du den Report.</p>';
 }
 
@@ -606,15 +742,26 @@ function paintEnd() {
     (vals.length ? "Aus " + vals.length + " von 12 Aussagen." : "Noch keine bewertbare Antwort.") +
     (room !== null ? " Der Raum liegt bei " + de1(room) + "." : "");
 
-  drawRadar(own, (S && S.avgs) || []);
-  paintGaps(own, (S && S.avgs) || []);
+  /* Nur neu zeichnen, wenn sich etwas geaendert hat: sonst baut der
+     Abruf alle zwei Sekunden dasselbe SVG neu auf. */
+  const sig = JSON.stringify([own, (S && S.avgs) || []]);
+  if (sig !== paintEnd.sig) {
+    paintEnd.sig = sig;
+    drawRadar(own, (S && S.avgs) || []);
+    paintGaps(own, (S && S.avgs) || []);
+  }
 
-  const done = !!PROF.mail;
+  const done = mailGiven();
   $("endMail").hidden = done;
   $("endThanks").hidden = !done;
+  /* Die Adressabfrage steht bewusst unter dem Vergleich, damit sie sich
+     nicht wie eine Schranke vor das Ergebnis stellt. Dann braucht sie
+     aber oben einen Hinweis, sonst findet sie niemand. */
+  $("endMailHint").hidden = done;
+  if (!done) $("endMailHint").textContent = "Den Report per E-Mail gibt es weiter unten auf dieser Seite.";
   if (done) {
     $("thanksH").textContent = "Erledigt";
-    $("thanksP").innerHTML = REPORT_LINE.replace("{mail}", PROF.mail) +
+    $("thanksP").innerHTML = REPORT_LINE.replace("{mail}", PROF.mail || "deine Adresse") +
       ' Wenn du in der Zwischenzeit tiefer einsteigen willst: ' +
       '<a href="' + FULL_CHECK + '" style="color:var(--mint)">die ausführliche Version</a>.';
   }
@@ -713,7 +860,7 @@ $("endGo").addEventListener("click", async () => {
   $("endGo").disabled = true;
   try {
     await sendProfile({ email: m, consent: true, consentText: $("consentText2").textContent });
-    PROF.mail = m; saveProf();
+    PROF.mail = m; PROF.hasMail = true; saveProf();
     paintEnd();
   } catch (e) {
     $("endErr").textContent = "Konnte nicht gespeichert werden: " + e.message;
@@ -729,23 +876,32 @@ async function tick() {
     const r = await fetch(WORKER + "/state?_=" + Date.now());
     if (!r.ok) throw new Error("HTTP " + r.status);
     S = await r.json();
+    failed = 0;
+    if (!recovered) await recover();
     if (readQ().length) flush();
     const want = decide();
     /* Waehrend jemand tippt, nicht unter den Fingern wegschalten. */
     const typing = document.activeElement && document.activeElement.tagName === "INPUT";
-    if (want !== view && !(typing && want === "vIntro")) show(want);
+    if (want !== view && !(typing && (want === "vIntro" || want === "vMail"))) show(want);
     else if (view === "vEnd") paintEnd();
     else if (view === "vQ") paintQ();
     else if (view === "vReady") paintReady();
+    else if (view === "vMail") paintMail();
     /* Bei erfolgreichem Abruf die Fehlermeldung wieder wegnehmen. Steht
        noch etwas in der Warteschlange, behaelt flush() das Sagen. */
     if (!readQ().length) setStatus("");
   } catch (e) {
+    failed++;
     setStatus("keine Verbindung, wird erneut versucht", true);
+    /* Nicht endlos "wird geladen" zeigen, wenn nichts kommt. */
+    if (!S && failed >= 3 && view === "vLoad") {
+      $("loadState").textContent = "keine Verbindung";
+      $("loadP").textContent = "Prüf kurz das WLAN. Die Seite versucht es weiter, du musst nichts tun.";
+    }
   }
 }
 
-show("vIntro");
+show("vLoad");
 tick();
 setInterval(tick, POLL_MS);
 /* Nach dem Sperren des Handys sofort nachziehen, statt bis zum naechsten
