@@ -397,7 +397,7 @@ let recovered = false; /* eigener Stand schon vom Worker zurueckgeholt? */
 let forceView = null;  /* von Hand gewaehlter Bildschirm, etwa Rolle aendern */
 let failed = 0;
 let qi = null;         /* Index der angezeigten Frage innerhalb der Saeule */
-let lockedPillars = {};/* Saeulen, die der Worker als abgeschlossen meldet */
+let lockedPillars = {}; /* Saeulen, die der Worker als abgeschlossen meldet */
 
 /* ── Aufbau ───────────────────────────────────────────────────────── */
 $("logo").src = LOGO;
@@ -504,6 +504,29 @@ async function recover() {
 }
 
 const mailGiven = () => !!(PROF.mail || PROF.hasMail);
+
+/* ── Neuer Durchgang erkannt ──────────────────────────────────────
+   Der Worker gibt eine Laufkennung mit, die sich beim Zuruecksetzen
+   aendert. Ohne diese Pruefung haelt ein Handy nach dem Trockenlauf seine
+   alten Antworten im Browserspeicher fest, landet sofort auf "Block
+   abgeschlossen" und kann nichts mehr eingeben. */
+function checkRun(runId) {
+  if (PROF.runId === undefined) { PROF.runId = runId || null; saveProf(); return false; }
+  if ((PROF.runId || null) === (runId || null)) return false;
+
+  Object.keys(ANS).forEach(k => { delete ANS[k]; });
+  saveAns();
+  writeQ([]);
+  /* Rolle und Adresse sind beim Worker ebenfalls weg, also hier auch. */
+  ["role", "mail", "hasMail", "mailAsked"].forEach(k => { delete PROF[k]; });
+  PROF.runId = runId || null;
+  saveProf();
+  recovered = true;   /* nichts zurueckzuholen, die Tafel ist leer */
+  lockedPillars = {};
+  qi = null;
+  forceView = null;
+  return true;
+}
 
 /* ── Ansicht bestimmen ────────────────────────────────────────────
    Der Worker haelt den Schritt, das Handy leitet daraus ab, was zu tun
@@ -877,6 +900,10 @@ async function tick() {
     if (!r.ok) throw new Error("HTTP " + r.status);
     S = await r.json();
     failed = 0;
+    /* Zuerst pruefen, ob ein neuer Durchgang laeuft. Sonst wuerde der
+       alte Stand gleich wieder eingelesen. */
+    const fresh = checkRun(S.runId);
+    if (fresh) setStatus("neuer Durchgang, du fängst von vorn an");
     if (!recovered) await recover();
     if (readQ().length) flush();
     const want = decide();
