@@ -25,18 +25,19 @@
   --ink:#F2F6FA; --muted:#93A7BA; --dim:#7C8FA3;
 }
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
 html,body{height:100%}
 body{
   background:var(--dark);color:var(--ink);
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Helvetica,Arial,sans-serif;
   display:flex;flex-direction:column;
-  padding:env(safe-area-inset-top) 20px calc(env(safe-area-inset-bottom) + 16px);
+  padding:env(safe-area-inset-top) 0 calc(env(safe-area-inset-bottom) + 16px);
   overflow:hidden;font-variant-numeric:tabular-nums;
 }
 body::before{content:"";position:fixed;inset:0;pointer-events:none;
   background:radial-gradient(120% 80% at 15% -10%,rgba(78,88,168,.4),transparent 60%)}
 
-header{flex:0 0 auto;padding:16px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;
+header{flex:0 0 auto;padding:16px 20px 8px;display:flex;align-items:center;justify-content:space-between;gap:10px;
        position:relative;z-index:2}
 .logo{height:24px;width:auto;display:block;flex:0 0 auto;max-width:52%}
 .brand{font-size:.7rem;font-weight:800;letter-spacing:.3em;color:var(--mint);flex:0 0 auto}
@@ -50,11 +51,11 @@ header{flex:0 0 auto;padding:16px 0 8px;display:flex;align-items:center;justify-
    kleiner als ihr Inhalt und der Text lief ueber die Fusszeile. */
 main{flex:1 1 auto;display:flex;flex-direction:column;overflow-y:auto;
      -webkit-overflow-scrolling:touch;position:relative;z-index:1;min-height:0}
-section{display:none;flex-direction:column;gap:18px}
+section{display:none;flex-direction:column;gap:18px;padding:0 20px}
 /* Automatische Aussenabstaende zentrieren, wenn Platz ist, und schneiden
    nichts ab, wenn keiner ist. Mit justify-content:center waere der obere
    Rand beim Ueberlaufen nicht mehr erreichbar. */
-section.on{display:flex;margin:auto 0;padding:2px 0}
+section.on{display:flex;margin:auto 0;padding:2px 20px}
 h1{font-size:1.5rem;font-weight:800;line-height:1.24}
 h2{font-size:1.02rem;font-weight:700;line-height:1.35}
 p.lead{font-size:.92rem;line-height:1.5;color:var(--muted)}
@@ -112,6 +113,7 @@ p.lead{font-size:.92rem;line-height:1.5;color:var(--muted)}
   header{padding:12px 0 6px}
   .logo{height:21px}
 }
+@media(max-height:700px){.hideshort{display:none}}
 @media(max-height:600px){
   .q{font-size:1.14rem}
   .opt{padding:9px 14px}
@@ -149,19 +151,62 @@ input[type=email]::placeholder{color:#6F8195}
 .score b{font-size:3.4rem;font-weight:800;color:var(--mint);line-height:1;letter-spacing:-.02em}
 .score span{font-size:1rem;font-weight:700;color:var(--muted)}
 .band{font-size:1rem;font-weight:800}
+/* Volle Bildschirmbreite fuer den Graphen, der Text darunter behaelt
+   seinen Rand. Ohne den Ausbruch bleiben bei 20 Pixel Seitenrand links
+   und rechts vierzig Pixel Radius liegen, und genau die fehlen. */
+.radarwrap{margin:0 -20px}
 #radar{width:100%;height:auto;display:block}
-.key{display:flex;gap:16px;justify-content:center;font-size:.8rem;font-weight:700}
-.key i{display:inline-block;width:20px;height:0;border-top:3px solid var(--mint);
+.radarwrap .key,.radarwrap .pick{padding:0 20px}
+.key{display:flex;gap:14px;justify-content:center;font-size:.74rem;font-weight:700;flex-wrap:wrap}
+.key i{display:inline-block;width:18px;height:0;border-top:3px solid var(--mint);
        vertical-align:middle;margin-right:6px}
 .key i.room{border-top:3px dashed #C6D3DE}
-.gaps{display:flex;flex-direction:column;gap:8px}
-.gap{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:.88rem}
-.gap s{text-decoration:none;font-weight:800;white-space:nowrap}
-.gap s.up{color:var(--mint)}.gap s.down{color:#F0A9A3}
+.key i.chip{width:11px;height:11px;border:0;border-radius:3px;background:#7C86D6}
+/* Die angetippte Dimension steht in einer festen Zeile unter dem Graphen.
+   Feste Hoehe, damit das Layout beim Antippen nicht springt. */
+.pick{min-height:2.9em;margin-top:6px;font-size:.8rem;line-height:1.45;color:var(--muted);
+      text-align:center}
+.pick b{color:var(--ink);font-weight:700}
+.pick s{text-decoration:none;font-weight:800;color:var(--mint)}
+.pick u{text-decoration:none;font-weight:700;color:#C6D3DE}
+
+/* Alle zwoelf Dimensionen mit Ziffer, eigenem Wert und Raumwert. Der
+   Graph traegt die Form, diese Liste traegt die Zahlen: auf einem Handy
+   ist das die ehrlichere Aufteilung. */
+.gaps{display:flex;flex-direction:column;gap:7px}
+.gap{display:grid;grid-template-columns:22px 1fr auto;gap:10px;align-items:center;font-size:.86rem}
+.gap i{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;
+       font-size:.68rem;font-weight:800;font-style:normal;color:#fff}
+.gap b{font-weight:600;line-height:1.25;min-width:0}
+.gap b small{display:block;font-size:.7rem;font-weight:600;color:var(--dim);margin-top:1px}
+.gap b small em{font-style:normal;font-weight:800}
+.gap b small em.up{color:var(--mint)}.gap b small em.down{color:#F0A9A3}
+.gap s{text-decoration:none;font-weight:800;font-size:1.02rem;white-space:nowrap;color:var(--mint)}
+.gap s.none{color:var(--dim);font-weight:700}
+
+/* Hinweis, dass es unten weitergeht. Die Abdunklung bleibt, solange noch
+   etwas kommt, der Knopf verschwindet nach der ersten Scroll-Bewegung:
+   ein dauerhaft huepfender Pfeil nervt beim zweiten Ansehen. */
+.fadeout{position:fixed;left:0;right:0;height:88px;z-index:4;pointer-events:none;
+  bottom:calc(env(safe-area-inset-bottom) + 58px);opacity:0;transition:opacity .3s;
+  background:linear-gradient(to top,#051F2E 26%,rgba(5,31,46,0))}
+.fadeout.on{opacity:1}
+.cue{position:fixed;left:50%;transform:translateX(-50%);z-index:5;
+  bottom:calc(env(safe-area-inset-bottom) + 70px);
+  display:flex;align-items:center;gap:8px;padding:11px 17px;border-radius:999px;
+  border:1.5px solid rgba(82,208,176,.55);background:rgba(6,37,54,.94);color:var(--mint);
+  font-family:inherit;font-size:.8rem;font-weight:800;cursor:pointer;white-space:nowrap;
+  box-shadow:0 8px 22px rgba(0,0,0,.5)}
+.cue[hidden]{display:none}
+.cue s{text-decoration:none;display:inline-block}
+@media(prefers-reduced-motion:no-preference){
+  .cue s{animation:bob 1.7s ease-in-out infinite}
+  @keyframes bob{0%,100%{transform:translateY(-2px)}50%{transform:translateY(2px)}}
+}
 .card{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);
       border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:12px}
 
-footer{flex:0 0 auto;padding-top:10px;display:flex;align-items:flex-end;justify-content:space-between;
+footer{flex:0 0 auto;padding:10px 20px 0;display:flex;align-items:flex-end;justify-content:space-between;
        gap:12px;position:relative;z-index:2}
 .status{font-size:.7rem;color:var(--dim);flex:0 0 auto;text-align:right}
 .status.err{color:#F0A9A3}
@@ -209,7 +254,7 @@ body.legal footer{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;ma
     <div>
       <h1>Wohin soll dein Report?</h1>
       <p class="lead">Dein Ergebnis mit dem Vergleich zum Raum und deinen Fokusfeldern.
-        Du kannst das auch überspringen.</p>
+        Du kannst das auch später eintragen, vor dem Ergebnis fragen wir noch einmal.</p>
     </div>
     <div style="display:flex;flex-direction:column;gap:12px">
       <input type="email" id="email" inputmode="email" autocomplete="email"
@@ -219,9 +264,32 @@ body.legal footer{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;ma
     <div class="err" id="mailErr" hidden></div>
     <div>
       <button class="btn" id="mailGo">Weiter</button>
-      <div style="text-align:center"><button class="linkbtn" id="skipMail">Ohne Adresse weiter</button></div>
+      <div style="text-align:center"><button class="linkbtn" id="skipMail">Später eintragen</button></div>
     </div>
     <p class="small" id="roleEcho"></p>
+  </section>
+
+  <!-- 2b. Schranke vor dem Ergebnis. Nur fuer die, die am Anfang
+       uebersprungen haben. Sie steht vor der Anzeige, nicht vor dem
+       Speichern: die Antworten liegen zu diesem Zeitpunkt schon in der
+       Datenbank, hier kann nichts mehr verloren gehen. -->
+  <section id="vGate">
+    <div>
+      <p class="small" style="letter-spacing:.14em;font-weight:800;text-transform:uppercase;color:var(--mint)">
+        Dein Ergebnis steht bereit</p>
+      <h1>Wohin soll dein Ergebnis?</h1>
+      <p class="lead">Du bekommst dein Profil im Vergleich zum Raum sofort hier angezeigt,
+        den ausführlichen Report schicken wir dir dazu.</p>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:12px">
+      <input type="email" id="email3" inputmode="email" autocomplete="email"
+             autocapitalize="off" spellcheck="false" placeholder="du@firma.de">
+      <label class="consent"><input type="checkbox" id="consent3"><span id="consentText3"></span></label>
+    </div>
+    <div class="err" id="gateErr" hidden></div>
+    <button class="btn" id="gateGo">Ergebnis anzeigen</button>
+    <p class="small hideshort">Deine Antworten sind schon gespeichert. Hier geht es nur darum,
+      wohin das Ergebnis geschickt wird.</p>
   </section>
 
   <!-- 2. Wartescreen. Sagt, was passiert, statt nur zu warten. -->
@@ -266,13 +334,18 @@ body.legal footer{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;ma
       <p class="small" id="endBase"></p>
       <p class="small" id="endMailHint" hidden></p>
     </div>
-    <div>
-      <svg id="radar" viewBox="0 0 340 300" aria-label="Dein Profil im Vergleich zum Raum"></svg>
-      <div class="key"><span><i></i>du</span><span><i class="room"></i>Raum</span></div>
+    <!-- Der Graph bricht aus dem Seitenrand aus. Auf einem Handy sind das
+         die vierzig Pixel, die den Unterschied zwischen lesbar und
+         mini-klein machen. -->
+    <div class="radarwrap">
+      <svg id="radar" viewBox="0 0 360 344" aria-label="Dein Profil im Vergleich zum Raum"></svg>
+      <div class="key"><span><i></i>du</span><span><i class="room"></i>Raum</span>
+        <span><i class="chip"></i>Ziffer antippen</span></div>
+      <div class="pick" id="radarPick"></div>
     </div>
     <div>
       <p class="small" style="letter-spacing:.14em;font-weight:800;text-transform:uppercase;margin-bottom:8px">
-        Die größten Unterschiede zum Raum</p>
+        Deine zwölf Dimensionen</p>
       <div class="gaps" id="endGaps"></div>
     </div>
     <div class="card" id="endMail">
@@ -293,6 +366,9 @@ body.legal footer{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;ma
   </section>
 
 </main>
+
+<button type="button" class="cue" id="cue" hidden>Deine zwölf Dimensionen <s>&#8595;</s></button>
+<div class="fadeout" id="fadeout"></div>
 
 <footer>
   <div class="disc">Selbsteinschätzung auf Basis deiner eigenen Angaben. Keine Konformitätsbewertung
@@ -338,7 +414,7 @@ const DIMNAMES = [
 ];
 const PILLARS = [
   { n: "Führung & Wertbeitrag", c: "#3D4585" },
-  { n: "Technologie & Daten",   c: "#4E58A8" },
+  { n: "Technologie & Daten",   c: "#7C86D6" },
   { n: "Regeln & Risiko",       c: "#52A5B0" },
   { n: "Menschen & Kultur",     c: "#52D0B0" }
 ];
@@ -403,6 +479,7 @@ let lockedPillars = {}; /* Saeulen, die der Worker als abgeschlossen meldet */
 $("logo").src = LOGO;
 $("consentText").innerHTML = CONSENT;
 $("consentText2").innerHTML = CONSENT;
+$("consentText3").innerHTML = CONSENT;
 $("roleOpts").innerHTML = ROLES.map(r =>
   '<button type="button" class="opt plain" data-r="' + r[0] + '">' +
     '<span class="k" aria-hidden="true"></span><span class="lbl">' + r[1] + '</span></button>').join("");
@@ -476,6 +553,31 @@ async function sendProfile(payload) {
   return true;
 }
 
+/* ── Adresse senden, ohne darauf zu warten ───────────────────────────
+   Das Ergebnis darf nicht am Netz haengen. Auf einem Festival ist das
+   WLAN der wahrscheinlichste Grund, warum jemand nach zwoelf Antworten
+   vor einer leeren Seite sitzt. Also wird die Adresse in die Warteschlange
+   gelegt, das Ergebnis erscheint sofort, und der Versand wird bei jedem
+   Abruf erneut versucht, bis er durch ist. */
+let flushingProf = false;
+function queueProfile(payload) {
+  PROF.pending = payload; saveProf();
+  flushProfile();
+}
+async function flushProfile() {
+  if (!PROF.pending || flushingProf) return;
+  flushingProf = true;
+  try {
+    await sendProfile(PROF.pending);
+    delete PROF.pending; saveProf();
+    setStatus("gespeichert");
+  } catch (e) {
+    setStatus("Adresse wird noch gesendet", true);
+  } finally {
+    flushingProf = false;
+  }
+}
+
 /* ── Eigenen Stand zurueckholen ───────────────────────────────────
    Der localStorage ist der schnelle Weg, aber nicht der verlaessliche:
    ein Neuladen im falschen Moment, ein zweiter Tab oder ein geleerter
@@ -518,7 +620,7 @@ function checkRun(runId) {
   saveAns();
   writeQ([]);
   /* Rolle und Adresse sind beim Worker ebenfalls weg, also hier auch. */
-  ["role", "mail", "hasMail", "mailAsked"].forEach(k => { delete PROF[k]; });
+  ["role", "mail", "hasMail", "mailAsked", "pending"].forEach(k => { delete PROF[k]; });
   PROF.runId = runId || null;
   saveProf();
   recovered = true;   /* nichts zurueckzuholen, die Tafel ist leer */
@@ -544,7 +646,10 @@ function decide() {
      einem Formular. */
   if (idle && !mailGiven() && !PROF.mailAsked) return "vMail";
   if (idle) return "vReady";
-  if (ph === "radar" || ph === "done") return "vEnd";
+  /* Ohne Adresse kein Ergebnis. Die Schranke steht vor der Anzeige und
+     nicht vor dem Speichern: geantwortet ist zu diesem Zeitpunkt schon,
+     es kann also niemand durch die Abfrage aus der Auswertung fallen. */
+  if (ph === "radar" || ph === "done") return mailGiven() ? "vEnd" : "vGate";
   const p = S.pillar;
   if (p === null || p === undefined) return "vReady";
   const dims = PILLAR_DIMS(p);
@@ -554,11 +659,12 @@ function decide() {
 }
 
 function show(v) {
+  const changed = view !== v;
   view = v;
-  ["vLoad", "vIntro", "vMail", "vReady", "vQ", "vHold", "vEnd"].forEach(id =>
+  ["vLoad", "vIntro", "vMail", "vGate", "vReady", "vQ", "vHold", "vEnd"].forEach(id =>
     $(id).classList.toggle("on", id === v));
   /* Der Rechtshinweis steht nur da, wo er hingehoert. */
-  document.body.classList.toggle("legal", v === "vMail" || v === "vEnd");
+  document.body.classList.toggle("legal", v === "vMail" || v === "vGate" || v === "vEnd");
   if (v === "vQ") paintQ();
   if (v === "vHold") paintHold();
   if (v === "vEnd") paintEnd();
@@ -566,10 +672,46 @@ function show(v) {
   if (v === "vIntro") paintIntro();
   if (v === "vMail") paintMail();
   paintCounter();
+  /* Beim Wechsel oben anfangen, sonst uebernimmt die Ergebnisseite die
+     Scrollposition der Frage davor und der Reifegrad steht nicht im
+     Bild. Danach den Hinweis nach unten neu bestimmen, aber erst wenn
+     der Umbruch stand: vorher ist scrollHeight noch der alte Wert. */
+  const m = document.querySelector("main");
+  if (changed && m) m.scrollTop = 0;
+  if (changed) cueDismissed = false;
+  requestAnimationFrame(updateCue);
 }
 
+/* ── Hinweis, dass es unten weitergeht ───────────────────────────────
+   Der Fehler auf der Ergebnisseite war nicht der fehlende Pfeil, sondern
+   dass der erste Block genau eine Bildschirmhoehe fuellte. Dann sieht
+   ein Bildschirmende wie ein Seitenende aus. Abdunklung und Knopf sagen
+   es zusaetzlich. */
+let cueDismissed = false;
+function updateCue() {
+  const m = document.querySelector("main");
+  if (!m) return;
+  const more = m.scrollHeight - m.clientHeight - m.scrollTop > 24;
+  const relevant = view === "vEnd" && more;
+  $("fadeout").classList.toggle("on", relevant);
+  $("cue").hidden = !(relevant && !cueDismissed);
+}
+document.querySelector("main").addEventListener("scroll", () => {
+  if (!cueDismissed) cueDismissed = true;
+  updateCue();
+}, { passive: true });
+addEventListener("resize", () => requestAnimationFrame(updateCue));
+$("cue").addEventListener("click", () => {
+  cueDismissed = true;
+  const t = $("endGaps").parentElement;
+  if (t && t.scrollIntoView) t.scrollIntoView({ behavior: "smooth", block: "start" });
+  updateCue();
+});
+
 function paintCounter() {
-  if (!S || view === "vIntro" || view === "vMail" || view === "vLoad") { $("counter").textContent = ""; return; }
+  if (!S || view === "vIntro" || view === "vMail" || view === "vGate" || view === "vLoad") {
+    $("counter").textContent = ""; return;
+  }
   if (view === "vEnd") { $("counter").textContent = "Ergebnis"; return; }
   /* Bei null Antworten sagt der Zaehler nichts und kostet nur Platz. */
   const n = Object.keys(ANS).length;
@@ -663,6 +805,20 @@ async function submitMail(withMail) {
 $("mailGo").addEventListener("click", () => submitMail(true));
 $("skipMail").addEventListener("click", () => submitMail(false));
 
+/* Schritt 2b: die Adresse vor dem Ergebnis, diesmal ohne Ausweg. Das
+   Ergebnis erscheint sofort nach dem Tippen, der Versand laeuft daneben. */
+$("gateGo").addEventListener("click", () => {
+  const m = $("email3").value.trim();
+  $("gateErr").hidden = true;
+  if (!m) return showErr("gateErr", "Trag deine Adresse ein, dann kommt das Ergebnis.");
+  if (!validMail(m)) return showErr("gateErr", "Bitte gib eine gültige E-Mail-Adresse ein.");
+  if (!$("consent3").checked) return showErr("gateErr", "Bitte bestätige die Einwilligung.");
+  PROF.mail = m; PROF.hasMail = true; PROF.mailAsked = true; saveProf();
+  queueProfile({ email: m, consent: true, consentText: $("consentText3").textContent });
+  forceView = null;
+  show(decide());
+});
+
 /* ── Warten ───────────────────────────────────────────────────────── */
 function paintReady() {
   const role = (ROLES.find(r => r[0] === PROF.role) || [])[1] || "";
@@ -671,7 +827,8 @@ function paintReady() {
     ? "Vorne läuft gerade das Bild des Raums" : "Gleich geht es los";
   $("readyEdit").innerHTML = mailGiven()
     ? '<p class="small">Report geht an ' + (PROF.mail || "deine Adresse") + '.</p>'
-    : '<p class="small">Deine Adresse fragen wir am Ende noch einmal, dann bekommst du den Report.</p>';
+    : '<p class="small">Vor dem Ergebnis fragen wir noch einmal nach deiner Adresse, dann '
+      + 'siehst du dein Profil und bekommst den Report.</p>';
 }
 
 /* ── Frage ────────────────────────────────────────────────────────── */
@@ -791,26 +948,44 @@ function paintEnd() {
 }
 
 function paintGaps(own, room) {
-  const rows = DIMS.map((_, i) => {
-    if (own[i] === null || room[i] === null || room[i] === undefined) return null;
-    return { i: i, d: own[i] - room[i] };
-  }).filter(Boolean).sort((a, b) => Math.abs(b.d) - Math.abs(a.d)).slice(0, 3);
-  if (!rows.length) {
-    $("endGaps").innerHTML = '<p class="small">Noch kein Vergleich möglich.</p>';
-    return;
-  }
-  $("endGaps").innerHTML = rows.map(r =>
-    '<div class="gap"><span>' + DIMNAMES[r.i] + '</span><s class="' + (r.d > 0 ? "up" : "down") + '">' +
-    (r.d > 0 ? "+" : "") + de1(r.d) + '</s></div>').join("");
+  /* Alle zwoelf, in der Reihenfolge des Graphen. Die drei groessten
+     Unterschiede werden markiert, statt sie in einer zweiten Liste
+     doppelt zu zeigen. */
+  const diffs = DIMS.map((_, i) =>
+    (own[i] === null || room[i] === null || room[i] === undefined)
+      ? null : { i: i, d: own[i] - room[i] }).filter(Boolean);
+  const top = diffs.slice().sort((a, b) => Math.abs(b.d) - Math.abs(a.d)).slice(0, 3)
+    .reduce((m, x) => { m[x.i] = x.d; return m; }, {});
+
+  $("endGaps").innerHTML = DIMS.map((_, i) => {
+    const mine = own[i], r = room[i];
+    const hasR = r !== null && r !== undefined;
+    const d = (mine === null || !hasR) ? null : mine - r;
+    let sub = hasR ? "Raum " + de1(r) : "Raum noch ohne Wert";
+    if (i in top && d !== null) {
+      sub += ' · <em class="' + (d > 0 ? "up" : "down") + '">' +
+        (d > 0 ? "+" : "") + de1(d) + '</em>';
+    }
+    return '<div class="gap"><i style="background:' + PILLARS[Math.floor(i / 3)].c + '">' +
+      (i + 1) + '</i><b>' + DIMNAMES[i] + '<small>' + sub + '</small></b>' +
+      '<s' + (mine === null ? ' class="none"' : '') + '>' +
+      (mine === null ? "unklar" : de1(mine)) + '</s></div>';
+  }).join("");
 }
 
 /* Gleiche Darstellung wie auf der Leinwand, zusaetzlich das eigene
-   Profil. Achsentexte passen auf einem Handy nicht, deshalb stehen die
-   vier Saeulennamen in den Ecken: jede Saeule belegt genau ein Viertel
-   des Kreises. */
+   Profil. Ausgeschriebene Achsentexte passen um einen Kreis von 116
+   Einheiten nicht, zwoelf davon erst gar nicht. Deshalb steht an jedem
+   Zacken die Ziffer in der Saeulenfarbe, die vier Saeulennamen stehen in
+   den Ecken, und die Ziffern loesen sich ueber die Liste darunter und
+   ueber einen Tipp auf den Zacken auf. */
+let RADAR = { own: [], room: [] }, picked = null;
+
 function drawRadar(own, room) {
   const svg = $("radar"), NS = "http://www.w3.org/2000/svg";
-  const cx = 170, cy = 150, R = 95, N = 12;
+  const cx = 180, cy = 172, R = 116, RC = 133, N = 12;
+  RADAR = { own: own, room: room };
+  picked = null;
   svg.innerHTML = "";
   const add = (tag, at) => {
     const e = document.createElementNS(NS, tag);
@@ -820,9 +995,9 @@ function drawRadar(own, room) {
   /* Innenradius, weil "nein" auf der Skala eine Null ist: ohne ihn faellt
      das Profil bei jeder Nein-Antwort in den Mittelpunkt. */
   const R0 = R * 0.14;
+  const ang = i => i * 2 * Math.PI / N - Math.PI / 2;
   const pt = (i, v) => {
-    const a = i * 2 * Math.PI / N - Math.PI / 2;
-    const r = R0 + Math.max(0, Math.min(5, v)) / 5 * (R - R0);
+    const a = ang(i), r = R0 + Math.max(0, Math.min(5, v)) / 5 * (R - R0);
     return [cx + r * Math.cos(a), cy + r * Math.sin(a)];
   };
   for (let g = 0; g <= 5; g++) {
@@ -832,8 +1007,9 @@ function drawRadar(own, room) {
       stroke: "rgba(255,255,255," + (g === 5 ? .28 : .1) + ")", "stroke-width": 1 });
   }
   for (let i = 0; i < N; i++) {
-    const e = pt(i, 5);
-    add("line", { x1: cx, y1: cy, x2: e[0], y2: e[1], stroke: "rgba(255,255,255,.09)", "stroke-width": 1 });
+    const a = ang(i);
+    add("line", { x1: cx, y1: cy, x2: cx + R * Math.cos(a), y2: cy + R * Math.sin(a),
+      stroke: "rgba(255,255,255,.09)", "stroke-width": 1 });
   }
   /* Der Raum als gestrichelte Linie, das eigene Profil gefuellt darueber.
      Dimensionen ohne Wert werden uebersprungen, nicht als Null gezeigt. */
@@ -841,7 +1017,6 @@ function drawRadar(own, room) {
     const p = [];
     vals.forEach((v, i) => { if (v !== null && v !== undefined) p.push(pt(i, v).join(",")); });
     if (p.length >= 3) add("polygon", Object.assign({ points: p.join(" ") }, at));
-    return p;
   };
   poly(room, { fill: "none", stroke: "#C6D3DE", "stroke-width": 2, "stroke-dasharray": "5 4",
     "stroke-linejoin": "round" });
@@ -856,22 +1031,70 @@ function drawRadar(own, room) {
   /* Jede Saeule belegt ein Viertel: 0 oben rechts, 1 unten rechts,
      2 unten links, 3 oben links. */
   const corners = [
-    { p: 0, x: 334, y: 16,  a: "end" },
-    { p: 1, x: 334, y: 268, a: "end" },
-    { p: 2, x: 6,   y: 268, a: "start" },
-    { p: 3, x: 6,   y: 16,  a: "start" }
+    { p: 0, x: 354, y: 12,  a: "end" },
+    { p: 1, x: 354, y: 322, a: "end" },
+    { p: 2, x: 6,   y: 322, a: "start" },
+    { p: 3, x: 6,   y: 12,  a: "start" }
   ];
   corners.forEach(c => {
     const parts = PILLARS[c.p].n.split(" & ");
     const lines = parts.length === 2 ? [parts[0] + " &", parts[1]] : [PILLARS[c.p].n];
-    const t = add("text", { x: c.x, y: c.y, fill: PILLARS[c.p].c, "font-size": 11.5,
+    const t = add("text", { x: c.x, y: c.y, fill: PILLARS[c.p].c, "font-size": 10.5,
       "font-weight": 800, "text-anchor": c.a });
-    lines.forEach((s, k) => {
+    lines.forEach((s2, k) => {
       const ts = document.createElementNS(NS, "tspan");
-      ts.setAttribute("x", c.x); if (k) ts.setAttribute("dy", 14);
-      ts.textContent = s; t.appendChild(ts);
+      ts.setAttribute("x", c.x); if (k) ts.setAttribute("dy", 13);
+      ts.textContent = s2; t.appendChild(ts);
     });
   });
+  /* Die Ziffern. Gefuelltes Plaettchen in der Saeulenfarbe, damit die
+     Zuordnung zur Liste darunter ohne Nachdenken funktioniert. Darueber
+     eine unsichtbare, deutlich groessere Trefferflaeche: neunzehn Pixel
+     trifft auf einem Handy niemand zuverlaessig. */
+  for (let i = 0; i < N; i++) {
+    const a = ang(i), x = cx + RC * Math.cos(a), y = cy + RC * Math.sin(a);
+    const g = add("g", { "data-i": i, style: "cursor:pointer" });
+    const mk = (tag, at) => {
+      const e = document.createElementNS(NS, tag);
+      for (const k in at) e.setAttribute(k, at[k]);
+      g.appendChild(e); return e;
+    };
+    mk("circle", { cx: x, cy: y, r: 17, fill: "transparent" });
+    mk("circle", { cx: x, cy: y, r: 9.5, fill: PILLARS[Math.floor(i / 3)].c,
+      stroke: "rgba(255,255,255,.28)", "stroke-width": 1, "data-chip": i });
+    const t = mk("text", { x: x, y: y + 3.7, fill: "#fff", "font-size": 10.5,
+      "font-weight": 800, "text-anchor": "middle", "pointer-events": "none" });
+    t.textContent = i + 1;
+  }
+  paintPick();
+}
+
+/* Ein Tipp auf eine Ziffer schreibt Name und Werte in die Zeile unter
+   dem Graphen. Der Handler haengt am SVG und nicht an den Ziffern, damit
+   er ein Neuzeichnen ueberlebt. */
+$("radar").addEventListener("click", e => {
+  const g = e.target.closest ? e.target.closest("[data-i]") : null;
+  if (!g) return;
+  const i = Number(g.getAttribute("data-i"));
+  picked = picked === i ? null : i;
+  paintPick();
+});
+
+function paintPick() {
+  document.querySelectorAll("#radar [data-chip]").forEach(c =>
+    c.setAttribute("stroke", Number(c.getAttribute("data-chip")) === picked
+      ? "#52D0B0" : "rgba(255,255,255,.28)"));
+  document.querySelectorAll("#radar [data-chip]").forEach(c =>
+    c.setAttribute("stroke-width", Number(c.getAttribute("data-chip")) === picked ? 2.5 : 1));
+  if (picked === null) {
+    $("radarPick").innerHTML = "Tipp auf eine Ziffer, dann steht hier, welche Dimension das ist. " +
+      "Alle zwölf stehen darunter.";
+    return;
+  }
+  const i = picked, mine = RADAR.own[i], r = RADAR.room[i];
+  $("radarPick").innerHTML = '<b>' + (i + 1) + ' · ' + DIMNAMES[i] + '</b><br>' +
+    'du <s>' + (mine === null || mine === undefined ? "unklar" : de1(mine)) + '</s>' +
+    ' · Raum <u>' + (r === null || r === undefined ? "–" : de1(r)) + '</u>';
 }
 
 /* ── Adresse am Ende ──────────────────────────────────────────────── */
@@ -906,6 +1129,8 @@ async function tick() {
     if (fresh) setStatus("neuer Durchgang, du fängst von vorn an");
     if (!recovered) await recover();
     if (readQ().length) flush();
+    /* Eine noch nicht bestaetigte Adresse bei jedem Abruf erneut senden. */
+    if (PROF.pending) flushProfile();
     const want = decide();
     /* Waehrend jemand tippt, nicht unter den Fingern wegschalten. */
     const typing = document.activeElement && document.activeElement.tagName === "INPUT";
@@ -916,7 +1141,10 @@ async function tick() {
     else if (view === "vMail") paintMail();
     /* Bei erfolgreichem Abruf die Fehlermeldung wieder wegnehmen. Steht
        noch etwas in der Warteschlange, behaelt flush() das Sagen. */
-    if (!readQ().length) setStatus("");
+    if (!readQ().length && !PROF.pending) setStatus("");
+    /* Der Inhalt der Ergebnisseite waechst mit den Antworten im Raum,
+       also muss der Hinweis nach unten danach neu bestimmt werden. */
+    requestAnimationFrame(updateCue);
   } catch (e) {
     failed++;
     setStatus("keine Verbindung, wird erneut versucht", true);
