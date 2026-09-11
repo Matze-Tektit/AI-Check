@@ -1,13 +1,15 @@
 
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Tektit AI Readiness Check</title>
+  <title>Tektit AI Self Check</title>
   
   <meta name="description" content="Find out how AI-ready your organisation actually is: 12 dimensions across leadership, people, technology and rules. Your report by email, plus the three areas to fix first.">
-  <meta property="og:title" content="Tektit AI Readiness Check">
+  <meta property="og:title" content="Tektit AI Self Check">
   <meta property="og:description" content="How AI-ready is your organisation, really? 12 dimensions, honest answer, in under ten minutes.">
   <meta property="og:type" content="website">
   
@@ -1527,7 +1529,12 @@
               <option value="unit_lead" data-i18n="roleUnitLead"></option>
               <option value="functional" data-i18n="roleFunctional"></option>
               <option value="staff" data-i18n="roleStaff"></option>
+              <option value="other" data-i18n="roleOther"></option>
             </select>
+          </div>
+          <div id="leadRoleOtherWrap" hidden>
+            <label for="leadRoleOther" class="sr-only" data-i18n="srRoleOther"></label>
+            <input type="text" id="leadRoleOther" placeholder="" data-i18n-ph="phRoleOther" maxlength="80" autocomplete="off">
           </div>
           <input type="text" id="tk_hp_field" name="tk_hp_field" tabindex="-1" autocomplete="off" aria-hidden="true" readonly onfocus="this.removeAttribute('readonly');" style="position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;">
           <label class="lead-consent" for="leadConsent">
@@ -1701,16 +1708,16 @@
          }},
         {t:{
           en:{
-            digital:"Our customers can see AI in at least one of our products.",
-            services:"Our clients can see AI in at least one of our services.",
-            mittelstand:"Our customers can see AI in at least one product or service they pay for.",
-            logistics:"Our customers notice AI in at least one of our services."
+            digital:"For our customers, AI is visible in our products.",
+            services:"For our clients, AI is visible in our services.",
+            mittelstand:"For our customers, AI is visible in our products.",
+            logistics:"For our customers, AI is visible in our services."
            },
           de:{
-            digital:"KI steckt f\u00fcr unsere Kunden sichtbar in mindestens einem Produkt oder Feature.",
-            services:"KI steckt f\u00fcr unsere Kunden sichtbar in mindestens einer Leistung.",
-            mittelstand:"KI steckt f\u00fcr unsere Kunden sichtbar in mindestens einem Produkt oder Service.",
-            logistics:"Unsere Kunden merken KI in mindestens einer unserer Leistungen."
+            digital:"F\u00fcr unsere Kunden ist KI in unseren Produkten sichtbar.",
+            services:"F\u00fcr unsere Kunden ist KI in unseren Leistungen sichtbar.",
+            mittelstand:"F\u00fcr unsere Kunden ist KI in unseren Produkten sichtbar.",
+            logistics:"F\u00fcr unsere Kunden ist KI in unseren Leistungen sichtbar."
            }
          }, w: 1.5, desc:{
           en:"Internal efficiency lowers your cost. Only what reaches the customer changes your market position.",
@@ -1762,8 +1769,8 @@
           en:"We have openly addressed what AI means for jobs here.",
           de:"Wir haben offen angesprochen, was KI f\u00fcr die Arbeitspl\u00e4tze bei uns bedeutet."
          }, w: 2, desc:{
-          en:"This is the question everyone has and nobody asks. What is not said openly gets filled in with the worst assumption, and silence is the most expensive communication choice available.",
-          de:"Das ist die Frage, die alle haben und niemand stellt. Was nicht offen gesagt wird, f\u00fcllen die Leute mit der schlechtesten Annahme, und Schweigen ist die teuerste Variante von Kommunikation."
+          en:"This is the question everyone has and nobody asks. What is not said openly gets filled in with the worst assumption. Silence is the most expensive communication choice available.",
+          de:"Das ist die Frage, die alle haben und niemand stellt. Was nicht offen gesagt wird, f\u00fcllen die Mitarbeitenden mit der schlechtesten Annahme. Schweigen ist die teuerste Variante von Kommunikation."
          }},
         {t:{
           en:"People who raise concerns about AI are not seen as blockers.",
@@ -1824,7 +1831,7 @@
           de:"Es gibt eine freigegebene KI-Umgebung f\u00fcr interne Informationen."
          }, w: 2, desc:{
           en:"A place where company information may be processed without anyone breaking a rule. Without a sanctioned place to work, people will find an unsanctioned one. This is the single highest-leverage item on this list.",
-          de:"Ein Ort, an dem Firmeninformationen verarbeitet werden d\u00fcrfen, ohne dass jemand eine Regel bricht. Ohne einen erlaubten Ort zum Arbeiten finden die Leute einen unerlaubten. Das ist der wirksamste Punkt auf dieser Liste."
+          de:"Ein Ort, an dem Firmeninformationen verarbeitet werden d\u00fcrfen, ohne dass jemand eine Regel bricht. Ohne einen erlaubten Ort zum Arbeiten finden die Mitarbeitenden einen unerlaubten. Das ist der wirksamste Punkt auf dieser Liste."
          }},
         {t:{
           en:"Our approved environment is better than the free alternatives.",
@@ -2012,13 +2019,13 @@
       mandate: { en: "Name one person as responsible for AI, in writing, with a budget line and the authority to decide. Give the topic a fixed slot in the leadership meeting. Both steps take one decision, not a project.", de: "Gib dem Thema einen festen Platz in der Führungsrunde und benenne schriftlich eine Person als verantwortlich, mit Budgetzeile und Entscheidungsbefugnis. Beides ist eine Entscheidung, kein Projekt." },
       focus: { en: "Take your three biggest cost or time drivers and ask for each one what AI would remove. Then write down two places where you will deliberately not use it. The second list is what makes the first credible.", de: "Nimm deine drei größten Kosten- oder Zeittreiber und frag bei jedem, was KI davon abnehmen würde. Schreib danach zwei Stellen auf, an denen du KI bewusst nicht einsetzt. Die zweite Liste macht die erste glaubwürdig." },
       impact: { en: "Pick the AI use case that is already running and measure it properly once: hours before, hours after, over two weeks. One defensible number opens more doors internally than ten pilots.", de: "Nimm den KI-Einsatz, der schon läuft, und miss ihn einmal richtig: Stunden vorher, Stunden nachher, über zwei Wochen. Eine belastbare Zahl öffnet intern mehr Türen als zehn Pilotprojekte." },
-      enablement: { en: "Replace the next information session with a working session on real tasks people brought with them. Then ask each business unit to name two people others can turn to.", de: "Ersetz die nächste Infoveranstaltung durch eine Arbeitssitzung an echten Aufgaben, die die Leute selbst mitbringen. Lass danach jeden Fachbereich zwei Personen benennen, an die sich andere wenden können." },
-      adoption: { en: "Say out loud what AI means for roles here, including what you do not yet know. Then check actual usage of the tools you pay for. The gap between licences and use is usually the real finding.", de: "Sag offen, was KI für Rollen bei Euch bedeutet, auch das, was du noch nicht weißt. Prüf danach die tatsächliche Nutzung der Werkzeuge, für die du zahlst. Die Lücke zwischen Lizenz und Nutzung ist meist der eigentliche Befund." },
-      learning: { en: "Set up one shared place for prompts, templates and findings, and make it somebody's job to keep it tidy. Then build looking into it into an existing routine, for example as a standing item in a team meeting. A maintained folder somebody opens beats any platform nobody opens.", de: "Richte einen gemeinsamen Ort für Prompts, Vorlagen und Erkenntnisse ein und mach das Pflegen zur Aufgabe einer Person. Dann bau den Griff darauf in eine bestehende Routine ein, etwa als festen Punkt im Team-Meeting. Ein gepflegter Ordner, in den jemand hineinsieht, schlägt jede Plattform, in die niemand hineinsieht." },
-      access: { en: "Give people one approved AI environment that is genuinely good, and make it easier to reach than the free alternative. Nothing else in this list reduces shadow usage as fast.", de: "Gib den Leuten eine freigegebene KI-Umgebung, die wirklich gut ist, und mach sie leichter erreichbar als die kostenlose Alternative. Nichts anderes auf dieser Liste senkt die Schattennutzung so schnell." },
+      enablement: { en: "Replace the next information session with a working session on real tasks people brought with them. Then ask each business unit to name two people others can turn to.", de: "Ersetz die nächste Infoveranstaltung durch eine Arbeitssitzung an echten Aufgaben, die die Mitarbeitenden selbst mitbringen. Lass danach jeden Fachbereich zwei Personen benennen, an die sich andere wenden können." },
+      adoption: { en: "Tell your people plainly what AI means for their tasks and their jobs, including what you do not yet know. Then check how many of them actually use the tools you pay for. The gap between licences and use is usually the real finding.", de: "Sag deinen Mitarbeitenden offen, was KI für ihre Aufgaben und ihre Stellen bedeutet, auch das, was du noch nicht weißt. Prüf danach, wie viele von ihnen die Werkzeuge wirklich nutzen, für die du zahlst. Die Lücke zwischen Lizenz und Nutzung ist meist der eigentliche Befund." },
+      learning: { en: "Set up one shared place for prompts, templates and findings. Make keeping it current the job of one named person. Then put it on the agenda of a meeting that already happens, so it actually gets opened. A folder somebody looks into once a week is enough to start.", de: "Richte einen gemeinsamen Ort für Prompts, Vorlagen und Erkenntnisse ein. Mach das Pflegen zur Aufgabe einer namentlich benannten Person. Setz den Ort danach als festen Punkt auf die Agenda eines Meetings, das es ohnehin gibt. Ein Ordner, in den einmal pro Woche jemand hineinsieht, genügt für den Anfang." },
+      access: { en: "Give people one approved AI environment that is genuinely good, and make it easier to reach than the free alternative. Nothing else in this list reduces shadow usage as fast.", de: "Gib deinen Mitarbeitenden eine freigegebene KI-Umgebung, die wirklich gut ist. Mach sie leichter erreichbar als die kostenlose Alternative. Nichts anderes auf dieser Liste senkt die Schattennutzung so schnell." },
       data: { en: "Pick the one use case you care about most and follow its data backwards: where does it sit, who owns it, can a system read it without a manual step. Fix that path before you buy anything.", de: "Nimm den Anwendungsfall, der dir am wichtigsten ist, und verfolg seine Daten zurück: Wo liegen sie, wer verantwortet sie, kann ein System sie ohne manuellen Schritt lesen. Räum diesen Weg frei, bevor du etwas kaufst." },
       integration: { en: "Move AI into the tool where the work already happens, even if the first version is cruder than a standalone app. Then define the path from experiment to production with IT and the business unit in the same room.", de: "Hol KI in das Werkzeug, in dem die Arbeit ohnehin passiert, auch wenn die erste Version gröber ist als eine eigene Anwendung. Definiere danach den Weg vom Versuch zum Betrieb mit IT und Fachbereich im selben Raum." },
-      rules: { en: "Write rules short enough that people remember them: which data may go where, and who to ask when in doubt. One page beats twelve. Then put a review date on it.", de: "Schreib die Regeln so kurz, dass die Leute sie behalten: Welche Daten dürfen wohin, und wen frage ich im Zweifel. Eine Seite schlägt zwölf. Setz danach ein Datum für die Überprüfung darauf." },
+      rules: { en: "Write rules short enough that people remember them: which data may go where, and who to ask when in doubt. One page beats twelve. Then put a review date on it.", de: "Schreib die Regeln so kurz, dass die Mitarbeitenden sie behalten: Welche Daten dürfen wohin, und wen frage ich im Zweifel. Eine Seite schlägt zwölf. Setz danach ein Datum für die Überprüfung darauf." },
       security: { en: "Before you connect AI to anything, run a permissions check on your most sensitive folders. You will find access that should have been removed years ago. Fix that first; it is cheaper than any AI project.", de: "Bevor du KI an irgendetwas anschließt, prüf die Berechtigungen auf deinen sensibelsten Ablagen. Du wirst Zugriffe finden, die vor Jahren hätten entfernt werden müssen. Räum das zuerst auf, es ist günstiger als jedes KI-Projekt." },
       regulatory: { en: "Start a simple register: what runs where, for what purpose, on which data, who is responsible. That single list answers most evidence questions and takes an afternoon to begin.", de: "Beginn eine einfache Übersicht: Was läuft wo, zu welchem Zweck, auf welchen Daten, wer ist verantwortlich. Diese eine Liste beantwortet die meisten Nachweisfragen und ist an einem Nachmittag begonnen." }
     };
@@ -2028,9 +2035,9 @@
       focus: { en: "Knowing where not to use AI is what makes the rest credible.", de: "Zu wissen, wo KI nicht hingehört, macht den Rest glaubwürdig." },
       impact: { en: "Internal efficiency lowers cost. Only the customer side changes your position.", de: "Interne Effizienz senkt Kosten. Erst die Kundenseite verändert deine Position." },
       enablement: { en: "Awareness is not ability. Ability comes from practising on your own work.", de: "Informiert sein ist nicht können. Können kommt vom Üben an der eigenen Arbeit." },
-      adoption: { en: "What is not said openly gets filled in with the worst assumption.", de: "Was nicht offen gesagt wird, füllen die Leute mit der schlechtesten Annahme." },
+      adoption: { en: "What is not said openly gets filled in with the worst assumption.", de: "Was nicht offen gesagt wird, füllen die Mitarbeitenden mit der schlechtesten Annahme." },
       learning: { en: "Documenting is the cheap part. The value appears when somebody looks it up.", de: "Dokumentieren ist der günstige Teil. Der Nutzen entsteht erst beim Nachschlagen." },
-      access: { en: "Without a sanctioned place to work, people find an unsanctioned one.", de: "Ohne erlaubten Ort zum Arbeiten finden die Leute einen unerlaubten." },
+      access: { en: "Without a sanctioned place to work, people find an unsanctioned one.", de: "Ohne erlaubten Ort zum Arbeiten finden die Mitarbeitenden einen unerlaubten." },
       data: { en: "Most AI projects fail on data access, not on the model.", de: "Die meisten KI-Vorhaben scheitern am Datenzugang, nicht am Modell." },
       integration: { en: "Every switch between systems costs adoption.", de: "Jeder Wechsel zwischen Systemen kostet Akzeptanz." },
       rules: { en: "A policy nobody can paraphrase protects nobody.", de: "Eine Richtlinie, die niemand wiedergeben kann, schützt niemanden." },
@@ -2040,7 +2047,7 @@
 
     /* ── UI strings. Product name and band names stay English in both languages. ── */
     const UI = {
-      headTitle: { en: "Tektit AI Readiness Check", de: "Tektit AI Readiness Check" },
+      headTitle: { en: "Tektit AI Self Check", de: "Tektit AI Self Check" },
       scale1: { en: "no: we do not have this", de: "nein: gibt es bei uns nicht" },
       scale2: { en: "partly: in some areas", de: "teilweise: in einzelnen Bereichen" },
       scale3: { en: "mostly: nearly everywhere, not binding", de: "meistens: fast überall, aber nicht verbindlich" },
@@ -2093,8 +2100,8 @@
       scopeBack: { en: "← Back to the check", de: "← Zurück zum Check" },
       scopeHint: { en: "Skipped dimensions are excluded from your score and your focus areas, so your result stays meaningful.", de: "Übersprungene Dimensionen fließen nicht in Score und Fokusfelder ein, damit dein Ergebnis aussagekräftig bleibt." },
       scopeNone: { en: "We need at least one dimension to work with. Please answer a few items, or mark a dimension as \"nothing established\" so we can score it.", de: "Wir brauchen mindestens eine Dimension. Beantworte ein paar Punkte, oder markiere eine Dimension als \"nichts etabliert\", damit wir sie bewerten können." },
-      gateH2: { en: "Unlock Your AI Readiness Results", de: "Deine Ergebnisse freischalten" },
-      gateP: { en: "Enter your details to unlock your full report: your <strong>AI Readiness Radar</strong>, the pillar that is holding you back, your top 3 focus areas and concrete next steps. You will also receive the report as a PDF by email.", de: "Trag deine Daten ein und du bekommst den vollen Report: Dein <strong>AI Readiness Radar</strong>, die Säule, die dich bremst, deine drei wichtigsten Fokusfelder und konkrete nächste Schritte. Den Report schicken wir dir zusätzlich als PDF per E-Mail." },
+      gateH2: { en: "Unlock Your AI Self Check Results", de: "Deine Ergebnisse freischalten" },
+      gateP: { en: "Enter your details to unlock your full report: your <strong>AI Self Check Radar</strong>, the pillar that is holding you back, your top 3 focus areas and concrete next steps. You will also receive the report as a PDF by email.", de: "Trag deine Daten ein und du bekommst den vollen Report: Dein <strong>AI Self Check Radar</strong>, die Säule, die dich bremst, deine drei wichtigsten Fokusfelder und konkrete nächste Schritte. Den Report schicken wir dir zusätzlich als PDF per E-Mail." },
       phName: { en: "Your name", de: "Dein Name" },
       phCompany: { en: "Your company name", de: "Name deines Unternehmens" },
       phEmail: { en: "Your work email address", de: "Deine geschäftliche E-Mail-Adresse" },
@@ -2111,7 +2118,7 @@
       bandFoundation: { en: "Foundation Stage: AI currently happens here, but it happens on its own. Without ownership, rules and a sanctioned environment, every further step multiplies the risk instead of the return.", de: "Foundation Stage: KI passiert bei dir, aber sie passiert von selbst. Ohne Verantwortung, Regeln und eine freigegebene Umgebung vervielfacht jeder weitere Schritt das Risiko statt den Nutzen." },
       bandWorking: { en: "Working Baseline: the basics hold. What is typically missing now is not more tooling but proof of value and a path from experiment to daily operations.", de: "Working Baseline: Die Grundlagen tragen. Was jetzt meist fehlt, sind nicht mehr Werkzeuge, sondern der Nachweis des Nutzens und ein Weg vom Versuch in den Alltag." },
       bandScale: { en: "Scale-Ready: your organisation can absorb AI. The leverage now lies less in enabling and more in deciding where it genuinely pays and where it does not.", de: "Scale-Ready: Deine Organisation kann KI aufnehmen. Der Hebel liegt jetzt weniger im Befähigen als in der Entscheidung, wo sich KI wirklich lohnt und wo nicht." },
-      reportSubtitle: { en: "AI Readiness Check · 12 Dimensions", de: "AI Readiness Check · 12 Dimensionen" },
+      reportSubtitle: { en: "AI Self Check · 12 Dimensions", de: "AI Self Check · 12 Dimensionen" },
       basis: { en: "Basis: {n} of {t} dimensions assessed", de: "Basis: {n} von {t} Dimensionen bewertet" },
       basisSkipped: { en: " · {s} not assessed and excluded from the score", de: " · {s} nicht bewertet und nicht im Score enthalten" },
       radarH3: { en: "Maturity Radar", de: "Maturity Radar" },
@@ -2148,7 +2155,7 @@
       srRole: { en: "Your role", de: "Deine Rolle" },
       disclaimer: { en: "Self-assessment based on your own answers. Not a conformity assessment under the EU AI Act and not legal advice.", de: "Selbsteinschätzung auf Basis deiner eigenen Angaben. Keine Konformitätsbewertung nach EU AI Act und keine Rechtsberatung." },
       shortGenBtn: { en: "Show my result", de: "Mein Ergebnis zeigen" },
-      shortSubtitle: { en: "AI Readiness Check · Short version, 12 statements", de: "AI Readiness Check · Kurzversion, 12 Aussagen" },
+      shortSubtitle: { en: "AI Self Check · Short version, 12 statements", de: "AI Self Check · Kurzversion, 12 Aussagen" },
       shortCapH3: { en: "Want this by email?", de: "Willst du das per Mail?" },
       shortCapP: { en: "We will send you your result together with the benchmark of everyone in this room, plus the link to the full check with all 36 statements. Optional. Your result is already on screen either way.", de: "Wir schicken dir dein Ergebnis zusammen mit dem Benchmark aller im Raum, dazu den Link zur Vollversion mit allen 36 Aussagen. Freiwillig. Dein Ergebnis steht ohnehin schon auf dem Bildschirm." },
       shortCapBtn: { en: "Send it to me", de: "Schick es mir" },
@@ -2159,7 +2166,11 @@
       roleUnitLead: { en: "Business unit lead", de: "Bereichsleitung" },
       roleFunctional: { en: "Functional lead (IT, HR, Legal, …)", de: "Fachverantwortung (IT, HR, Recht, …)" },
       roleStaff: { en: "Staff / project role", de: "Stab / Projektrolle" },
+      roleOther: { en: "Other (type it in)", de: "Andere (selbst eintippen)" },
+      srRoleOther: { en: "Type your role", de: "Deine Rolle eintippen" },
+      phRoleOther: { en: "Your role", de: "Deine Rolle" },
       errRole: { en: "Please select your role.", de: "Bitte wähl deine Rolle aus." },
+      errRoleOther: { en: "Please type your role.", de: "Bitte tipp deine Rolle ein." },
       weakestPillarSame: { en: "Your weakest pillar is {pillar}, at {score} of 5.0. Your first focus area sits there too, so that is where to start.", de: "Deine schwächste Säule ist {pillar} mit {score} von 5,0. Dein erstes Fokusfeld liegt ebenfalls dort, also fängst du hier an." },
       weakestPillarDiff: { en: "Your weakest pillar is {pillar}, at {score} of 5.0. The largest single lever is {dim}, which is why your focus areas start there: one dimension can matter more than the average of a whole pillar.", de: "Deine schwächste Säule ist {pillar} mit {score} von 5,0. Den größten Einzelhebel hat {dim}, deshalb beginnen deine Fokusfelder dort: Eine einzelne Dimension kann mehr wiegen als der Durchschnitt einer ganzen Säule." },
       cantAssessNote1: { en: "You marked one statement as “cannot assess”. That is a finding, not a gap in the data: it shows where leadership currently has no visibility into its own organisation.", de: "Du hast eine Aussage als „kann ich nicht beurteilen“ markiert. Das ist ein Befund und keine Datenlücke: Er zeigt, wo die Führung derzeit keinen Einblick in die eigene Organisation hat." },
@@ -2247,7 +2258,10 @@
     const BENCHMARK_SCHEMA_VERSION = 3;       // 3 = scaled answers + role + cantAssess
     const WEBHOOK_ENDPOINT = "https://hook.eu2.make.com/gijl0dhirgnmo4lmbsvzq76xg3ev4d28";
     const CONSENT_VERSION = "2026-08-12-proposal";   // provisional until legal sign-off
-    const TOOL_URL = "https://matze-tektit.github.io/AI-Check/";
+    // Progress lives in localStorage, which is scoped to the origin. A resume link
+    // pointing at another host lands the visitor on a page that cannot see their
+    // saved answers, so this has to be the host they actually used.
+    const TOOL_URL = "https://ai-check.tektitconsulting.com/";
     // The consent text actually shown to the visitor, in the language they saw.
     function consentText(explicit) {
       // An explicitly supplied wording wins: the short-mode capture has its own
@@ -2378,11 +2392,13 @@
         userName: lead.name || "",
         companyName: lead.company || "",
         respondentRole: lead.role || "",
+        respondentRoleOther: lead.roleOther || "",
         lead: {
           name: lead.name || "",
           email: lead.email || "",
           company: lead.company || "",
           role: lead.role || "",
+          roleOther: lead.roleOther || "",
           consent: !!lead.consent,
           consentText: consentText(lead.consentText),
           consentVersion: CONSENT_VERSION,
@@ -3078,6 +3094,22 @@
       initEarlyLink();
       flushQueue();
 
+      /* The free-text role box only appears once "other" is picked, so the form
+         stays four fields wide for the large majority who fit a preset. */
+      (function initRoleOther() {
+        const sel = document.getElementById("leadRole");
+        const wrap = document.getElementById("leadRoleOtherWrap");
+        const box = document.getElementById("leadRoleOther");
+        if (!sel || !wrap || !box) return;
+        function sync() {
+          const on = sel.value === "other";
+          wrap.hidden = !on;
+          if (on) { box.focus(); } else { box.value = ""; }
+        }
+        sel.addEventListener("change", sync);
+        sync();
+      })();
+
       let unlockInFlight = false;
       document.getElementById("unlockResultsBtn").addEventListener("click", () => {
         // A second tap on a slow connection would create a second lead and a
@@ -3114,6 +3146,14 @@
           roleInput.focus();
           return;
         }
+        // "other" only counts as an answer once something has been typed.
+        const roleOtherInput = document.getElementById("leadRoleOther");
+        const roleOtherVal = ((roleOtherInput && roleOtherInput.value) || "").trim();
+        if (roleInput.value === "other" && !roleOtherVal) {
+          alert(t("errRoleOther"));
+          roleOtherInput.focus();
+          return;
+        }
         if (!consentInput.checked) {
           alert(t("errConsent"));
           consentInput.focus();
@@ -3125,6 +3165,9 @@
           email: emailVal,
           company: companyVal,
           role: roleInput.value,
+          // Kept in its own field rather than written into `role`, so the preset
+          // codes stay clean for grouping and the free text is still recorded.
+          roleOther: roleInput.value === "other" ? roleOtherVal : "",
           consent: true,
           consentTimestamp: new Date().toISOString(),
           suspectedBot: suspectedBot
@@ -3540,7 +3583,7 @@
           <div class="minto-booking-card">
             <h2>${t("bookH2")}</h2>
             <p>${t("bookP")}</p>
-            <a href="https://calendar.app.google/D4xqjmvEALBMTgg47" target="_blank" rel="noopener noreferrer" class="minto-booking-btn">${t("bookBtn")}</a>
+            <a href="https://calendar.app.google/JtTkeRwwHmdsgsBD6" target="_blank" rel="noopener noreferrer" class="minto-booking-btn">${t("bookBtn")}</a>
           </div>`;
         bookingSec.style.display = "block";
         
@@ -3595,12 +3638,18 @@
         const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
         text.setAttribute("x", labelX);
         text.setAttribute("fill", s.assessed === false ? "#a0aec0" : "#051F2E");
-        text.setAttribute("font-size", "15");
         text.setAttribute("font-weight", "700");
         text.setAttribute("text-anchor", Math.abs(labelX - cx) < 15 ? "middle" : (labelX > cx ? "start" : "end"));
 
-        // Word-wrap the label onto at most three lines (keeps the full name)
-        const words = (s.icon + " " + s.name).split(" ");
+        // "Datenzugang & Datenqualität" used to wrap as three lines with the
+        // ampersand alone on the middle one. An ampersand belongs to the word
+        // in front of it, so glue the two together before wrapping and let that
+        // token overrun the line budget rather than break away from it.
+        const words = [];
+        String(s.name || "").split(/\s+/).filter(Boolean).forEach(function(w) {
+          if (/^[&+\/]$/.test(w) && words.length) { words[words.length - 1] += " " + w; }
+          else { words.push(w); }
+        });
         const lines = [];
         let cur = "";
         words.forEach(function(w) {
@@ -3611,6 +3660,12 @@
         // Up to three lines: forcing two produced an over-long second line
         // ("Infrastructure & Automation") that ran outside the viewBox.
         if (lines.length > 3) { lines[2] = lines.slice(2).join(" "); lines.length = 3; }
+
+        /* "Informationssicherheit" is 22 characters and, at the full label size,
+           its left-hand position pushed a few units past the viewBox edge. Long
+           labels get a smaller size rather than a clipped one. */
+        const longest = lines.reduce(function(m, l) { return Math.max(m, l.length); }, 0);
+        text.setAttribute("font-size", longest > 18 ? "13" : "15");
 
         const lineH = 16;
         const yStart = labelY - (lines.length - 1) * lineH / 2;
