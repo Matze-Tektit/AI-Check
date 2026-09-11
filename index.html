@@ -1213,14 +1213,10 @@
     }
 
     /* ── Early link capture ── */
+    /* Erbt Rahmen, Radius und Verhalten von .usage-accordion; hier bleibt nur,
+       was diese Box von der Erklärbox unterscheidet. */
     .early-link {
-      background: #fff;
-      border: 1px solid var(--tk-border);
       border-left: 3px solid var(--tk-teal);
-      border-radius: 4px;
-      padding: 18px 20px;
-      margin-top: 24px;
-      max-width: 840px;
     }
     .early-link-text { font-size: 0.9rem; color: #2d3748; margin-bottom: 12px; }
     .early-link-form { display: flex; gap: 10px; flex-wrap: wrap; }
@@ -1404,7 +1400,12 @@
       <p data-i18n="introP3"></p>
       <p data-i18n="introP4"></p>
       
-      <section class="early-link" id="earlyLink">
+      <!-- Eingeklappt wie "So nutzt du das Tool": dieselbe <details>-Mechanik
+           und derselbe Rahmen. Der Teal-Streifen links bleibt, damit die Box mit
+           dem Formular sich weiterhin von der reinen Erklärbox unterscheidet. -->
+      <details class="usage-accordion early-link" id="earlyLink">
+        <summary data-i18n="earlySummary"></summary>
+        <div class="accordion-content">
         <div class="early-link-text">
 <span data-i18n="earlyText"></span>
         </div>
@@ -1418,7 +1419,8 @@
           <span data-i18n="earlyConsent"></span>
         </label>
         <div class="early-msg" id="earlyMsg" role="status" aria-live="polite"></div>
-      </section>
+        </div>
+      </details>
 
       <details class="usage-accordion">
         <summary data-i18n="accSummary">How to use this tool</summary>
@@ -2063,11 +2065,12 @@
       selectedLabel: { en: "Selected:", de: "Ausgewählt:" },
       langHint: { en: "Language", de: "Sprache" },
       introH2: { en: "Most companies don't know how AI-ready they actually are.", de: "Die meisten Unternehmen wissen nicht, wie KI-ready sie wirklich sind." },
-      introP1: { en: "They have bought licences, run a training session, maybe written a policy. And still nobody in the building can answer the question of where the company actually stands. Meanwhile the tools get used anyway, on private accounts, with no rules and no record of what was learned.", de: "Sie haben Lizenzen gekauft, eine Schulung gemacht, vielleicht eine Richtlinie geschrieben. Und trotzdem kann niemand im Haus die Frage beantworten, wo das Unternehmen eigentlich steht. Genutzt wird KI ohnehin, über private Accounts, ohne Regeln und ohne dass jemand die Erkenntnisse festhält." },
+      introP1: { en: "Your company has probably bought licences, run a training session, maybe even written a policy. And still nobody in the building can answer the question of where the company actually stands. Meanwhile the tools get used anyway, on private accounts, with no rules and no record of what was learned.", de: "Dein Unternehmen hat wahrscheinlich Lizenzen gekauft, eine Schulung gemacht, vielleicht sogar eine Richtlinie geschrieben. Und trotzdem kann niemand im Haus die Frage beantworten, wo das Unternehmen eigentlich steht. Genutzt wird KI ohnehin, über private Accounts, ohne Regeln und ohne dass jemand die Erkenntnisse festhält." },
       introP2: { en: "Introducing AI is not an IT project. It is a company-wide change with a technical, a cultural, an organisational and a legal side, and it fails on whichever of the four gets ignored. This check looks at all four.", de: "Die Einführung von KI ist kein IT-Projekt. Sie ist eine unternehmensweite Veränderung mit vier Säulen: Führung, Technologie, Regeln und Menschen. Sie scheitert an der Säule, die übersehen wird. Dieser Check prüft alle vier." },
       introP3: { en: "In under ten minutes you will see which pillar is your constraint, what to fix first, and where AI is not worth it for you.", de: "In unter zehn Minuten siehst du, welche Säule dein Engpass ist, was du zuerst angehen solltest und wo sich KI für dich nicht lohnt." },
       introP4: { en: "No fluff. No consultant-speak. Just clarity.", de: "Kein Blabla. Kein Beratersprech. Nur Klarheit." },
-      earlyText: { en: "<strong>Short on time?</strong> We'll email you the link; complete the check later, for example on your way home.", de: "<strong>Keine Zeit?</strong> Wir schicken dir den Link. Du kannst den Check später machen." },
+      earlySummary: { en: "Short on time?", de: "Keine Zeit?" },
+      earlyText: { en: "We'll email you the link; complete the check later, for example on your way home.", de: "Wir schicken dir den Link. Du kannst den Check später machen." },
       earlyPlaceholder: { en: "your.name@company.com", de: "Dein.name@firma.de" },
       earlyBtn: { en: "Send me the link", de: "Link schicken" },
       earlyConsent: { en: "I agree to be contacted by Tektit Consulting GmbH and to receive the link and my report by email. See our <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Data Privacy</a> notice.", de: "Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und mir den Link sowie meinen Report per E-Mail schickt. Siehe unsere <a href=\"https://www.tektitconsulting.com/datenschutz\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzhinweise</a>." },
@@ -2171,6 +2174,7 @@
       phRoleOther: { en: "Your role", de: "Deine Rolle" },
       errRole: { en: "Please select your role.", de: "Bitte wähl deine Rolle aus." },
       errRoleOther: { en: "Please type your role.", de: "Bitte tipp deine Rolle ein." },
+      changedAfterSend: { en: "You have changed answers since your report was sent. What you see here is current; the PDF in your inbox shows the earlier state. Reload the page to start over and get a fresh report.", de: "Du hast Antworten ge\u00e4ndert, nachdem dein Report verschickt wurde. Was du hier siehst, ist aktuell. Das PDF in deinem Postfach zeigt den Stand von vorher. Lade die Seite neu, wenn du von vorn beginnen und einen neuen Report bekommen willst." },
       weakestPillarSame: { en: "Your weakest pillar is {pillar}, at {score} of 5.0. Your first focus area sits there too, so that is where to start.", de: "Deine schwächste Säule ist {pillar} mit {score} von 5,0. Dein erstes Fokusfeld liegt ebenfalls dort, also fängst du hier an." },
       weakestPillarDiff: { en: "Your weakest pillar is {pillar}, at {score} of 5.0. The largest single lever is {dim}, which is why your focus areas start there: one dimension can matter more than the average of a whole pillar.", de: "Deine schwächste Säule ist {pillar} mit {score} von 5,0. Den größten Einzelhebel hat {dim}, deshalb beginnen deine Fokusfelder dort: Eine einzelne Dimension kann mehr wiegen als der Durchschnitt einer ganzen Säule." },
       cantAssessNote1: { en: "You marked one statement as “cannot assess”. That is a finding, not a gap in the data: it shows where leadership currently has no visibility into its own organisation.", de: "Du hast eine Aussage als „kann ich nicht beurteilen“ markiert. Das ist ein Befund und keine Datenlücke: Er zeigt, wo die Führung derzeit keinen Einblick in die eigene Organisation hat." },
@@ -2631,9 +2635,18 @@
       return ANS[dimId];
     }
     function getAns(dimId, idx) { return ansArr(dimId)[idx]; }
+    /* Set once the gate has been passed. Whoever has already handed over their
+       contact details must not be asked a second time, and must not be left
+       looking at blurred results, which is what happened before: the unlock
+       button stayed disabled, so changing an answer afterwards led into a gate
+       that could not be submitted again. */
+    let leadCaptured = false;
+    let answersChangedSinceSend = false;
+
     function setAns(dimId, idx, val) {
       const a = ansArr(dimId);
       a[idx] = (a[idx] === val) ? null : val;   // tapping the same value clears it
+      if (leadCaptured) answersChangedSinceSend = true;
       return a[idx];
     }
     // Elements carrying a numeric level, i.e. everything that feeds the score.
@@ -3188,6 +3201,8 @@
         confirm.style.display = "block";
 
         document.getElementById("userGreeting").textContent = nameVal ? t("greeting", { name: nameVal.split(" ")[0] }) : t("resultsTitle");
+        leadCaptured = true;
+        answersChangedSinceSend = false;
         evaluate(false); 
       });
 
@@ -3319,7 +3334,8 @@
         if (cap) cap.style.display = "";
         return;
       }
-      evaluate(true);
+      /* Locked only for someone who has not been through the gate yet. */
+      evaluate(!leadCaptured);
     }
 
     /* A level of 1 maps to 0.0 and a level of 4 maps to 5.0, so the output scale
@@ -3585,6 +3601,13 @@
             <p>${t("bookP")}</p>
             <a href="https://calendar.app.google/JtTkeRwwHmdsgsBD6" target="_blank" rel="noopener noreferrer" class="minto-booking-btn">${t("bookBtn")}</a>
           </div>`;
+        /* The PDF went out at the moment of unlock. If answers changed after
+           that, the screen and the mailed report no longer agree, and saying so
+           is better than letting someone compare the two and wonder. */
+        if (leadCaptured && answersChangedSinceSend) {
+          bookingSec.insertAdjacentHTML("afterbegin",
+            '<p class="small" style="margin-bottom:14px">' + t("changedAfterSend") + '</p>');
+        }
         bookingSec.style.display = "block";
         
         resultsSection.scrollIntoView({behavior: "smooth", block: "start"});
