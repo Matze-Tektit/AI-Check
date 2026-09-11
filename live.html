@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#051F2E">
-<title>Tektit · AI Readiness Check live</title>
+<title>Tektit · AI Self Check live</title>
 <style>
 /* ═══════════════════════════════════════════════════════════════════
    Teilnehmenden-Ansicht, Handy zuerst.
@@ -314,13 +314,13 @@ body.legal footer{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;ma
     <div class="q" id="qText"></div>
     <div class="hint" id="qHint" hidden></div>
     <div class="opts" id="qOpts"></div>
-    <button class="back" id="qBack" hidden>← vorige Frage in diesem Block</button>
+    <button class="back" id="qBack" hidden>← vorige Frage in dieser Säule</button>
   </section>
 
-  <!-- 4. Block fertig, warten auf die Bühne. -->
+  <!-- 4. Säule fertig, warten auf die Bühne. -->
   <section id="vHold">
-    <div class="wait"><span class="pulse"></span><span>Block abgeschlossen</span></div>
-    <h1 id="holdH">Danke, das war der Block</h1>
+    <div class="wait"><span class="pulse"></span><span>Säule abgeschlossen</span></div>
+    <h1 id="holdH">Danke, das war die Säule</h1>
     <p class="lead" id="holdP">Vorne wird jetzt das Ergebnis besprochen. Die nächsten Fragen erscheinen hier automatisch.</p>
     <div class="facts" id="holdFacts"></div>
   </section>
@@ -331,6 +331,9 @@ body.legal footer{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;ma
       <p class="small" style="letter-spacing:.14em;font-weight:800;text-transform:uppercase">Dein Reifegrad</p>
       <div class="score"><b id="endScore">–</b><span>von 5</span></div>
       <div class="band" id="endBand"></div>
+      <!-- Die Stufennamen bleiben englisch. Einmal muss der Report sagen,
+           was sie bedeuten, sonst ist "Working Baseline" nur ein Etikett. -->
+      <p class="small" id="endBandScale">Die drei Stufen: <b>Foundation Stage</b> bis 1,7, KI passiert, aber niemand steuert sie. <b>Working Baseline</b> von 1,8 bis 3,1, die Grundlagen tragen, der Nutzen ist unbewiesen. <b>Scale-Ready</b> ab 3,2, die Organisation kann KI aufnehmen.</p>
       <p class="small" id="endBase"></p>
       <p class="small" id="endMailHint" hidden></p>
     </div>
@@ -610,7 +613,7 @@ const mailGiven = () => !!(PROF.mail || PROF.hasMail);
 /* ── Neuer Durchgang erkannt ──────────────────────────────────────
    Der Worker gibt eine Laufkennung mit, die sich beim Zuruecksetzen
    aendert. Ohne diese Pruefung haelt ein Handy nach dem Trockenlauf seine
-   alten Antworten im Browserspeicher fest, landet sofort auf "Block
+   alten Antworten im Browserspeicher fest, landet sofort auf "Säule
    abgeschlossen" und kann nichts mehr eingeben. */
 function checkRun(runId) {
   if (PROF.runId === undefined) { PROF.runId = runId || null; saveProf(); return false; }
@@ -646,6 +649,9 @@ function decide() {
      einem Formular. */
   if (idle && !mailGiven() && !PROF.mailAsked) return "vMail";
   if (idle) return "vReady";
+  /* Waehrend der Saeulenfolie sind die Fragen im Worker noch geschlossen.
+     Also hier warten und schon sagen, worum es geht. */
+  if (ph === "intro") return "vReady";
   /* Ohne Adresse kein Ergebnis. Die Schranke steht vor der Anzeige und
      nicht vor dem Speichern: geantwortet ist zu diesem Zeitpunkt schon,
      es kann also niemand durch die Abfrage aus der Auswertung fallen. */
@@ -684,7 +690,7 @@ function show(v) {
 
 /* ── Hinweis, dass es unten weitergeht ───────────────────────────────
    Der Fehler auf der Ergebnisseite war nicht der fehlende Pfeil, sondern
-   dass der erste Block genau eine Bildschirmhoehe fuellte. Dann sieht
+   dass der erste Abschnitt genau eine Bildschirmhoehe fuellte. Dann sieht
    ein Bildschirmende wie ein Seitenende aus. Abdunklung und Knopf sagen
    es zusaetzlich. */
 let cueDismissed = false;
@@ -823,8 +829,13 @@ $("gateGo").addEventListener("click", () => {
 function paintReady() {
   const role = (ROLES.find(r => r[0] === PROF.role) || [])[1] || "";
   $("readyState").textContent = "Du bist dabei" + (role ? " · " + role : "");
-  $("readyH").textContent = S && S.phase === "role"
-    ? "Vorne läuft gerade das Bild des Raums" : "Gleich geht es los";
+  const p = S && S.phase === "intro" ? S.pillar : null;
+  $("readyH").textContent =
+    p !== null && p !== undefined ? "Säule " + (p + 1) + ": " + PILLARS[p].n :
+    S && S.phase === "role" ? "Vorne läuft gerade das Bild des Raums" :
+    "Gleich geht es los";
+  $("readyState").textContent = p !== null && p !== undefined
+    ? "Gleich kommen drei Aussagen" : $("readyState").textContent;
   $("readyEdit").innerHTML = mailGiven()
     ? '<p class="small">Report geht an ' + (PROF.mail || "deine Adresse") + '.</p>'
     : '<p class="small">Vor dem Ergebnis fragen wir noch einmal nach deiner Adresse, dann '
@@ -834,8 +845,8 @@ function paintReady() {
 /* ── Frage ────────────────────────────────────────────────────────── */
 function paintQ() {
   const p = S.pillar, dims = PILLAR_DIMS(p);
-  /* Standardmaessig die erste noch offene Frage des Blocks. Nur wenn qi
-     leer ist oder auf einen anderen Block zeigt: sonst wuerde ein
+  /* Standardmaessig die erste noch offene Frage der Saeule. Nur wenn qi
+     leer ist oder auf eine andere Saeule zeigt: sonst wuerde ein
      bewusstes Zurueckspringen auf eine beantwortete Frage sofort wieder
      nach vorne korrigiert. */
   if (qi === null || Math.floor(qi / 3) !== p) {
@@ -843,7 +854,7 @@ function paintQ() {
     qi = open === undefined ? dims[0] : open;
   }
   const k = qi - p * 3;
-  $("qPillar").textContent = "Block " + (p + 1) + " von 4 · " + PILLARS[p].n;
+  $("qPillar").textContent = "Säule " + (p + 1) + " von 4 · " + PILLARS[p].n;
   $("qPillar").style.color = PILLARS[p].c;
   $("qDots").innerHTML = dims.map((i, n) =>
     '<b class="' + (n === k ? "on" : (ANS[i] !== undefined ? "done" : "")) + '"></b>').join("") +
@@ -854,7 +865,7 @@ function paintQ() {
   if (h) $("qHint").textContent = h;
   document.querySelectorAll("#qOpts .opt").forEach(b =>
     b.classList.toggle("sel", ANS[qi] === b.dataset.v));
-  /* Zurueck nur innerhalb des Blocks und nur, solange er offen ist. */
+  /* Zurueck nur innerhalb der Saeule und nur, solange er offen ist. */
   const prev = dims.filter(i => i < qi && ANS[i] !== undefined);
   $("qBack").hidden = !prev.length;
 }
@@ -885,21 +896,21 @@ $("qBack").addEventListener("click", () => {
   paintQ();
 });
 
-/* ── Block fertig ─────────────────────────────────────────────────── */
+/* ── Säule fertig ─────────────────────────────────────────────────── */
 function paintHold() {
   const p = S.pillar;
   const own = PILLAR_DIMS(p).map(i => ANS[i]).filter(v => v !== undefined && v !== "na")
     .map(v => levelToScore(Number(v)));
   const na = PILLAR_DIMS(p).filter(i => ANS[i] === "na").length;
-  $("holdH").textContent = "Danke, das war Block " + (p + 1);
+  $("holdH").textContent = "Danke, das war Säule " + (p + 1);
   $("holdFacts").innerHTML =
     '<div><b>Dein Wert</b><span>' + (own.length
-      ? de1(own.reduce((a, b) => a + b, 0) / own.length) + " von 5 in diesem Block"
+      ? de1(own.reduce((a, b) => a + b, 0) / own.length) + " von 5 in dieser Säule"
       : "kein Wert, du hast alles als unklar markiert") + '</span></div>' +
     (na ? '<div><b>Unklar</b><span>' + na + ' mal. Das zählt nicht in den Durchschnitt, ' +
           'ist aber selbst ein Befund.</span></div>' : '') +
-    '<div><b>Weiter</b><span>' + (p < 3 ? "Noch " + (3 - p) + " Block" + (p < 2 ? "s" : "") +
-      ", dann kommt dein Gesamtbild." : "Das war der letzte Block.") + '</span></div>';
+    '<div><b>Weiter</b><span>' + (p < 3 ? "Noch " + (3 - p) + " Säule" + (p < 2 ? "n" : "") +
+      ", dann kommt dein Gesamtbild." : "Das war die letzte Säule.") + '</span></div>';
 }
 
 /* ── Ergebnis ─────────────────────────────────────────────────────── */
