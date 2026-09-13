@@ -2012,7 +2012,7 @@
           de:"Bei neuen KI-Vorhaben ist der Datenschutz von Anfang an beteiligt."
          }, w: 1, desc:{
           en:"And employee representation where you have it. Late involvement turns a partner into a gatekeeper; the same people asked early usually clear the path.",
-          de:"Und die Mitbestimmung, wo es sie gibt. Sp\u00e4te Einbindung macht aus einem Partner eine H\u00fcrde. Fr\u00fch gefragt r\u00e4umen dieselben Leute den Weg meist frei."
+          de:"Und die Mitbestimmung, wo es sie gibt. Sp\u00e4te Einbindung macht aus einem Partner eine H\u00fcrde. Fr\u00fch gefragt r\u00e4umen dieselben Personen den Weg meist frei."
          }}
       ]}
     ];
@@ -2175,6 +2175,7 @@
       errRole: { en: "Please select your role.", de: "Bitte wähl deine Rolle aus." },
       errRoleOther: { en: "Please type your role.", de: "Bitte tipp deine Rolle ein." },
       changedAfterSend: { en: "You have changed answers since your report was sent. What you see here is current; the PDF in your inbox shows the earlier state. Reload the page to start over and get a fresh report.", de: "Du hast Antworten ge\u00e4ndert, nachdem dein Report verschickt wurde. Was du hier siehst, ist aktuell. Das PDF in deinem Postfach zeigt den Stand von vorher. Lade die Seite neu, wenn du von vorn beginnen und einen neuen Report bekommen willst." },
+      changedAfterSendShort: { en: "You have changed answers after your result was recorded. What you see here is current; the record in the room comparison shows the earlier state.", de: "Du hast Antworten geändert, nachdem dein Ergebnis erfasst wurde. Was du hier siehst, ist aktuell. Im Raumvergleich steht der Stand von vorher." },
       weakestPillarSame: { en: "Your weakest pillar is {pillar}, at {score} of 5.0. Your first focus area sits there too, so that is where to start.", de: "Deine schwächste Säule ist {pillar} mit {score} von 5,0. Dein erstes Fokusfeld liegt ebenfalls dort, also fängst du hier an." },
       weakestPillarDiff: { en: "Your weakest pillar is {pillar}, at {score} of 5.0. The largest single lever is {dim}, which is why your focus areas start there: one dimension can matter more than the average of a whole pillar.", de: "Deine schwächste Säule ist {pillar} mit {score} von 5,0. Den größten Einzelhebel hat {dim}, deshalb beginnen deine Fokusfelder dort: Eine einzelne Dimension kann mehr wiegen als der Durchschnitt einer ganzen Säule." },
       cantAssessNote1: { en: "You marked one statement as “cannot assess”. That is a finding, not a gap in the data: it shows where leadership currently has no visibility into its own organisation.", de: "Du hast eine Aussage als „kann ich nicht beurteilen“ markiert. Das ist ein Befund und keine Datenlücke: Er zeigt, wo die Führung derzeit keinen Einblick in die eigene Organisation hat." },
@@ -3327,7 +3328,17 @@
         // The pseudonymised record goes out immediately so the room benchmark is
         // complete even for people who do not want an email. The email is asked
         // for afterwards, separately, with its own consent.
-        deliver(buildBenchmarkPayload("short_complete", { consent: false }));
+        //
+        // Genau einmal. Vorher schickte jeder erneute Klick auf "Auswertung
+        // erstellen" einen weiteren Datensatz, also zählte dieselbe Person im
+        // Raum-Benchmark mehrfach. Wer zurückgeht und etwas ändert, sieht das
+        // neue Ergebnis auf dem Bildschirm; der gesendete Datensatz bleibt der
+        // erste, und darauf weist der Hinweis unten hin.
+        if (!leadCaptured) {
+          deliver(buildBenchmarkPayload("short_complete", { consent: false }));
+          leadCaptured = true;
+          answersChangedSinceSend = false;
+        }
         document.getElementById("userGreeting").textContent = t("resultsTitle");
         evaluate(false);
         const cap = document.getElementById("shortCapture");
@@ -3606,13 +3617,28 @@
            is better than letting someone compare the two and wonder. */
         if (leadCaptured && answersChangedSinceSend) {
           bookingSec.insertAdjacentHTML("afterbegin",
-            '<p class="small" style="margin-bottom:14px">' + t("changedAfterSend") + '</p>');
+            '<p class="small" style="margin-bottom:14px">' + t(SHORT ? "changedAfterSendShort" : "changedAfterSend") + '</p>');
         }
         bookingSec.style.display = "block";
         
         resultsSection.scrollIntoView({behavior: "smooth", block: "start"});
         setupStickyBar();
       }
+    }
+
+    /* Das Radar folgte der Reihenfolge der Vorlagenliste, der Check fragt aber
+       nach Säulen gruppiert. Nach Säulen sortiert zeigen Bildschirm, Fragebogen
+       und PDF-Report dieselbe Abfolge. Die Nutzdaten bleiben unangetastet,
+       sortiert wird nur die Anzeige. */
+    function radarOrder(scores) {
+      const rank = {};
+      CLUSTERS.forEach(function(c, i) { rank[c] = i; });
+      return scores.map(function(s, i) { return { s: s, i: i }; })
+        .sort(function(a, b) {
+          const ra = rank[a.s.cluster], rb = rank[b.s.cluster];
+          const na = ra === undefined ? 99 : ra, nb = rb === undefined ? 99 : rb;
+          return na !== nb ? na - nb : a.i - b.i;
+        });
     }
 
     function drawRadarChart(scores) {
@@ -3639,7 +3665,9 @@
       
       const dataPoints = [];
       const dotColors = [];
-      scores.forEach((s, j) => {
+      const ordered = radarOrder(scores);
+      ordered.forEach((entry, j) => {
+        const s = entry.s;
         const angle = (j * 2 * Math.PI / numDims) - Math.PI / 2;
         const pc = s.assessed === false ? "#cbd5e0" : pillarColor(s.cluster);
         
