@@ -3796,24 +3796,34 @@
           else { groups.push({ cluster: c, start: j, end: j }); }
         });
         const step = 2 * Math.PI / numDims;
-        const rArc = rMax + 10;
+        /* Der Bogen läuft auf dem äußersten Gitterring, nicht außerhalb davon.
+           Außerhalb schnitt er bei langen, dreizeiligen Beschriftungen mitten
+           durch den Text; zwischen Ring und Beschriftung ist schlicht kein
+           freier Raum. Auf dem Ring gibt es keinen Konflikt, und der Verlauf
+           folgt exakt dem Gitter, weil er durch dieselben Eckpunkte geht wie
+           das äußerste Vieleck. */
+        function ringPoint(k) {
+          const a = (k * step) - Math.PI / 2;
+          return [cx + rMax * Math.cos(a), cy + rMax * Math.sin(a)];
+        }
+        function edgePoint(k, towards, frac) {
+          const p0 = ringPoint(k), p1 = ringPoint(towards);
+          return [p0[0] + (p1[0] - p0[0]) * frac, p0[1] + (p1[1] - p0[1]) * frac];
+        }
         groups.forEach(function(g) {
-          /* Eine halbe Achsteilung über die äußeren Speichen hinaus, minus ein
-             kleiner Spalt, damit benachbarte Säulen sich nicht berühren. */
-          const gap = step * 0.10;
-          const a0 = (g.start * step) - Math.PI / 2 - step / 2 + gap;
-          const a1 = (g.end   * step) - Math.PI / 2 + step / 2 - gap;
-          const x0 = cx + rArc * Math.cos(a0), y0 = cy + rArc * Math.sin(a0);
-          const x1 = cx + rArc * Math.cos(a1), y1 = cy + rArc * Math.sin(a1);
-          const big = (a1 - a0) > Math.PI ? 1 : 0;
+          /* Bis zur Mitte der Kante zum Nachbarn, minus ein Stück als Spalt,
+             damit zwei Säulen sich nicht berühren. */
+          const pts = [edgePoint(g.start, g.start - 1, 0.40)];
+          for (let k = g.start; k <= g.end; k++) pts.push(ringPoint(k));
+          pts.push(edgePoint(g.end, g.end + 1, 0.40));
           const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          path.setAttribute("d", "M " + x0 + " " + y0 + " A " + rArc + " " + rArc +
-                                 " 0 " + big + " 1 " + x1 + " " + y1);
+          path.setAttribute("d", "M " + pts.map(function(p) { return p[0] + " " + p[1]; }).join(" L "));
           path.setAttribute("fill", "none");
           path.setAttribute("stroke", pillarColor(g.cluster));
-          path.setAttribute("stroke-width", "3");
+          path.setAttribute("stroke-width", "3.5");
           path.setAttribute("stroke-linecap", "round");
-          path.setAttribute("opacity", "0.9");
+          path.setAttribute("stroke-linejoin", "round");
+          path.setAttribute("opacity", "0.95");
           svg.appendChild(path);
         });
       })();
