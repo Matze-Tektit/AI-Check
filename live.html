@@ -131,9 +131,12 @@ p.lead{font-size:.92rem;line-height:1.5;color:var(--muted)}
 .back{background:none;border:0;color:var(--muted);font-family:inherit;font-size:.82rem;
        font-weight:700;cursor:pointer;padding:4px 0;text-align:left}
 
-input[type=email]{width:100%;padding:14px 16px;border-radius:10px;font-family:inherit;font-size:1rem;
+input[type=email],input[type=tel]{width:100%;padding:14px 16px;border-radius:10px;font-family:inherit;font-size:1rem;
   border:1.5px solid rgba(255,255,255,.18);background:rgba(255,255,255,.06);color:var(--ink)}
-input[type=email]::placeholder{color:#6F8195}
+input[type=email]::placeholder,input[type=tel]::placeholder{color:#6F8195}
+/* Die Nummer ist freiwillig, also steht sie optisch eine Stufe leiser
+   als die Adresse. Wer sie uebersieht, hat nichts verpasst. */
+input[type=tel]{border-style:dashed;border-color:rgba(255,255,255,.14)}
 .consent{display:flex;gap:10px;align-items:flex-start;font-size:.78rem;line-height:1.45;color:var(--muted)}
 .consent a{color:var(--mint)}
 .consent input{margin-top:2px;flex:0 0 auto;width:18px;height:18px}
@@ -259,6 +262,10 @@ body.legal footer{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;ma
     <div style="display:flex;flex-direction:column;gap:12px">
       <input type="email" id="email" inputmode="email" autocomplete="email"
              autocapitalize="off" spellcheck="false" placeholder="du@firma.de">
+      <input type="tel" id="phone" inputmode="tel" autocomplete="tel"
+             placeholder="Telefon (freiwillig)">
+      <p class="small">Die Nummer brauchen wir nicht. Trag sie ein, wenn dir ein kurzer
+        Rückruf lieber ist als eine E-Mail.</p>
       <label class="consent"><input type="checkbox" id="consent"><span id="consentText"></span></label>
     </div>
     <div class="err" id="mailErr" hidden></div>
@@ -284,6 +291,8 @@ body.legal footer{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;ma
     <div style="display:flex;flex-direction:column;gap:12px">
       <input type="email" id="email3" inputmode="email" autocomplete="email"
              autocapitalize="off" spellcheck="false" placeholder="du@firma.de">
+      <input type="tel" id="phone3" inputmode="tel" autocomplete="tel"
+             placeholder="Telefon (freiwillig)">
       <label class="consent"><input type="checkbox" id="consent3"><span id="consentText3"></span></label>
     </div>
     <div class="err" id="gateErr" hidden></div>
@@ -358,6 +367,8 @@ body.legal footer{border-top:1px solid rgba(255,255,255,.08);padding-top:12px;ma
       </div>
       <input type="email" id="email2" inputmode="email" autocomplete="email"
              autocapitalize="off" spellcheck="false" placeholder="du@firma.de">
+      <input type="tel" id="phone2" inputmode="tel" autocomplete="tel"
+             placeholder="Telefon (freiwillig)">
       <label class="consent"><input type="checkbox" id="consent2"><span id="consentText2"></span></label>
       <div class="err" id="endErr" hidden></div>
       <button class="btn" id="endGo">Schick es mir</button>
@@ -439,8 +450,12 @@ const ROLES = [
   ["stab",    "Stab / Projektrolle"],
   ["consult", "Consultant"]
 ];
-const CONSENT = 'Ich bin damit einverstanden, dass die Tektit Consulting GmbH mich kontaktiert und meine ' +
-  'Antworten verarbeitet, um mir meinen Report, den Raum-Benchmark und den Link zur Vollversion zu schicken. ' +
+/* Die Einwilligung nennt den Anruf ausdruecklich. Eine Nummer einsammeln
+   und sie dann unter "kontaktiert" verbuchen, waere genau die Unschaerfe,
+   die uns spaeter teuer zu stehen kommt. */
+const CONSENT = 'Ich bin damit einverstanden, dass die Tektit Consulting GmbH meine Antworten verarbeitet ' +
+  'und mich kontaktiert, um mir meinen Report, den Raum-Benchmark und den Link zur Vollversion zu schicken. ' +
+  'Wenn ich eine Telefonnummer angebe, darf Tektit mich dazu auch anrufen. ' +
   'Siehe unsere <a href="https://de.tektitconsulting.com/datenschutz" target="_blank" rel="noopener">Datenschutzhinweise</a>.';
 /* Absichtlich ohne feste Frist: eine unterschrittene Zusage ist der
    einzige Weg, an dieser Stelle Vertrauen zu verlieren. */
@@ -623,7 +638,7 @@ function checkRun(runId) {
   saveAns();
   writeQ([]);
   /* Rolle und Adresse sind beim Worker ebenfalls weg, also hier auch. */
-  ["role", "mail", "hasMail", "mailAsked", "pending"].forEach(k => { delete PROF[k]; });
+  ["role", "mail", "phone", "hasMail", "mailAsked", "pending"].forEach(k => { delete PROF[k]; });
   PROF.runId = runId || null;
   saveProf();
   recovered = true;   /* nichts zurueckzuholen, die Tafel ist leer */
@@ -760,6 +775,21 @@ $("roleOpts").addEventListener("click", e => {
 
 function validMail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
 
+/* Die Nummer wird nur grob geprueft: sechs Ziffern und keine Buchstaben.
+   Alles Strengere wirft auf einem Festival mehr richtige Nummern heraus
+   als falsche, etwa Durchwahlen oder auslaendische Vorwahlen. */
+function validPhone(v) {
+  return /^[+0(]?[0-9 ()/.\-]{5,29}$/.test(v) && v.replace(/[^0-9]/g, "").length >= 6;
+}
+/* Leer bleibt leer. Mehrfache Leerzeichen fallen weg, sonst bleibt die
+   Eingabe so stehen, wie sie getippt wurde. */
+function readPhone(id, errId) {
+  const v = $(id).value.trim().replace(/\s+/g, " ");
+  if (!v) return "";
+  if (!validPhone(v)) { showErr(errId, "Die Telefonnummer sieht nicht vollständig aus. Du kannst das Feld auch leer lassen."); return null; }
+  return v;
+}
+
 const showErr = (id, msg) => { $(id).textContent = msg; $(id).hidden = false; };
 
 /* Schritt 1: nur die Rolle. Sie geht sofort raus, damit sich das
@@ -791,13 +821,17 @@ async function submitMail(withMail) {
     if (!m) return showErr("mailErr", "Trag eine Adresse ein oder überspring den Schritt.");
     if (!validMail(m)) return showErr("mailErr", "Bitte gib eine gültige E-Mail-Adresse ein.");
     if (!$("consent").checked) return showErr("mailErr", "Bitte bestätige die Einwilligung.");
+    const tel = readPhone("phone", "mailErr");
+    if (tel === null) return;
     payload.email = m; payload.consent = true; payload.consentText = $("consentText").textContent;
+    if (tel) payload.phone = tel;
   }
   $("mailGo").disabled = true;
   try {
     if (payload.email) {
       await sendProfile(payload);
       PROF.mail = payload.email; PROF.hasMail = true;
+      if (payload.phone) PROF.phone = payload.phone;
     }
     PROF.mailAsked = true; saveProf();
     forceView = null;
@@ -819,8 +853,14 @@ $("gateGo").addEventListener("click", () => {
   if (!m) return showErr("gateErr", "Trag deine Adresse ein, dann kommt das Ergebnis.");
   if (!validMail(m)) return showErr("gateErr", "Bitte gib eine gültige E-Mail-Adresse ein.");
   if (!$("consent3").checked) return showErr("gateErr", "Bitte bestätige die Einwilligung.");
-  PROF.mail = m; PROF.hasMail = true; PROF.mailAsked = true; saveProf();
-  queueProfile({ email: m, consent: true, consentText: $("consentText3").textContent });
+  const tel3 = readPhone("phone3", "gateErr");
+  if (tel3 === null) return;
+  PROF.mail = m; PROF.hasMail = true; PROF.mailAsked = true;
+  if (tel3) PROF.phone = tel3;
+  saveProf();
+  const gatePayload = { email: m, consent: true, consentText: $("consentText3").textContent };
+  if (tel3) gatePayload.phone = tel3;
+  queueProfile(gatePayload);
   forceView = null;
   show(decide());
 });
@@ -1114,10 +1154,16 @@ $("endGo").addEventListener("click", async () => {
   $("endErr").hidden = true;
   if (!validMail(m)) { $("endErr").textContent = "Bitte gib eine gültige E-Mail-Adresse ein."; $("endErr").hidden = false; return; }
   if (!$("consent2").checked) { $("endErr").textContent = "Bitte bestätige die Einwilligung."; $("endErr").hidden = false; return; }
+  const tel2 = readPhone("phone2", "endErr");
+  if (tel2 === null) return;
   $("endGo").disabled = true;
   try {
-    await sendProfile({ email: m, consent: true, consentText: $("consentText2").textContent });
-    PROF.mail = m; PROF.hasMail = true; saveProf();
+    const endPayload = { email: m, consent: true, consentText: $("consentText2").textContent };
+    if (tel2) endPayload.phone = tel2;
+    await sendProfile(endPayload);
+    PROF.mail = m; PROF.hasMail = true;
+    if (tel2) PROF.phone = tel2;
+    saveProf();
     paintEnd();
   } catch (e) {
     $("endErr").textContent = "Konnte nicht gespeichert werden: " + e.message;
