@@ -1,6 +1,7 @@
 
 
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2283,7 +2284,7 @@
     /* ── Benchmarking / capture layer ── */
     const ASSESSMENT = "ai_ready";            // distinguishes this tool from the business Maturity Check
     const TOOL_VERSION = "1.0.0";
-    const BENCHMARK_SCHEMA_VERSION = 3;       // 3 = scaled answers + role + cantAssess
+    const BENCHMARK_SCHEMA_VERSION = 4;       // 3 = scaled answers + role + cantAssess, 4 = focusAreas
     const WEBHOOK_ENDPOINT = "https://hook.eu2.make.com/gijl0dhirgnmo4lmbsvzq76xg3ev4d28";
     const CONSENT_VERSION = "2026-08-12-proposal";   // provisional until legal sign-off
     // Progress lives in localStorage, which is scoped to the origin. A resume link
@@ -2318,6 +2319,26 @@
         if (v < worstVal) { worstVal = v; worst = c; }
       });
       return worst;
+    }
+
+    /* Fokusfelder an einer Stelle: Bildschirm und Payload nutzen dieselbe
+       Auswahl. Kandidaten nur mit echtem Spielraum (Score < 5), sortiert nach
+       Hebel = Luecke x strategisches Gewicht, hoechstens drei. Sind alle
+       Dimensionen bewertet und >= 4,5, gibt es keine Fokusfelder. */
+    const FOCUS_STRONG = 4.5;
+    function selectFocusAreas(scored, totalCount) {
+      const allStrong = scored.length === totalCount &&
+        scored.every(function(r) { return r.score >= FOCUS_STRONG; });
+      const top3 = scored
+        .filter(function(r) { return r.score < 5; })
+        .map(function(r) {
+          return Object.assign({}, r, {
+            leverage: (1.0 - (r.score || 0) / 5) * (r.strategicWeight || 1.0)
+          });
+        })
+        .sort(function(a, b) { return b.leverage - a.leverage; })
+        .slice(0, 3);
+      return { allStrong: allStrong, top3: allStrong ? [] : top3 };
     }
 
     function maturityBand(avg) {
@@ -2443,6 +2464,17 @@
         cantAssessDimensions: dims.filter(function(r){ return r.cantAssess > 0; })
                                   .map(function(r){ return r.id; }),
         pillarScores: pillarScores,
+        // Same selection as on screen and in the report. Empty array means
+        // no focus areas (all strong, or nothing with headroom).
+        focusAreas: selectFocusAreas(scored, dims.length).top3.map(function(r) {
+          return {
+            id: r.id,
+            name: r.name,
+            cluster: r.cluster,
+            score: r.score,
+            leverage: parseFloat(r.leverage.toFixed(3))
+          };
+        }),
         dimensions: dims,
         meta: {
           userAgent: navigator.userAgent,
@@ -3577,9 +3609,8 @@
          vorher immer auf drei aufgefuellt, auch wenn nur eine Dimension Luft
          hatte: bei Score 5,0 ist der Hebel null, die Dimension landete
          trotzdem als Fokusfeld in der Liste. */
-      const candidates = scored.filter(function(r) { return r.score < 5; })
-        .sort(function(a, b) { return b.leverage - a.leverage; });
-      const top3 = candidates.slice(0, 3);
+      const focusSel = selectFocusAreas(scored, scores.length);
+      const top3 = focusSel.top3;
 
       const focusCard = document.getElementById("focusCard");
       const focusDescEl = focusCard.querySelector(".focus-desc");
@@ -3589,8 +3620,7 @@
 
       // Congratulations instead of focus areas: only when the whole picture is
       // assessed and genuinely strong, so it never fires on a partial or so-so run.
-      const STRONG = 4.5;
-      const allStrong = scored.length === scores.length && scored.every(function(r){ return r.score >= STRONG; });
+      const allStrong = focusSel.allStrong;
 
       if (allStrong || !top3.length) {
         document.getElementById("focusHeading").textContent = t("congratsH");
