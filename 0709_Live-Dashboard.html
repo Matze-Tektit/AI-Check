@@ -319,7 +319,7 @@ footer{flex:0 0 auto;display:flex;align-items:center;justify-content:flex-end;ga
    das Token hier stehen. Die Teilnehmenden-Ansicht kennt es nicht.
    ═══════════════════════════════════════════════════════════════════ */
 const WORKER      = "https://broken-tree-2400.matthias-paratsch.workers.dev";
-const ADMIN_TOKEN = "bigbang2026";
+const ADMIN_TOKEN = new URLSearchParams(location.search).get("token") || "";
 const REFRESH_MS  = 2500;
 const JOIN_URL    = "ai-check.tektitconsulting.com/live.html";
 const ASSETS      = "https://ai-check.tektitconsulting.com/";
