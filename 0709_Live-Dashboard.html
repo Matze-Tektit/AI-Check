@@ -772,7 +772,7 @@ $("ctrl").addEventListener("click", e => {
 $("qrSheet").addEventListener("click", () => toggleQr(false));
 
 addEventListener("keydown", e => {
-  if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); if (qrOpen) toggleQr(false); else control("next"); }
+  if (["ArrowRight", "PageDown", " "].includes(e.key)) { e.preventDefault(); if (S && S.overlay === "qr") toggleQr(false); else control("next"); }
   else if (["ArrowLeft", "PageUp"].includes(e.key)) { e.preventDefault(); control("prev"); }
   else if (e.key === "q") { e.preventDefault(); toggleQr(); }
   else if (e.key === "r") { control("role"); }
