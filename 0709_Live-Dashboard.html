@@ -315,11 +315,21 @@ footer{flex:0 0 auto;display:flex;align-items:center;justify-content:flex-end;ga
 <script>
 /* ═══════════════════════════════════════════════════════════════════
    KONFIGURATION: nur dieser Block wird angepasst.
-   Diese Seite laeuft nur auf dem Rechner auf der Buehne, deshalb darf
-   das Token hier stehen. Die Teilnehmenden-Ansicht kennt es nicht.
+   Token kommt aus der URL (?token=... oder #token=...). Fehlt es dort,
+   greift TOKEN_FALLBACK. Nur auf dem Buehnenrechner eintragen, die
+   Teilnehmenden-Ansicht kennt es nicht.
    ═══════════════════════════════════════════════════════════════════ */
-const WORKER      = "https://broken-tree-2400.matthias-paratsch.workers.dev";
-const ADMIN_TOKEN = new URLSearchParams(location.search).get("token") || "";
+const WORKER         = "https://broken-tree-2400.matthias-paratsch.workers.dev";
+const TOKEN_FALLBACK = "";   /* <- hier das NEUE Worker-Token eintragen */
+function readToken() {
+  /* Bewusst nicht URLSearchParams: das macht aus "+" ein Leerzeichen
+     und zerstoert damit base64-Tokens. */
+  const src = location.search + "&" + location.hash.replace(/^#/, "");
+  const m = src.match(/(?:^|[?&])token=([^&]*)/);
+  if (m && m[1]) { try { return decodeURIComponent(m[1]).trim(); } catch (e) { return m[1].trim(); } }
+  return TOKEN_FALLBACK.trim();
+}
+const ADMIN_TOKEN = readToken();
 const REFRESH_MS  = 2500;
 const JOIN_URL    = "ai-check.tektitconsulting.com/live.html";
 const ASSETS      = "https://ai-check.tektitconsulting.com/";
@@ -692,7 +702,8 @@ async function tick() {
     if (Date.now() > noticeUntil) {
       status.className = "status";
       status.innerHTML = '<span class="pulse"></span>aktualisiert ' +
-        new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+        new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit", second: "2-digit" }) +
+        (ADMIN_TOKEN ? "" : " · OHNE TOKEN, Steuerung gesperrt");
     }
   } catch (e) {
     fails++;
