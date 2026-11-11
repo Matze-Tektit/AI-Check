@@ -2452,6 +2452,9 @@
           consentTimestamp: lead.consentTimestamp || null
         },
         overallScore: overallWeighted,
+        // Exactly the string the screen and the PDF show (same toFixed rounding,
+        // same decimal sign), so the report mail cannot print a different number.
+        overallScoreDisplay: num(overallWeighted, 1),
         overallScoreUnweighted: overallSimple,
         assessedDimensions: scored.length,
         totalDimensions: dims.length,
