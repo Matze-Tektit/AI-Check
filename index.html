@@ -1,7 +1,3 @@
-
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -2368,6 +2364,7 @@
           userEmail: lead.email || "",
           lead: {
             email: lead.email || "",
+            campaignRef: CAMPAIGN.ref,          // Mailchimp UNIQID, "" without campaign link
             consent: !!lead.consent,
             consentText: consentText(lead.consentText),
             consentVersion: CONSENT_VERSION,
@@ -2448,6 +2445,7 @@
           company: lead.company || "",
           role: lead.role || "",
           roleOther: lead.roleOther || "",
+          campaignRef: CAMPAIGN.ref,            // Mailchimp UNIQID, "" without campaign link
           consent: !!lead.consent,
           consentText: consentText(lead.consentText),
           consentVersion: CONSENT_VERSION,
@@ -2672,6 +2670,38 @@
     const KIOSK = /[?&]kiosk=1/.test(location.search);
     const SHORT = /[?&]short=1/.test(location.search);
     let earlyLeadEmail = "";
+
+    /* ── Campaign link (Mailchimp) ──
+       Link format: https://ai-check.tektitconsulting.com/#email=*|URL:EMAIL|*&r=*|UNIQID|*
+       Read from the fragment only: a fragment never reaches a server, a log or
+       a referrer. Deliberately no ?email= fallback, because a query string does.
+       The fragment is removed from the address bar right away, so the address
+       is not kept in bookmarks or copied links. Kiosk devices are shared and
+       never take over an address. Unresolved merge tags (test sends, previews)
+       fail validation and are ignored. */
+    const CAMPAIGN = (function readCampaignLink() {
+      const out = { email: "", ref: "" };
+      if (!location.hash || location.hash.length < 2) return out;
+      const p = new URLSearchParams(location.hash.slice(1));
+      if (!p.has("email") && !p.has("r")) return out;      // some other anchor: leave it alone
+      try { history.replaceState(null, "", location.pathname + location.search); } catch (e) {}
+      if (KIOSK) return out;
+      // An unencoded "+" arrives as a space; an address never contains one.
+      const email = (p.get("email") || "").trim().replace(/ /g, "+");
+      if (email.length <= 254 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) out.email = email;
+      const ref = (p.get("r") || "").trim();
+      if (/^[A-Za-z0-9]{1,64}$/.test(ref)) out.ref = ref;
+      return out;
+    })();
+
+    // Puts an address into an empty field exactly once. A field the user has
+    // cleared or changed is never touched again, however often it is shown.
+    function prefillEmailOnce(input, value) {
+      if (!input || !value || input.dataset.prefilled) return;
+      input.dataset.prefilled = "1";
+      if (input.value.trim()) return;
+      input.value = value;
+    }
 
     /* ── Answer state ──
        ANS[dimId] is an array, one slot per element:
@@ -3281,6 +3311,7 @@
     function initShortCapture() {
       const btn = document.getElementById("shortSendBtn");
       if (!btn) return;
+      prefillEmailOnce(document.getElementById("shortEmail"), CAMPAIGN.email);
       let sent = false;
       btn.addEventListener("click", function() {
         if (sent) return;
@@ -3663,9 +3694,10 @@
 
       resultsSection.style.display = "block";
 
-      if (isLocked && earlyLeadEmail) {
-        const gateEmail = document.getElementById("leadEmail");
-        if (gateEmail && !gateEmail.value.trim()) gateEmail.value = earlyLeadEmail;
+      // An address the visitor typed into the early-link box wins over the one
+      // from the campaign link (forwarded mails). Filled once, never again.
+      if (isLocked) {
+        prefillEmailOnce(document.getElementById("leadEmail"), earlyLeadEmail || CAMPAIGN.email);
       }
 
       if (isLocked) {
