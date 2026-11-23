@@ -3153,8 +3153,11 @@
       });
 
       document.getElementById("showLeadBtn").addEventListener("click", () => {
+        /* Eine Dimension, in der alles mit "kann ich nicht beurteilen" beantwortet
+           ist, wurde beantwortet und ist trotzdem nicht bewertbar: Sie fällt ohne
+           Rückfrage aus dem Score (isAssessed bleibt false), genau wie im Report. */
         const open = DIMS.filter(function(d) {
-          return !hasAnyCheck(d.id) && !dimAssessment[d.id];
+          return !hasAnyCheck(d.id) && !dimAssessment[d.id] && naCount(d.id) < ansArr(d.id).length;
         });
         if (open.length) { openScopeDialog(open); return; }
         proceedToGate();
@@ -3397,9 +3400,23 @@
 
     function applyScopeChoice(choice) {
       const modal = document.getElementById("scopeModal");
-      (modal.dataset.ids || "").split(",").filter(Boolean).forEach(function(id) {
+      const ids = (modal.dataset.ids || "").split(",").filter(Boolean);
+      ids.forEach(function(id) {
         dimAssessment[id] = choice;
+        /* 2026-11-23: "Dort ist nichts etabliert" wird als Antwort "nein" (Stufe 1)
+           in die Antworten geschrieben, nicht nur als Markierung gehalten. Vorher
+           kamen leere Antworten mit assessed=true bei Make an: Bildschirm, Report,
+           Anhang ("übersprungen") und Benchmark-Tabelle erzählten dann
+           unterschiedliche Geschichten. Mit "nein" ist die Aussage des Nutzers
+           überall dieselbe Information. "Kann ich nicht beurteilen" bleibt stehen. */
+        if (choice === "assessed") {
+          const a = ansArr(id);
+          for (let i = 0; i < a.length; i++) { if (a[i] === null || a[i] === undefined) a[i] = 1; }
+          if (leadCaptured) answersChangedSinceSend = true;
+          updateDimCard(id);
+        }
       });
+      if (choice === "assessed" && ids.length) { updateGlobalProgress(); persistProgress(); }
       modal.style.display = "none";
       proceedToGate();
     }
